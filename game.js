@@ -534,7 +534,7 @@ function loadSave(){
         saveData.totalEarned = d.totalEarned||0;
         saveData.garden = d.garden && typeof d.garden==='object' ? Object.assign({seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0,unlockedPlots:1,flowers:0,harvestCount:0,totalFlowers:0,totalPlanted:0},d.garden) : {seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0,unlockedPlots:1,flowers:0,harvestCount:0,totalFlowers:0,totalPlanted:0};
         if(!Array.isArray(saveData.garden.plots)) saveData.garden.plots=[];
-        saveData.garden.unlockedPlots=clamp(Number(saveData.garden.unlockedPlots)||1,1,6);saveData.garden.flowers=Number(saveData.garden.flowers)||0;saveData.garden.harvestCount=Number(saveData.garden.harvestCount)||0;saveData.garden.totalFlowers=Number(saveData.garden.totalFlowers)||0;saveData.garden.totalPlanted=Number(saveData.garden.totalPlanted)||saveData.garden.plots.length;
+        saveData.garden.unlockedPlots=clamp(Math.max(Number(saveData.garden.unlockedPlots)||1,Math.min(6,saveData.garden.plots.length)),1,6);saveData.garden.flowers=Number(saveData.garden.flowers)||0;saveData.garden.harvestCount=Number(saveData.garden.harvestCount)||0;saveData.garden.totalFlowers=Number(saveData.garden.totalFlowers)||0;saveData.garden.totalPlanted=Number(saveData.garden.totalPlanted)||saveData.garden.plots.length;
         saveData.theme = d.theme||"warm";
         saveData.avatar = d.avatar||"sun";
         saveData.ownedThemes = Array.isArray(d.ownedThemes)?d.ownedThemes:[];
@@ -1773,7 +1773,7 @@ function checkDragCollision(a,fromX,fromY){
    花园与存档管理
    ============================================================ */
 const GARDEN_PLOT_COSTS=[0,120,260,480,800,1200];
-function ensureGarden(){if(!saveData.garden)saveData.garden={seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};const g=saveData.garden;if(!Array.isArray(g.plots))g.plots=[];if(g.unlockedPlots==null)g.unlockedPlots=1;if(g.flowers==null)g.flowers=0;if(g.harvestCount==null)g.harvestCount=0;if(g.totalFlowers==null)g.totalFlowers=0;if(g.totalPlanted==null)g.totalPlanted=g.plots.length;g.unlockedPlots=clamp(Number(g.unlockedPlots)||1,1,6);return g;}
+function ensureGarden(){if(!saveData.garden)saveData.garden={seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};const g=saveData.garden;if(!Array.isArray(g.plots))g.plots=[];if(g.unlockedPlots==null)g.unlockedPlots=1;if(g.flowers==null)g.flowers=0;if(g.harvestCount==null)g.harvestCount=0;if(g.totalFlowers==null)g.totalFlowers=0;if(g.totalPlanted==null)g.totalPlanted=g.plots.length;g.unlockedPlots=clamp(Math.max(Number(g.unlockedPlots)||1,Math.min(6,g.plots.length)),1,6);return g;}
 function renderGarden(){
  const g=ensureGarden();gardenSeedsEl.textContent=g.seeds||0;gardenMoneyEl.textContent=formatMoney(saveData.money||0);document.getElementById('gardenFlowerStock').textContent=g.flowers||0;
  document.getElementById('gardenProgress').textContent='已收获 '+g.harvestCount+' 次 · '+(g.harvestCount>=10?'卖花直播已解锁！':'再收获 '+(10-g.harvestCount)+' 次解锁卖花直播');
@@ -1847,6 +1847,7 @@ document.getElementById('btnNewGame').addEventListener('click',function(){
     money:0, totalEarned:0, garden:{seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0,unlockedPlots:1,flowers:0,harvestCount:0,totalFlowers:0,totalPlanted:0}, theme:"warm", avatar:"sun",
     ownedThemes:[], ownedAvatars:[], perfumes:[], pkWins:0, seenIntro:true };
   gardenTipEl.textContent='第一步：点击「种下一颗种子」。植物成熟后点击收获，就能积累鲜花库存。';
+  showTutorial();
   persist();
   applyBuffsForNewDay();
   startGiftTimer();
