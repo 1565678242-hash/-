@@ -278,6 +278,9 @@ const CONFIG = {
     { id:'snacks',   name:'零食大礼包',   desc:'下一局粉丝获取 +40%',           cost:50,     kind:'consumable', icon:'🍿' },
     { id:'coffee',   name:'冰美式',       desc:'下一局连击窗口 +2 秒',          cost:40,     kind:'consumable', icon:'☕' },
     { id:'cake',     name:'治愈小蛋糕',   desc:'下一局必定掉落 1 个好运果',     cost:120,    kind:'consumable', icon:'🍰' },
+    { id:'fertilizer', name:'花园营养液', desc:'让一株植物立即成长一步', cost:30, kind:'gardenItem', stockKey:'fertilizer', icon:'🧴' },
+    { id:'doubleHarvest', name:'双倍收获卡', desc:'下次收获有概率获得双倍鲜花', cost:50, kind:'gardenItem', stockKey:'doubleCards', icon:'🌼' },
+    { id:'tripleHarvest', name:'三倍收获卡', desc:'下次收获有较低概率获得三倍鲜花', cost:90, kind:'gardenItem', stockKey:'tripleCards', icon:'🌷' },
     { id:'plant',    name:'桌面绿植',     desc:'永久：粉丝获取 +2%（可叠加5）', cost:150,    kind:'asset',      key:'plant', icon:'🪴' },
     { id:'light',    name:'柔光补光灯',   desc:'永久：热度获取 +5%（可叠加5）', cost:260,    kind:'asset',      key:'light', icon:'💡' },
     { id:'mic',      name:'专业声卡麦',   desc:'永久：礼物收益 +10%（可叠加5）', cost:400,   kind:'asset',      key:'mic',   icon:'🎙️' },
@@ -286,8 +289,8 @@ const CONFIG = {
     { id:'house',    name:'海景大平层 🏠', desc:'几百万的安居梦，终于实现了',     cost:2888888, kind:'milestone', key:'house', icon:'🏠' }
   ],
 
-  /* 调香拍卖：每隔 perfumeEvery 天开展；当天玩法变为原料融合调香 */
-  perfumeEvery: 3,
+  /* 首发版本暂不开放调香特别日，保留旧存档兼容 */
+  perfumeEvery: 999999,
   blendNeed: 6,
   treatTexts: { milkTea:'今天喝了一杯超好喝的快乐奶茶，感觉好幸福～', snacks:'零食大礼包一打开，幸福感爆棚！', coffee:'冰美式下肚，感觉能连击到天亮！', cake:'治愈小蛋糕，甜到心里了～' },
   flowerEmoji: { peach:'🍑',apricot:'🌸',apple:'🍎',pear:'🍐',pomegranate:'🌹',tangerine:'🍊',jujube:'🧧',strawberry:'🍓',banana:'🍌',mango:'🥭',grape:'🍇',watermelon:'🍉',lemon:'🍋',pomelo:'🍈',loquat:'🍊',bayberry:'🫐',persimmon:'🧡',papaya:'🍈',starfruit:'⭐',mulberry:'🫐',hawthorn:'🍒',chestnut:'🌰',hazelnut:'🌰',cashew:'🌙',pistachio:'🟢',sunflower:'🌻',cantaloupe:'🍈',guava:'🍏',waxapple:'🍎',olive:'🫒',cherry:'🍒',plum:'🌺',orange:'🍊',walnut:'🌰',blueberry:'🫐',coconut:'🥥',kiwi:'🥝',lychee:'🌸',longan:'🍇',mangosteen:'🟣',raspberry:'🫐',blackberry:'🫐',cranberry:'🔴',almond:'🌰',macadamia:'🟤',dragonfruit:'🐉',durian:'🍍',jackfruit:'🍈',fig:'🟤',cocoa:'🍫' },
@@ -1481,7 +1484,11 @@ function renderGoodsShop(){
       if(!item||saveData.money<item.cost) return;
       AudioSys.collect();
       saveData.money-=item.cost;
-      if(item.kind==='milestone'){
+      if(item.kind==='gardenItem'){
+        if(!saveData.garden) saveData.garden={seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};
+        saveData.garden[item.stockKey]=(saveData.garden[item.stockKey]||0)+1;
+        showToast(item.icon,'获得 '+item.name+'！');
+      } else if(item.kind==='milestone'){
         saveData.ownedItems.push({ id:item.id, kind:'milestone', key:item.key });
         showToast(item.icon,'恭喜！获得 '+item.name+'！'); checkAchievements();
       } else if(item.kind==='asset'){
@@ -1786,6 +1793,8 @@ function checkDragCollision(a,fromX,fromY){
 function renderGarden(){
   const g=saveData.garden||(saveData.garden={seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0});
   gardenSeedsEl.textContent=g.seeds||0; gardenMoneyEl.textContent=formatMoney(saveData.money||0);
+  const fertilizeBtn=document.getElementById('btnGardenFertilize');
+  fertilizeBtn.textContent='使用营养液 · 30 元';
   if(!g.plots.length) gardenPlotsEl.innerHTML='<div class="garden-empty">这里还空着呢。完成一场直播，就能获得一颗种子。<br>种下第一朵花，让小花园慢慢热闹起来。</div>';
   else gardenPlotsEl.innerHTML=g.plots.map(function(p){const icons=['🌰','🌱','🌿','🌼'];const labels=['刚刚种下','长出嫩芽','正在生长','已经开花'];return '<div class="garden-plot"><div class="garden-plant">'+icons[Math.min(3,p.stage||0)]+'</div><div class="garden-plant-name">'+p.name+'</div><div class="garden-stage">'+labels[Math.min(3,p.stage||0)]+'</div></div>';}).join('');
   document.getElementById('btnGardenPlant').disabled=(g.seeds||0)<1;
@@ -1838,9 +1847,7 @@ function updateHome(){
   btn.style.display=has?'':'none';
   if(has) btn.textContent='继 续 游 戏 · 第 '+(saveData.currentDay||1)+' 天';
   const cd=document.getElementById('perfumeCountdown');
-  const d0=saveData.currentDay||1;
-  if(d0%CONFIG.perfumeEvery===0) cd.textContent='🧪 今天是调香直播日！';
-  else cd.textContent='🧪 距下次调香直播还有 '+(CONFIG.perfumeEvery-(d0%CONFIG.perfumeEvery))+' 天';
+  cd.textContent='每完成一场直播，都会收获收益与种子。';
 }
 
 document.getElementById('btnContinue').addEventListener('click',function(){
