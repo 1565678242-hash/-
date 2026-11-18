@@ -384,7 +384,10 @@ const ACHIEVEMENTS = [
   { id:'gardenHarvest1',name:'第一束花',desc:'第一次收获鲜花',icon:'💐',check:function(){return (saveData.garden&&saveData.garden.harvestCount||0)>=1;} },
   { id:'gardenHarvest10',name:'小小花农',desc:'累计收获 10 次',icon:'🌷',check:function(){return (saveData.garden&&saveData.garden.harvestCount||0)>=10;} },
   { id:'gardenPlots3',name:'花园扩建',desc:'解锁 3 块土地',icon:'🪴',check:function(){return (saveData.garden&&saveData.garden.unlockedPlots||1)>=3;} },
-  { id:'gardenFlowers50',name:'鲜花满篮',desc:'累计收获 50 朵鲜花',icon:'🧺',check:function(){return (saveData.garden&&saveData.garden.totalFlowers||0)>=50;} }
+  { id:'gardenFlowers50',name:'鲜花满篮',desc:'累计收获 50 朵鲜花',icon:'🧺',check:function(){return (saveData.garden&&saveData.garden.totalFlowers||0)>=50;} },
+  { id:'gardenBouquet4',name:'丰盛花束',desc:'单次收获达到 4 朵鲜花',icon:'💐',check:function(){return (saveData.garden&&saveData.garden.maxHarvestBatch||0)>=4;} },
+  { id:'gardenPlots6',name:'花园主人',desc:'解锁全部 6 块土地',icon:'🏡',check:function(){return (saveData.garden&&saveData.garden.unlockedPlots||1)>=6;} },
+  { id:'flowerLive1',name:'花香开播',desc:'完成第一次卖花直播',icon:'🎥',check:function(){return (saveData.garden&&saveData.garden.flowerLives||0)>=1;} }
 ];
 
 const FONT_FAMILY = '"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif';
@@ -1773,7 +1776,7 @@ function checkDragCollision(a,fromX,fromY){
    花园与存档管理
    ============================================================ */
 const GARDEN_PLOT_COSTS=[0,100,240,430,700,1050];
-function ensureGarden(){if(!saveData.garden)saveData.garden={seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};const g=saveData.garden;if(!Array.isArray(g.plots))g.plots=[];if(g.unlockedPlots==null)g.unlockedPlots=1;if(g.flowers==null)g.flowers=0;if(g.harvestCount==null)g.harvestCount=0;if(g.totalFlowers==null)g.totalFlowers=0;if(g.totalPlanted==null)g.totalPlanted=g.plots.length;g.unlockedPlots=clamp(Math.max(Number(g.unlockedPlots)||1,Math.min(6,g.plots.length)),1,6);return g;}
+function ensureGarden(){if(!saveData.garden)saveData.garden={seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};const g=saveData.garden;if(!Array.isArray(g.plots))g.plots=[];if(g.unlockedPlots==null)g.unlockedPlots=1;if(g.flowers==null)g.flowers=0;if(g.harvestCount==null)g.harvestCount=0;if(g.totalFlowers==null)g.totalFlowers=0;if(g.totalPlanted==null)g.totalPlanted=g.plots.length;if(g.maxHarvestBatch==null)g.maxHarvestBatch=0;if(g.flowerLives==null)g.flowerLives=0;g.unlockedPlots=clamp(Math.max(Number(g.unlockedPlots)||1,Math.min(6,g.plots.length)),1,6);return g;}
 function renderGarden(){
  const g=ensureGarden();gardenSeedsEl.textContent=g.seeds||0;gardenMoneyEl.textContent=formatMoney(saveData.money||0);document.getElementById('gardenFlowerStock').textContent=g.flowers||0;
  document.getElementById('gardenProgress').textContent='累计收获 '+g.harvestCount+' 次 · '+(g.harvestCount>=10?'🎥 卖花直播已解锁':'再收获 '+(10-g.harvestCount)+' 次解锁卖花直播')+' · 每株可收获 2–4 朵';
@@ -1796,9 +1799,9 @@ document.getElementById('btnGardenPlant').addEventListener('click',function(){co
 function waterGardenPlot(i){const g=ensureGarden(),p=g.plots[i];if(!p||(p.stage||0)>=3)return;p.stage=Math.min(3,(p.stage||0)+1);p.watered=true;gardenTipEl.textContent='浇水完成！'+p.name+' 长高了一步。再浇水或完成直播，就离开花更近啦。';persist();renderGarden();}
 document.getElementById('btnGardenWater').addEventListener('click',function(){const g=ensureGarden(),i=g.plots.findIndex(function(p){return(p.stage||0)<3;});if(i>=0)waterGardenPlot(i);});
 document.getElementById('btnGardenFertilize').addEventListener('click',function(){const g=ensureGarden(),i=g.plots.findIndex(function(p){return(p.stage||0)<3;});if(i<0)return;if(g.fertilizer>0)g.fertilizer--;else{if(saveData.money<30)return;saveData.money-=30;}g.plots[i].stage=Math.min(3,(g.plots[i].stage||0)+1);gardenTipEl.textContent='营养液让 '+g.plots[i].name+' 快速成长了一步。';persist();renderGarden();});
-function harvestGardenPlot(i){const g=ensureGarden(),p=g.plots[i];if(!p||(p.stage||0)<3)return;let m=1;if(g.tripleCards>0){g.tripleCards--;if(Math.random()<0.12)m=3;}else if(g.doubleCards>0){g.doubleCards--;if(Math.random()<0.32)m=2;}const n=randInt(2,4)*m;g.flowers+=n;g.totalFlowers+=n;g.harvestCount++;g.plots.splice(i,1);gardenTipEl.textContent='收获 '+p.name+'！这一株结出了 '+n+' 朵鲜花。鲜花存进花篮，累计收获 10 次后解锁卖花直播。';persist();renderGarden();checkAchievements();}
+function harvestGardenPlot(i){const g=ensureGarden(),p=g.plots[i];if(!p||(p.stage||0)<3)return;let m=1;if(g.tripleCards>0){g.tripleCards--;if(Math.random()<0.12)m=3;}else if(g.doubleCards>0){g.doubleCards--;if(Math.random()<0.32)m=2;}const n=randInt(2,4)*m;g.flowers+=n;g.totalFlowers+=n;g.harvestCount++;g.maxHarvestBatch=Math.max(Number(g.maxHarvestBatch)||0,n);g.plots.splice(i,1);gardenTipEl.textContent='收获 '+p.name+'！这一株结出了 '+n+' 朵鲜花。鲜花存进花篮，累计收获 10 次后解锁卖花直播。';persist();renderGarden();checkAchievements();}
 document.getElementById('btnGardenHarvest').addEventListener('click',function(){const g=ensureGarden(),i=g.plots.findIndex(function(p){return(p.stage||0)>=3;});if(i>=0)harvestGardenPlot(i);});
-document.getElementById('btnFlowerLive').addEventListener('click',function(){const g=ensureGarden();if(g.harvestCount<10||g.flowers<1)return;const sold=g.flowers,income=sold*22+Math.round((saveData.totalFans||0)*0.15);g.flowers=0;saveData.money+=income;saveData.totalEarned+=income;gardenTipEl.textContent='卖花直播圆满结束！卖出 '+sold+' 朵鲜花，收入 '+formatMoney(income)+' 元。';persist();renderGarden();checkAchievements();showToast('🌷','卖花直播成交，收入 +'+formatMoney(income)+' 元');});
+document.getElementById('btnFlowerLive').addEventListener('click',function(){const g=ensureGarden();if(g.harvestCount<10||g.flowers<1)return;const sold=g.flowers,income=sold*22+Math.round((saveData.totalFans||0)*0.15);g.flowers=0;g.flowerLives=(g.flowerLives||0)+1;saveData.money+=income;saveData.totalEarned+=income;gardenTipEl.textContent='卖花直播圆满结束！卖出 '+sold+' 朵鲜花，收入 '+formatMoney(income)+' 元。';persist();renderGarden();checkAchievements();showToast('🌷','卖花直播成交，收入 +'+formatMoney(income)+' 元');});
 function exportSave(){
   persist();const blob=new Blob([JSON.stringify(saveData,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
   a.href=url;a.download='滚蛋吧坏情绪-存档.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);showToast('💾','存档已导出');
@@ -1844,7 +1847,7 @@ document.getElementById('btnNewGame').addEventListener('click',function(){
     unlocked:[], luckyCount:0, daysSinceLucky:0, unlockedAchievements:[],
     maxComboEver:0, answeredCount:0, ownedItems:[],
     currentDay:1, hintedFruit:false, hintedPositive:false, hintedBlend:false, daySnapshot:null,
-    money:0, totalEarned:0, garden:{seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0,unlockedPlots:1,flowers:0,harvestCount:0,totalFlowers:0,totalPlanted:0}, theme:"warm", avatar:"sun",
+    money:0, totalEarned:0, garden:{seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0,unlockedPlots:1,flowers:0,harvestCount:0,totalFlowers:0,totalPlanted:0,maxHarvestBatch:0,flowerLives:0}, theme:"warm", avatar:"sun",
     ownedThemes:[], ownedAvatars:[], perfumes:[], pkWins:0, seenIntro:false, seenStoryIntro:false };
   gardenTipEl.textContent='花圃已经整理好啦。先领取直播种子，再选择空土地种下；浇水三次或完成直播，让花苗慢慢长大。'; renderGarden();
   showTutorial();
