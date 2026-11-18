@@ -94,7 +94,7 @@ const CONFIG = {
     positiveCooldown: 2.0,
     fanLossOnHit: [5, 12],
     heatLossOnHit: [8, 15],
-    bubbleTopLimit: 100,
+    bubbleTopLimit: 136,
     bubbleBottomMargin: 28,
     questionChance: 0.55,
     questionIntervalMin: 18,
@@ -1791,7 +1791,6 @@ function renderGarden(){
 function openGarden(){renderGarden();showScreen(gardenScreen);}
 document.getElementById('btnGardenHome').addEventListener('click',function(){AudioSys.click();openGarden();});
 btnGardenQuickEl.addEventListener('click',function(){AudioSys.click();openGarden();});
-document.getElementById('btnGardenRibbon').addEventListener('click',function(){AudioSys.click();openGarden();});
 document.getElementById('btnGardenBack').addEventListener('click',function(){AudioSys.click();showScreen(homeScreen);});
 document.getElementById('btnGardenPlant').addEventListener('click',function(){const g=ensureGarden();if(g.seeds<1||g.plots.length>=g.unlockedPlots)return;const keys=saveData.unlocked.length?saveData.unlocked:CONFIG.pairs.map(function(p){return p.key;});const key=keys[randInt(0,keys.length-1)],pair=CONFIG.pairs.filter(function(p){return p.key===key;})[0]||CONFIG.pairs[0];g.seeds--;g.plots.push({key:pair.key,name:pair.flower,stage:0,watered:false});g.totalPlanted++;gardenTipEl.textContent='已种下 '+pair.flower+'。点这块土地上的「浇水」让它成长；完成直播也会让所有花苗成长一步。';persist();renderGarden();checkAchievements();});
 function waterGardenPlot(i){const g=ensureGarden(),p=g.plots[i];if(!p||(p.stage||0)>=3)return;p.stage=Math.min(3,(p.stage||0)+1);p.watered=true;gardenTipEl.textContent='浇水完成！'+p.name+' 长高了一步。再浇水或完成直播，就离开花更近啦。';persist();renderGarden();}
