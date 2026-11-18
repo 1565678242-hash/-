@@ -422,7 +422,7 @@ let saveData = {
   answeredCount: 0, ownedItems: [],
   currentDay: 1, hintedFruit: false, hintedPositive: false, hintedBlend: false, daySnapshot: null,
   money: 0, totalEarned: 0, garden: { seeds: 0, plots: [], fertilizer: 0, doubleCards: 0, tripleCards: 0 }, theme: "warm", avatar: "sun",
-  ownedThemes: [], ownedAvatars: [], perfumes: [], pkWins: 0, seenIntro: false
+  ownedThemes: [], ownedAvatars: [], perfumes: [], pkWins: 0, seenIntro: false, seenStoryIntro: false
 };
 
 /* ============================================================
@@ -547,6 +547,7 @@ function loadSave(){
         saveData.perfumes = Array.isArray(d.perfumes)?d.perfumes:[];
         saveData.pkWins = d.pkWins||0;
         saveData.seenIntro = !!d.seenIntro;
+        saveData.seenStoryIntro = !!d.seenStoryIntro;
         saveData.hintedBlend = !!d.hintedBlend;
       }
     }
@@ -1902,7 +1903,7 @@ tabShopGoodsEl.addEventListener('click',function(){ AudioSys.click(); shopTab='g
 /* ---- 新手引导 ---- */
 let tutStep=0;
 function showTutorial(){
-  if(saveData.seenIntro) return;
+  if(saveData.seenStoryIntro) return;
   tutStep=0; renderTut(); introTutorialEl.classList.add('show');
 }
 function renderTut(){
@@ -1922,7 +1923,7 @@ function setupTutorial(){
   });
   tutSkipEl.addEventListener('click',function(){ AudioSys.click(); closeTutorial(); });
 }
-function closeTutorial(){ introTutorialEl.classList.remove('show'); saveData.seenIntro=true; persist(); }
+function closeTutorial(){ introTutorialEl.classList.remove('show'); saveData.seenIntro=true; saveData.seenStoryIntro=true; persist(); }
 
 /* ---- 点赞互动：观众点赞涨热度 ---- */
 let likeCd=0;
