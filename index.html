@@ -17,10 +17,11 @@
     <div class="hud-chip"><span>收益</span><b id="hudMoney">0</b></div>
   </div>
   <div id="liveBar"><span class="live-dot"></span>直播中 · <b id="liveViewers">--</b> 人在看</div>
+  <button id="btnGardenRibbon" type="button">🌷 我的花园 <small>种植 · 浇水 · 收获</small></button>
   <div id="hostAvatar">🌞</div>
   <div id="topRight">
     <button class="icon-btn" id="btnMute" title="静音">🔊</button>
-    <button class="text-btn" id="btnGardenQuick">🌱 花园</button>
+    <button class="text-btn" id="btnGardenQuick">🌷 花园</button>
     <button class="text-btn" id="btnShop">商店</button>
     <button class="text-btn" id="btnCollection">图鉴</button>
     <button class="text-btn" id="btnMenu">菜单</button>
@@ -59,7 +60,7 @@
   <div id="gardenScreen" class="screen">
     <button class="back-btn" id="btnGardenBack">‹ 返回</button>
     <div class="page-title">我的小花园</div>
-    <div class="garden-intro">先解锁土地，再把种子种进土里。每场直播会让植物长大；也可以亲手浇水。成熟后一次能收下几朵花。</div>
+    <div class="garden-intro">把种子种进土地，浇水让花苗长大。每场直播也会帮助植物成长；成熟后点击收获，一株能收下多朵鲜花。用直播收益开垦新土地，最多经营六块花圃。</div>
     <div class="garden-balance"><span>🌱 种子 <b id="gardenSeeds">0</b></span><span>🌷 鲜花 <b id="gardenFlowerStock">0</b></span><span>♡ 收益 <b id="gardenMoney">0</b></span></div>
     <div class="garden-progress" id="gardenProgress">已收获 0 次 · 再收获 10 次解锁卖花直播</div>
     <div class="garden-plots" id="gardenPlots"></div>
@@ -90,7 +91,7 @@
   <div id="collectionScreen" class="screen">
     <button class="back-btn" id="btnCollectionBack">‹ 返回</button>
     <div class="page-title" id="colTitle">花果图鉴</div>
-    <div class="tabs"><button class="tab active" id="tabUnlocked">已收集</button><button class="tab" id="tabAll">全部</button><button class="tab" id="tabPerfume" hidden>香水图鉴</button></div>
+    <div class="tabs"><button class="tab active" id="tabUnlocked">已收集</button><button class="tab" id="tabAll">全部</button></div>
     <div class="pair-grid" id="collectionGrid"></div>
   </div>
   <div id="shopScreen" class="screen">
@@ -145,10 +146,10 @@
   </div>
   <div id="introTutorial">
     <div class="tut-card">
-      <div class="tut-step on"><div class="tut-emoji">🫧</div><div class="tut-title">先学会消除情绪泡泡</div><div class="tut-text">按住一个泡泡，拖到另一个相同的泡泡上。<br>配对成功就能消除，获得热度和粉丝。</div></div>
-      <div class="tut-step"><div class="tut-emoji">🌱</div><div class="tut-title">每场直播都会送你种子</div><div class="tut-text">完成一场直播后，奖励会发放种子和收益。<br>点击游戏上方的「花园」，就能进入种植。</div></div>
-      <div class="tut-step"><div class="tut-emoji">💧</div><div class="tut-title">种下、浇水，等花开</div><div class="tut-text">一开始只有一块土地，只能种一株植物。<br>每场直播让植物长大一步，也可以手动浇水；成熟后一次能收获几朵花。</div></div>
-      <div class="tut-step"><div class="tut-emoji">🌷</div><div class="tut-title">把花园慢慢经营起来</div><div class="tut-text">用收益解锁更多土地，最多拥有六块。<br>累计收获 10 次后解锁卖花直播；商店分为「好运果兑换」和「花园商城」。</div></div>
+      <div class="tut-step on"><div class="tut-emoji">🫧</div><div class="tut-title">先学会消除情绪泡泡</div><div class="tut-text">按住一个泡泡，拖到另一个同样文字的泡泡上。<br>松开后即可消除，热度和粉丝会自动增加。</div></div>
+      <div class="tut-step"><div class="tut-emoji">🌱</div><div class="tut-title">每场直播都会送你种子</div><div class="tut-text">每完成一场直播，固定获得 1 颗种子和直播收益。<br>点击画面上方的「花园」按钮，随时查看花圃。</div></div>
+      <div class="tut-step"><div class="tut-emoji">💧</div><div class="tut-title">种下、浇水，等花开</div><div class="tut-text">开始时只有 1 块土地，只能种 1 株。<br>进入花园后点「种下种子」，再点土地上的「浇水」；浇水 3 次可成熟，每场直播也会让植物成长一步。</div></div>
+      <div class="tut-step"><div class="tut-emoji">🌷</div><div class="tut-title">把花园慢慢经营起来</div><div class="tut-text">收获时每株会得到 2–4 朵鲜花。<br>用收益解锁其余 5 块土地；累计收获 10 次后开启卖花直播。商店分为「好运果兑换」和「花园商城」。</div></div>
       <div class="tut-dots"><span class="on"></span><span></span><span></span><span></span></div>
       <button class="main-btn primary" id="tutNext" style="width:100%">下一步</button><button id="tutSkip">跳过引导</button>
     </div>
