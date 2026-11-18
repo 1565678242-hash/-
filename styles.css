@@ -269,3 +269,43 @@ canvas#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block
 @media(max-width:380px){.garden-plot{min-height:138px}.garden-plots{gap:8px}.garden-actions{gap:6px}.garden-action{font-size:10px}}
 
 @media(max-width:420px){#topRight{gap:3px}#topRight .text-btn{padding:0 7px;font-size:9px}#btnGardenQuick{letter-spacing:0}}
+
+
+/* ---- 花园入口与花圃美化 ---- */
+#btnGardenRibbon{position:absolute;z-index:12;top:calc(190px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:9px;padding:8px 16px;border:1px solid rgba(255,255,255,.95);border-radius:22px;background:linear-gradient(120deg,rgba(255,250,244,.96),rgba(238,247,232,.96));color:#718d74;font-size:12px;font-weight:800;letter-spacing:.04em;box-shadow:0 7px 20px rgba(112,143,112,.16);cursor:pointer;white-space:nowrap}
+#btnGardenRibbon small{font-size:9px;font-weight:500;color:#a1ad9b}
+#btnGardenRibbon:active{transform:translateX(-50%) scale(.97)}
+#btnGardenQuick{font-weight:800;box-shadow:0 4px 14px rgba(130,155,125,.15)}
+#gardenScreen{justify-content:flex-start;padding-top:calc(42px + env(safe-area-inset-top));padding-bottom:20px;overflow-y:auto}
+#gardenScreen .page-title{margin:5px 0 12px;font-size:23px;color:#718d74;letter-spacing:.1em}
+.garden-intro{max-width:340px;margin:0 0 12px;padding:10px 14px;border-radius:16px;background:rgba(255,255,255,.62);box-shadow:inset 0 1px 0 rgba(255,255,255,.9)}
+.garden-progress{color:#8c9e83;background:linear-gradient(100deg,#fff8ee,#f1f7ec);border:1px solid rgba(255,255,255,.9)}
+.garden-plots{width:min(92vw,430px);max-height:none;overflow:visible;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.garden-plot{min-height:158px;border-radius:22px;background:linear-gradient(155deg,#fffefa 0%,#f5f8ed 100%);box-shadow:0 7px 18px rgba(115,139,105,.12),inset 0 1px 0 #fff}
+.soil-bed{height:76px;margin:0}
+.soil-bed:before{width:104px;height:36px;background:radial-gradient(ellipse at 50% 25%,#b48a6e,#947055 70%,#76573f);box-shadow:inset 0 5px 9px rgba(255,229,198,.28),0 6px 9px rgba(104,117,83,.16)}
+.soil-bed:after{width:90px;bottom:19px;height:6px}
+.soil-sprout{font-size:31px;transform-origin:bottom center;filter:drop-shadow(0 4px 3px rgba(76,111,72,.2))}
+.soil-sprout.stage-1{font-size:37px}.soil-sprout.stage-2{font-size:43px}.soil-sprout.stage-3{font-size:48px}
+.soil-leaf{width:23px;height:12px;background:linear-gradient(135deg,#d1e6ad,#7fa879);box-shadow:0 2px 4px rgba(82,125,79,.12)}
+.garden-plot.planted-plot{border-color:#e7efdf}
+.garden-plant-name{font-size:12px;color:#738b73}
+.plot-actions button{min-height:30px;background:linear-gradient(180deg,#fff,#f4f8ef);border-color:#e3ecdd;font-weight:700}
+.plot-actions button:not(:disabled):active{background:#eaf3e5}
+.empty-plot{background:linear-gradient(160deg,#fffefa,#f2f6eb)}
+.empty-plot .soil-bed:before{background:radial-gradient(ellipse at 50% 25%,#c9a98a,#a4876b 70%,#8b715a)}
+.locked-plot{background:linear-gradient(150deg,#f7f7ee,#eaf1e5);border:1px dashed #c6d4bd}
+.plot-cost{color:#bd9870;font-weight:700}
+.garden-action{font-weight:700;box-shadow:0 4px 12px rgba(119,148,116,.08)}
+.garden-action.primary{background:linear-gradient(120deg,#a9cba7,#cbb9d9)}
+.garden-action.flower-live{background:linear-gradient(120deg,#f4dce5,#eee3f5)}
+.garden-tip{max-width:350px;padding:9px 13px;border-radius:14px;background:rgba(255,255,255,.65);color:#849781}
+.shop-section{color:#9b9b80}
+@media(max-width:520px){
+ #btnGardenRibbon{top:calc(184px + env(safe-area-inset-top));padding:7px 13px;font-size:11px}
+ #btnGardenRibbon small{font-size:8px}
+ #gardenScreen{padding-top:calc(40px + env(safe-area-inset-top))}
+ .garden-plots{width:min(94vw,430px);gap:9px}
+ .garden-plot{min-height:145px;padding:8px 5px}
+}
+@media(max-height:740px){#gardenScreen{justify-content:flex-start}.garden-plots{gap:8px}.garden-plot{min-height:132px}.garden-actions{margin-top:9px}}
