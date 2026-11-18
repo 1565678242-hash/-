@@ -1993,6 +1993,7 @@ renderAchievements();
 renderShop();
 if(!saveData.garden) saveData.garden={seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};
 renderGarden();
+if(saveData.garden&&Array.isArray(saveData.garden.pendingMaturedFlowers)&&saveData.garden.pendingMaturedFlowers.length){showGardenNotice('🌸','花儿成熟啦！','你种下的 '+saveData.garden.pendingMaturedFlowers.join('、')+' 已经成熟，快去花园收获吧！');}
 showScreen(homeScreen);
 
 requestAnimationFrame(function(now){ state.lastTime=now; requestAnimationFrame(loop); });
