@@ -1201,7 +1201,7 @@ function collectFruit(b){
   state.heat+=CONFIG.gameplay.fruitHeatBonus;
   if(state.heat>state.dayStats.heatPeak) state.dayStats.heatPeak=state.heat;
   addFloat(b.x,b.y-b.r-10,'好运果 +1','#d9a020');
-  showToast('🍀','获得好运果！可以在商店里兑换好物哦。');
+  showGardenNotice('🍀','好运果 +1！','好运果可以在商店里兑换好物哦，记得去看看。');
   setTimeout(checkDayEnd,320);
 }
 
@@ -1263,8 +1263,13 @@ function finishSuccess(){
   if(state.fruitCollected) saveData.luckyCount+=1;
   /* 每场直播奖励种子，植物随直播自然成长一步。 */
   const liveIncome=Math.max(18,Math.round(18+state.heat*0.12));saveData.money+=liveIncome;saveData.totalEarned+=liveIncome;
-  if(!saveData.garden)saveData.garden={seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0,unlockedPlots:1,flowers:0,harvestCount:0,totalFlowers:0,totalPlanted:0};
-  saveData.garden.seeds+=1;saveData.garden.plots.forEach(function(p){p.stage=Math.min(3,(p.stage||0)+1);p.watered=false;});state.liveIncome=liveIncome;state.auctionPerfume=null;
+  if(!saveData.garden)saveData.garden={seeds:0,seedInventory:[],lastWaterDay:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0,unlockedPlots:1,flowers:0,harvestCount:0,totalFlowers:0,totalPlanted:0};
+  const garden=ensureGarden();const seedCount=randInt(1,3),seedRewards=[];
+  for(let si=0;si<seedCount;si++){const seed=rollGardenSeed();garden.seedInventory.push(seed);seedRewards.push(seed.label);}
+  garden.seeds=garden.seedInventory.length;
+  const maturedNames=[];
+  garden.plots.forEach(function(p){const before=p.stage||0;p.stage=Math.min(3,before+1);if(before<3&&p.stage>=3)maturedNames.push(p.name);});
+  state.maturedFlowers=maturedNames;state.seedRewards=seedRewards;state.liveIncome=liveIncome;state.auctionPerfume=null;
   saveData.totalHeat+=state.heat; saveData.totalFans=state.fans;
   saveData.totalPopped+=state.dayStats.popped; saveData.totalDays+=1;
   if(state.currentDay>saveData.bestDay) saveData.bestDay=state.currentDay;
@@ -1283,7 +1288,7 @@ function showResult(){
   state.phase='result';
   const day=state.currentDay;
   resultTitleEl.textContent='第 '+day+' 天 · 完成';
-  resultSubEl.textContent='本场直播收益 '+formatMoney(state.liveIncome||0)+' 元 · 获得 '+(state.seedRewards||[]).length+' 颗随机种子。花园里的每株植物都成长了一步。';
+  resultSubEl.textContent='恭喜完成今天的疗愈直播！获得 '+(state.seedRewards||[]).length+' 颗随机种子和 '+formatMoney(state.liveIncome||0)+' 元收益。花园里的每株植物都成长了一步。';
   resultStatsEl.innerHTML='<div class="rs-item"><span>消除坏情绪</span><b>'+state.dayStats.popped+'</b></div><div class="rs-item"><span>今日涨粉</span><b>+'+state.dayStats.fansGained+'</b></div><div class="rs-item"><span>回答提问</span><b>'+state.dayStats.answered+'</b></div>';
   let rewardHtml=(state.seedRewards||[]).map(function(s){return '<div class="reward-item"><div class="reward-icon">'+(s.indexOf('神秘')>=0?'❔':(s.indexOf('疗愈')>=0?'✨':'🌱'))+'</div><div class="reward-name">'+s+'</div></div>';}).join('');
   /* 每日结算奖励统一为种子；好运果仅作为直播过程中的额外收集物。 */
@@ -1332,8 +1337,8 @@ function showResult(){
    二十五、页面 / 果篮商店
    ============================================================ */
 function showScreen(el){ const ss=document.querySelectorAll('.screen'); for(let i=0;i<ss.length;i++) ss[i].classList.remove('active'); if(el) el.classList.add('active'); }
-function showGardenNotice(emoji,title,message){const box=document.getElementById('gardenNotice');document.getElementById('gardenNoticeEmoji').textContent=emoji;document.getElementById('gardenNoticeTitle').textContent=title;document.getElementById('gardenNoticeText').textContent=message;box.classList.add('show');}
-document.getElementById('gardenNoticeClose').addEventListener('click',function(){document.getElementById('gardenNotice').classList.remove('show');AudioSys.click();});
+function showGardenNotice(emoji,title,message){if(state.phase==='playing')state.paused=true;const box=document.getElementById('gardenNotice');document.getElementById('gardenNoticeEmoji').textContent=emoji;document.getElementById('gardenNoticeTitle').textContent=title;document.getElementById('gardenNoticeText').textContent=message;box.classList.add('show');}
+document.getElementById('gardenNoticeClose').addEventListener('click',function(){document.getElementById('gardenNotice').classList.remove('show');if(state.phase==='playing')state.paused=false;AudioSys.click();});
 function beginDayTransition(day){const el=document.getElementById('dayTransition');document.getElementById('dayTransitionText').textContent='第 '+day+' 天';el.classList.add('show');setTimeout(function(){el.classList.remove('show');startDay(day);},1450);}
 function hideAllScreens(){ showScreen(null); }
 
@@ -1795,7 +1800,7 @@ function renderGarden(){
  document.getElementById('gardenProgress').textContent='累计收获 '+g.harvestCount+' 次 · '+(g.harvestCount>=10?'🎥 卖花直播已解锁':'再收获 '+(10-g.harvestCount)+' 次解锁卖花直播')+' · 每株可收获 2–4 朵';
  const icons=['🌰','🌱','🌿','🌸'],labels=['种子刚入土','冒出嫩芽','枝叶舒展','鲜花盛开'];let cards='';
  for(let i=0;i<6;i++){const p=g.plots[i];if(i>=g.unlockedPlots){cards+='<button class="garden-plot locked-plot" data-unlock-plot="'+i+'"><span class="plot-lock">🔒</span><span class="plot-title">土地 '+(i+1)+'</span><span class="plot-cost">解锁 · '+GARDEN_PLOT_COSTS[i]+' 元</span></button>';}
- else if(p){const st=clamp(Number(p.stage)||0,0,3);cards+='<div class="garden-plot planted-plot"><div class="soil-bed"><span class="soil-sprout stage-'+st+'">'+icons[st]+'</span><i class="soil-leaf leaf-one"></i><i class="soil-leaf leaf-two"></i></div><div class="garden-plant-name">'+p.name+'</div><div class="garden-stage">'+labels[st]+'</div><div class="plot-actions"><button data-water-plot="'+i+'" '+(st>=3?'disabled':'')+'>💧 浇水</button><button data-harvest-plot="'+i+'" '+(st<3?'disabled':'')+'>收获</button></div></div>';}
+ else if(p){const st=clamp(Number(p.stage)||0,0,3);cards+='<div class="garden-plot planted-plot"><div class="soil-bed"><span class="soil-sprout stage-'+st+'">'+icons[st]+'</span><i class="soil-leaf leaf-one"></i><i class="soil-leaf leaf-two"></i></div><div class="garden-plant-name">'+p.name+'</div><div class="garden-stage">'+labels[st]+'</div><div class="plot-actions"><button data-water-plot="'+i+'" '+(st>=3||g.lastWaterDay===(saveData.currentDay||1)?'disabled':'')+'>💧 浇水</button><button data-harvest-plot="'+i+'" '+(st<3?'disabled':'')+'>收获</button></div></div>';}
  else cards+='<div class="garden-plot empty-plot"><div class="soil-bed"><span class="soil-seed">🌰</span></div><div class="garden-plant-name">空土地 '+(i+1)+'</div><div class="garden-stage">'+((g.seeds||0)>0?'点击「种下一颗种子」':'等待直播奖励种子')+'</div></div>';}
  gardenPlotsEl.innerHTML=cards;document.getElementById('btnGardenPlant').disabled=(g.seeds||0)<1||g.plots.length>=g.unlockedPlots;document.getElementById('btnGardenWater').disabled=g.lastWaterDay===(saveData.currentDay||1)||!g.plots.some(p=>(p.stage||0)<3);
  document.getElementById('btnGardenFertilize').textContent='🧴 营养液（库存 '+(g.fertilizer||0)+'）';document.getElementById('btnGardenFertilize').disabled=(!(g.fertilizer>0)&&(saveData.money||0)<30)||!g.plots.some(p=>(p.stage||0)<3);
