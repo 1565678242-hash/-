@@ -89,8 +89,8 @@
   </div>
   <div id="collectionScreen" class="screen">
     <button class="back-btn" id="btnCollectionBack">‹ 返回</button>
-    <div class="page-title" id="colTitle">花果图鉴</div>
-    <div class="tabs"><button class="tab active" id="tabUnlocked">已收集</button><button class="tab" id="tabAll">全部</button></div>
+    <div class="page-title" id="colTitle">鲜花图鉴</div>
+    <div class="tabs"><button class="tab active" id="tabUnlocked">已收集</button><button class="tab" id="tabAll">全部鲜花</button></div>
     <div class="pair-grid" id="collectionGrid"></div>
   </div>
   <div id="shopScreen" class="screen">
@@ -144,25 +144,24 @@
     </div>
   </div>
   <div id="introTutorial">
-    <div class="tut-card">
-      <div class="tut-step on"><div class="tut-emoji">🫧</div><div class="tut-title">先学会消除情绪泡泡</div><div class="tut-text">按住一个泡泡，拖到另一个同样文字的泡泡上。<br>松开后即可消除，热度和粉丝会自动增加。</div></div>
-      <div class="tut-step"><div class="tut-emoji">🌱</div><div class="tut-title">每场直播都会送你种子</div><div class="tut-text">每完成一场直播，固定获得 1 颗种子和直播收益。<br>点击画面上方的「花园」按钮，随时查看花圃。</div></div>
-      <div class="tut-step"><div class="tut-emoji">💧</div><div class="tut-title">种下、浇水，等花开</div><div class="tut-text">开始时只有 1 块土地，只能种 1 株。<br>进入花园后点「种下种子」，再点土地上的「浇水」；浇水 3 次可成熟，每场直播也会让植物成长一步。</div></div>
-      <div class="tut-step"><div class="tut-emoji">🌷</div><div class="tut-title">把花园慢慢经营起来</div><div class="tut-text">收获时每株会得到 2–4 朵鲜花。<br>用收益解锁其余 5 块土地；累计收获 10 次后开启卖花直播。商店分为「好运果兑换」和「花园商城」。</div></div>
-      <div class="tut-dots"><span class="on"></span><span></span><span></span><span></span></div>
-      <button class="main-btn primary" id="tutNext" style="width:100%">下一步</button><button id="tutSkip">跳过引导</button>
+    <div class="tut-card story-card">
+      <div class="story-system">✦ 疗愈直播系统 · 已绑定 ✦</div>
+      <div class="tut-step on"><div class="tut-emoji">🔔</div><div class="tut-title">叮！欢迎绑定</div><div class="tut-text">欢迎来到「滚蛋吧坏情绪：疗愈直播系统」！<br>一段新的生活，正等待你开启。</div></div>
+      <div class="tut-step"><div class="tut-emoji">🌧️</div><div class="tut-title">失业之后</div><div class="tut-text">失业后，你决定开始疗愈直播。<br>没有想到，这会成为人生新的起点。</div></div>
+      <div class="tut-step"><div class="tut-emoji">🫧</div><div class="tut-title">疗愈别人，也疗愈自己</div><div class="tut-text">你在直播里消除了很多观众的负面情绪，<br>也慢慢帮助大家解开了心里的结。</div></div>
+      <div class="tut-step"><div class="tut-emoji">💗</div><div class="tut-title">一点点变好的生活</div><div class="tut-text">收到的鼓励越来越多，<br>你也慢慢获得了第一笔属于自己的收益。</div></div>
+      <div class="tut-step"><div class="tut-emoji">🌱</div><div class="tut-title">把收益种进花园</div><div class="tut-text">你把这些收益投入自己的小花园，<br>买下土地，播种、浇水，照料每一株花苗。</div></div>
+      <div class="tut-step"><div class="tut-emoji">🌷</div><div class="tut-title">鲜花也有了新去处</div><div class="tut-text">花儿终于盛开。<br>你把亲手收获的鲜花摆进直播间，开始售卖花束。</div></div>
+      <div class="tut-step"><div class="tut-emoji">🏡</div><div class="tut-title">从小花园到大花园</div><div class="tut-text">你决定继续扩张自己的花园，<br>让更多种子在这里生根、开花。</div></div>
+      <div class="tut-step"><div class="tut-emoji">🍎</div><div class="tut-title">还有更远的计划</div><div class="tut-text">等花园越来越热闹，<br>你还打算买地经营一座果园……</div></div>
+      <div class="tut-step"><div class="tut-emoji">☀️</div><div class="tut-title">故事，从今天开始</div><div class="tut-text">愿你在疗愈别人的路上，<br>也把自己的日子过成喜欢的模样。</div></div>
+      <div class="tut-dots"><span class="on"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <button class="main-btn primary" id="tutNext" style="width:100%">下一页</button>
+      <button id="tutSkip">跳过故事</button>
     </div>
   </div>
-  <div id="gameMenu" class="menu-overlay">
-    <div class="menu-card"><div class="menu-title">暂停一下</div><div class="menu-sub">你的进度会自动保存</div>
-      <button class="menu-action primary" id="btnResume">继续直播</button><button class="menu-action" id="btnSaveExport">导出存档</button>
-      <button class="menu-action" id="btnSaveImport">导入存档</button><button class="menu-action" id="btnMenuHome">返回主页</button>
-      <button class="menu-cancel" id="btnMenuClose">关闭</button>
-    </div>
+  <div id="gardenNotice" class="garden-notice" aria-live="polite">
+    <div class="garden-notice-card"><div class="notice-emoji" id="gardenNoticeEmoji">🌸</div><div class="notice-title" id="gardenNoticeTitle">花儿成熟啦</div><div class="notice-text" id="gardenNoticeText"></div><button class="main-btn primary" id="gardenNoticeClose">知道啦</button></div>
   </div>
-  <input type="file" id="saveFileInput" accept="application/json,.json" hidden>
-</div>
-
-<script src="game.js" defer></script>
-</body>
-</html>
+  <div id="dayTransition" class="day-transition"><div class="day-transition-flower">🌼</div><div id="dayTransitionText">第 2 天</div><small>新的一天，也要好好生活</small></div>
+>
