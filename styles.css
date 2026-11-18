@@ -307,3 +307,28 @@ canvas#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block
 
 /* 顶部花园入口始终清晰可见，泡泡从导航区下方开始 */
 #btnGardenQuick{height:34px;padding:0 13px;font-size:11px;background:linear-gradient(135deg,#eaf4e4,#fff8ef);border:1px solid #fff;color:#6f8d72;box-shadow:0 4px 12px rgba(130,155,125,.18)}
+
+/* 首次绑定剧情弹窗与每日成长反馈 */
+.story-card{max-height:88vh;overflow-y:auto;padding-top:22px}
+.story-system{font-size:10px;letter-spacing:.18em;color:#a5b99c;margin-bottom:20px}
+.story-card .tut-emoji{font-size:54px;margin:10px 0 16px}
+.story-card .tut-title{font-size:20px;letter-spacing:.08em}
+.story-card .tut-text{font-size:14px;line-height:2.05;color:#879989}
+.story-card .tut-dots{margin:22px 0 14px}
+#tutNext{min-height:46px;letter-spacing:.04em;font-size:13px}
+.garden-notice{position:fixed;inset:0;z-index:100000;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(95,112,94,.32);backdrop-filter:blur(7px)}
+.garden-notice.show{display:flex;animation:noticeFade .25s ease}
+.garden-notice-card{width:min(88vw,340px);padding:28px 24px 22px;border-radius:28px;background:linear-gradient(160deg,#fffefa,#f3f8ef);border:1px solid rgba(255,255,255,.95);box-shadow:0 22px 65px rgba(88,115,88,.22);text-align:center;animation:qIn .42s cubic-bezier(.34,1.56,.64,1)}
+.notice-emoji{font-size:52px;margin-bottom:10px}
+.notice-title{font-size:19px;font-weight:800;color:#728b72;margin-bottom:10px}
+.notice-text{font-size:13px;line-height:1.9;color:#91a08e;margin-bottom:20px}
+.garden-notice-card .main-btn{width:100%;min-height:44px}
+.day-transition{position:fixed;inset:0;z-index:99990;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(150deg,#f9f6e9,#edf5ed 55%,#f7eff3);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+.day-transition.show{opacity:1;visibility:visible}
+.day-transition-flower{font-size:58px;animation:dayBloom 1.2s ease-in-out infinite alternate}
+#dayTransitionText{font-size:28px;font-weight:800;letter-spacing:.16em;color:#789477;margin:14px 0 8px}
+.day-transition small{font-size:12px;letter-spacing:.1em;color:#a2b09e}
+@keyframes dayBloom{from{transform:translateY(5px) rotate(-8deg) scale(.92)}to{transform:translateY(-5px) rotate(8deg) scale(1.06)}}
+@keyframes noticeFade{from{opacity:0}to{opacity:1}}
+.flower-only-card .pair-icons{justify-content:center}
+.flower-only-card .pair-icon{width:76px;height:76px}
