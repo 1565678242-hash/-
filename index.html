@@ -164,4 +164,15 @@
     <div class="garden-notice-card"><div class="notice-emoji" id="gardenNoticeEmoji">🌸</div><div class="notice-title" id="gardenNoticeTitle">花儿成熟啦</div><div class="notice-text" id="gardenNoticeText"></div><button class="main-btn primary" id="gardenNoticeClose">知道啦</button></div>
   </div>
   <div id="dayTransition" class="day-transition"><div class="day-transition-flower">🌼</div><div id="dayTransitionText">第 2 天</div><small>新的一天，也要好好生活</small></div>
->
+  <div id="gameMenu" class="menu-overlay">
+    <div class="menu-card"><div class="menu-title">暂停一下</div><div class="menu-sub">你的进度会自动保存</div>
+      <button class="menu-action primary" id="btnResume">继续直播</button><button class="menu-action" id="btnSaveExport">导出存档</button>
+      <button class="menu-action" id="btnSaveImport">导入存档</button><button class="menu-action" id="btnMenuHome">返回主页</button>
+      <button class="menu-cancel" id="btnMenuClose">关闭</button>
+    </div>
+  </div>
+  <input type="file" id="saveFileInput" accept="application/json,.json" hidden>
+</div>
+<script src="game.js" defer></script>
+</body>
+</html>
