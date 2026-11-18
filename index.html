@@ -20,6 +20,7 @@
   <div id="hostAvatar">🌞</div>
   <div id="topRight">
     <button class="icon-btn" id="btnMute" title="静音">🔊</button>
+    <button class="text-btn" id="btnGardenQuick">🌱 花园</button>
     <button class="text-btn" id="btnShop">商店</button>
     <button class="text-btn" id="btnCollection">图鉴</button>
     <button class="text-btn" id="btnMenu">菜单</button>
@@ -58,15 +59,18 @@
   <div id="gardenScreen" class="screen">
     <button class="back-btn" id="btnGardenBack">‹ 返回</button>
     <div class="page-title">我的小花园</div>
-    <div class="garden-intro">每完成一场直播，花园里的植物就会向前生长一点。</div>
-    <div class="garden-balance"><span>🌱 种子 <b id="gardenSeeds">0</b></span><span>♡ 收益 <b id="gardenMoney">0</b></span></div>
+    <div class="garden-intro">先解锁土地，再把种子种进土里。每场直播会让植物长大；也可以亲手浇水。成熟后一次能收下几朵花。</div>
+    <div class="garden-balance"><span>🌱 种子 <b id="gardenSeeds">0</b></span><span>🌷 鲜花 <b id="gardenFlowerStock">0</b></span><span>♡ 收益 <b id="gardenMoney">0</b></span></div>
+    <div class="garden-progress" id="gardenProgress">已收获 0 次 · 再收获 10 次解锁卖花直播</div>
     <div class="garden-plots" id="gardenPlots"></div>
     <div class="garden-actions">
-      <button class="garden-action primary" id="btnGardenPlant">种下一颗种子</button>
-      <button class="garden-action" id="btnGardenFertilize">使用营养液 · 30 元</button>
-      <button class="garden-action" id="btnGardenHarvest">收获成熟花朵</button>
+      <button class="garden-action primary" id="btnGardenPlant">🌱 种下一颗种子</button>
+      <button class="garden-action" id="btnGardenWater">💧 给植物浇水</button>
+      <button class="garden-action" id="btnGardenFertilize">🧴 使用营养液</button>
+      <button class="garden-action" id="btnGardenHarvest">🌼 收获成熟花朵</button>
+      <button class="garden-action flower-live" id="btnFlowerLive" disabled>🎥 卖花直播（收获 10 次解锁）</button>
     </div>
-    <div class="garden-tip" id="gardenTip">完成直播可获得种子与收益。花园不需要打卡，想来的时候再来看看。</div>
+    <div class="garden-tip" id="gardenTip">第一步：点击「种下一颗种子」。植物成熟后点击收获，就能积累鲜花库存。</div>
   </div>
   <div id="dataScreen" class="screen">
     <button class="back-btn" id="btnDataBack">‹ 返回</button>
@@ -81,20 +85,19 @@
       <div class="data-card"><span>累计好运果</span><b id="statLucky">0</b></div>
       <div class="data-card"><span>已兑换道具</span><b id="statItems">0</b></div>
       <div class="data-card"><span>累计收益</span><b id="statEarn">0</b></div>
-      <div class="data-card"><span>香水收藏</span><b id="statPerfumes">0</b></div>
-    </div>
+      </div>
   </div>
   <div id="collectionScreen" class="screen">
     <button class="back-btn" id="btnCollectionBack">‹ 返回</button>
     <div class="page-title" id="colTitle">花果图鉴</div>
-    <div class="tabs"><button class="tab active" id="tabUnlocked">已收集</button><button class="tab" id="tabAll">全部</button><button class="tab" id="tabPerfume">香水图鉴</button></div>
+    <div class="tabs"><button class="tab active" id="tabUnlocked">已收集</button><button class="tab" id="tabAll">全部</button><button class="tab" id="tabPerfume" hidden>香水图鉴</button></div>
     <div class="pair-grid" id="collectionGrid"></div>
   </div>
   <div id="shopScreen" class="screen">
     <button class="back-btn" id="btnShopBack">‹ 返回</button>
     <div class="page-title">商店</div>
     <div class="shop-balance">好运果 <b id="shopBalance">0</b> · 收益 <b id="shopMoney" style="color:#7a9a5a">0 元</b></div>
-    <div class="tabs"><button class="tab active" id="tabShopFruit">果篮兑换</button><button class="tab" id="tabShopGoods">好物商城</button></div>
+    <div class="tabs"><button class="tab active" id="tabShopFruit">好运果兑换</button><button class="tab" id="tabShopGoods">花园商城</button></div>
     <div class="shop-grid" id="shopGrid"></div>
   </div>
   <div id="achievementScreen" class="screen">
@@ -142,10 +145,10 @@
   </div>
   <div id="introTutorial">
     <div class="tut-card">
-      <div class="tut-step on"><div class="tut-emoji">☁️</div><div class="tut-title">生活暂时按下了暂停键</div><div class="tut-text">你失去了一份工作，也暂时不知道下一步该往哪里走。<br>不如先给自己一点时间。</div></div>
-      <div class="tut-step"><div class="tut-emoji">☀️</div><div class="tut-title">试着开一场疗愈直播</div><div class="tut-text">你开始在直播间里陪伴那些疲惫的人。<br>一条暖心留言，一份小小的礼物，让你重新找到了价值。</div></div>
-      <div class="tut-step"><div class="tut-emoji">🌷</div><div class="tut-title">把日子慢慢种回来</div><div class="tut-text">你把直播的收益攒起来，买下种子和营养液。<br>从一盆小花开始，打造属于自己的花园。</div></div>
-      <div class="tut-step"><div class="tut-emoji">🫧</div><div class="tut-title">欢迎来到疗愈直播间</div><div class="tut-text">拖动一个情绪泡泡，碰到另一个相同的泡泡即可消除。<br>完成直播可获得粉丝、收益和种子；每完成一场，花园都会成长。</div></div>
+      <div class="tut-step on"><div class="tut-emoji">🫧</div><div class="tut-title">先学会消除情绪泡泡</div><div class="tut-text">按住一个泡泡，拖到另一个相同的泡泡上。<br>配对成功就能消除，获得热度和粉丝。</div></div>
+      <div class="tut-step"><div class="tut-emoji">🌱</div><div class="tut-title">每场直播都会送你种子</div><div class="tut-text">完成一场直播后，奖励会发放种子和收益。<br>点击游戏上方的「花园」，就能进入种植。</div></div>
+      <div class="tut-step"><div class="tut-emoji">💧</div><div class="tut-title">种下、浇水，等花开</div><div class="tut-text">一开始只有一块土地，只能种一株植物。<br>每场直播让植物长大一步，也可以手动浇水；成熟后一次能收获几朵花。</div></div>
+      <div class="tut-step"><div class="tut-emoji">🌷</div><div class="tut-title">把花园慢慢经营起来</div><div class="tut-text">用收益解锁更多土地，最多拥有六块。<br>累计收获 10 次后解锁卖花直播；商店分为「好运果兑换」和「花园商城」。</div></div>
       <div class="tut-dots"><span class="on"></span><span></span><span></span><span></span></div>
       <button class="main-btn primary" id="tutNext" style="width:100%">下一步</button><button id="tutSkip">跳过引导</button>
     </div>
