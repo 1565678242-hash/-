@@ -1624,10 +1624,11 @@ function fruitSVG(type){
    二十九、主循环
    ============================================================ */
 function update(dt){
-  state.time+=dt; updateHudNumbers(dt); updateParticles(dt); updateFloats(dt); updateGifts(dt);
+  state.time+=dt; updateHudNumbers(dt);
+  if(state.paused) return;
+  updateParticles(dt); updateFloats(dt); updateGifts(dt);
   if(state.positiveCooldown>0) state.positiveCooldown=Math.max(0,state.positiveCooldown-dt);
   if(likeCd>0) likeCd-=dt;
-  if(state.paused) return;
   if(state.comboTimer>0){ state.comboTimer-=dt; if(state.comboTimer<=0) resetCombo(); }
   if(state.tree.active){ state.tree.t+=dt; if(state.tree.t>=state.tree.duration){ state.tree.active=false; const cb=state.tree.onDone; state.tree.onDone=null; if(cb) cb(); } return; }
   if(state.phase!=='playing') return;
