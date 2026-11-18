@@ -1269,7 +1269,7 @@ function finishSuccess(){
   garden.seeds=garden.seedInventory.length;
   const maturedNames=[];
   garden.plots.forEach(function(p){const before=p.stage||0;p.stage=Math.min(3,before+1);if(before<3&&p.stage>=3)maturedNames.push(p.name);});
-  state.maturedFlowers=maturedNames;state.seedRewards=seedRewards;state.liveIncome=liveIncome;state.auctionPerfume=null;
+  garden.pendingMaturedFlowers=(garden.pendingMaturedFlowers||[]).concat(maturedNames);state.maturedFlowers=maturedNames;state.seedRewards=seedRewards;state.liveIncome=liveIncome;state.auctionPerfume=null;
   saveData.totalHeat+=state.heat; saveData.totalFans=state.fans;
   saveData.totalPopped+=state.dayStats.popped; saveData.totalDays+=1;
   if(state.currentDay>saveData.bestDay) saveData.bestDay=state.currentDay;
@@ -1330,7 +1330,7 @@ function showResult(){
   resultBtnEl.textContent='进入第 '+(day+1)+' 天';
   resultBtnEl.onclick=function(){ AudioSys.click(); beginDayTransition(day+1); };
   showScreen(resultScreen);
-  if(state.maturedFlowers&&state.maturedFlowers.length){showGardenNotice('🌸','花儿成熟啦！','你种下的 '+state.maturedFlowers.join('、')+' 已经成熟，快去花园收获吧！');state.maturedFlowers=[];}
+  const pendingMatured=ensureGarden().pendingMaturedFlowers;if(pendingMatured.length){showGardenNotice('🌸','花儿成熟啦！','你种下的 '+pendingMatured.join('、')+' 已经成熟，快去花园收获吧！');}
 }
 
 /* ============================================================
@@ -1338,7 +1338,7 @@ function showResult(){
    ============================================================ */
 function showScreen(el){ const ss=document.querySelectorAll('.screen'); for(let i=0;i<ss.length;i++) ss[i].classList.remove('active'); if(el) el.classList.add('active'); }
 function showGardenNotice(emoji,title,message){if(state.phase==='playing')state.paused=true;const box=document.getElementById('gardenNotice');document.getElementById('gardenNoticeEmoji').textContent=emoji;document.getElementById('gardenNoticeTitle').textContent=title;document.getElementById('gardenNoticeText').textContent=message;box.classList.add('show');}
-document.getElementById('gardenNoticeClose').addEventListener('click',function(){document.getElementById('gardenNotice').classList.remove('show');if(state.phase==='playing')state.paused=false;AudioSys.click();});
+document.getElementById('gardenNoticeClose').addEventListener('click',function(){document.getElementById('gardenNotice').classList.remove('show');const pending=ensureGarden().pendingMaturedFlowers;if(pending.length){pending.length=0;persist();}if(state.phase==='playing')state.paused=false;AudioSys.click();});
 function beginDayTransition(day){const el=document.getElementById('dayTransition');document.getElementById('dayTransitionText').textContent='第 '+day+' 天';el.classList.add('show');setTimeout(function(){el.classList.remove('show');startDay(day);},1450);}
 function hideAllScreens(){ showScreen(null); }
 
@@ -1794,7 +1794,7 @@ const THERAPY_FLOWERS=[
  {id:'peace',name:'平安心花',emoji:'🕊️',effect:'愿心里的风浪渐渐平息，日子安稳而明亮。'}
 ];
 function rollGardenSeed(){const n=Math.random();if(n<0.055)return {kind:'mystery',label:'神秘随机种子'};if(n<0.105){const f=THERAPY_FLOWERS[randInt(0,THERAPY_FLOWERS.length-1)];return {kind:'therapy',flowerId:f.id,label:'疗愈特异种子'};}const f=GARDEN_SEED_LIBRARY[randInt(0,GARDEN_SEED_LIBRARY.length-1)];return {kind:'normal',flowerId:f.id,label:f.label};}
-function ensureGarden(){if(!saveData.garden)saveData.garden={seeds:0,seedInventory:[],lastWaterDay:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};const g=saveData.garden;if(!Array.isArray(g.plots))g.plots=[];if(!Array.isArray(g.seedInventory))g.seedInventory=[];while(g.seedInventory.length<(Number(g.seeds)||0))g.seedInventory.push(rollGardenSeed());g.seeds=g.seedInventory.length;if(g.lastWaterDay==null)g.lastWaterDay=0;if(g.unlockedPlots==null)g.unlockedPlots=1;if(g.flowers==null)g.flowers=0;if(g.harvestCount==null)g.harvestCount=0;if(g.totalFlowers==null)g.totalFlowers=0;if(g.totalPlanted==null)g.totalPlanted=g.plots.length;if(g.maxHarvestBatch==null)g.maxHarvestBatch=0;if(g.flowerLives==null)g.flowerLives=0;g.unlockedPlots=clamp(Math.max(Number(g.unlockedPlots)||1,Math.min(6,g.plots.length)),1,6);return g;}
+function ensureGarden(){if(!saveData.garden)saveData.garden={seeds:0,seedInventory:[],lastWaterDay:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};const g=saveData.garden;if(!Array.isArray(g.plots))g.plots=[];if(!Array.isArray(g.seedInventory))g.seedInventory=[];while(g.seedInventory.length<(Number(g.seeds)||0))g.seedInventory.push(rollGardenSeed());g.seeds=g.seedInventory.length;if(g.lastWaterDay==null)g.lastWaterDay=0;if(g.unlockedPlots==null)g.unlockedPlots=1;if(g.flowers==null)g.flowers=0;if(g.harvestCount==null)g.harvestCount=0;if(g.totalFlowers==null)g.totalFlowers=0;if(!Array.isArray(g.pendingMaturedFlowers))g.pendingMaturedFlowers=[];if(g.totalPlanted==null)g.totalPlanted=g.plots.length;if(g.maxHarvestBatch==null)g.maxHarvestBatch=0;if(g.flowerLives==null)g.flowerLives=0;g.unlockedPlots=clamp(Math.max(Number(g.unlockedPlots)||1,Math.min(6,g.plots.length)),1,6);return g;}
 function renderGarden(){
  const g=ensureGarden();gardenSeedsEl.textContent=g.seeds||0;gardenMoneyEl.textContent=formatMoney(saveData.money||0);document.getElementById('gardenFlowerStock').textContent=g.flowers||0;
  document.getElementById('gardenProgress').textContent='累计收获 '+g.harvestCount+' 次 · '+(g.harvestCount>=10?'🎥 卖花直播已解锁':'再收获 '+(10-g.harvestCount)+' 次解锁卖花直播')+' · 每株可收获 2–4 朵';
@@ -1861,12 +1861,13 @@ document.getElementById('btnNewGame').addEventListener('click',function(){
   if(saveData.totalDays>0||saveData.luckyCount>0||saveData.unlocked.length>0){
     if(!window.confirm('重新开始会清空所有进度，确定吗？')) return;
   }
+  const hasSeenStory=!!saveData.seenStoryIntro;
   saveData={ totalHeat:0, totalFans:0, totalPopped:0, totalDays:0, bestDay:0,
     unlocked:[], luckyCount:0, daysSinceLucky:0, unlockedAchievements:[],
     maxComboEver:0, answeredCount:0, ownedItems:[],
     currentDay:1, hintedFruit:false, hintedPositive:false, hintedBlend:false, daySnapshot:null,
-    money:0, totalEarned:0, garden:{seeds:0,seedInventory:[],lastWaterDay:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0,unlockedPlots:1,flowers:0,harvestCount:0,totalFlowers:0,totalPlanted:0,maxHarvestBatch:0,flowerLives:0}, theme:"warm", avatar:"sun",
-    ownedThemes:[], ownedAvatars:[], perfumes:[], pkWins:0, seenIntro:false, seenStoryIntro:false };
+    money:0, totalEarned:0, garden:{seeds:0,seedInventory:[],lastWaterDay:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0,unlockedPlots:1,flowers:0,harvestCount:0,totalFlowers:0,totalPlanted:0,maxHarvestBatch:0,flowerLives:0,pendingMaturedFlowers:[]}, theme:"warm", avatar:"sun",
+    ownedThemes:[], ownedAvatars:[], perfumes:[], pkWins:0, seenIntro:hasSeenStory, seenStoryIntro:hasSeenStory };
   gardenTipEl.textContent='花圃已经整理好啦。先领取直播种子，再选择空土地种下；浇水三次或完成直播，让花苗慢慢长大。'; renderGarden();
   showTutorial();
   updateHome();
@@ -1956,8 +1957,8 @@ document.getElementById('btnCollectionHome').addEventListener('click',function()
 document.getElementById('btnCollectionBack').addEventListener('click',backFromOverlay);
 btnCollection.addEventListener('click',function(e){ e.stopPropagation(); AudioSys.click(); if(state.phase==='playing'||state.phase==='tree'){ state.paused=true; state.dragging=null; state.pointerId=null; if(state.phase==='playing'){ saveDaySnapshot(); persist(); } } renderCollection(); showScreen(collectionScreen); });
 
-document.getElementById('tabUnlocked').addEventListener('click',function(){ AudioSys.click(); collectionFilter='unlocked'; document.getElementById('colTitle').textContent='花果图鉴'; this.classList.add('active'); document.getElementById('tabAll').classList.remove('active'); renderCollection(); });
-document.getElementById('tabAll').addEventListener('click',function(){ AudioSys.click(); collectionFilter='all'; document.getElementById('colTitle').textContent='花果图鉴'; this.classList.add('active'); document.getElementById('tabUnlocked').classList.remove('active'); renderCollection(); });
+document.getElementById('tabUnlocked').addEventListener('click',function(){ AudioSys.click(); collectionFilter='unlocked'; document.getElementById('colTitle').textContent='鲜花图鉴'; this.classList.add('active'); document.getElementById('tabAll').classList.remove('active'); renderCollection(); });
+document.getElementById('tabAll').addEventListener('click',function(){ AudioSys.click(); collectionFilter='all'; document.getElementById('colTitle').textContent='鲜花图鉴'; this.classList.add('active'); document.getElementById('tabUnlocked').classList.remove('active'); renderCollection(); });
 
 document.getElementById('btnAchievements').addEventListener('click',function(){ AudioSys.click(); renderAchievements(); showScreen(achievementScreen); });
 document.getElementById('btnAchievementBack').addEventListener('click',function(){ AudioSys.click(); showScreen(homeScreen); });
