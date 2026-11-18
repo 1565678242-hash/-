@@ -22,7 +22,8 @@
     <button class="icon-btn" id="btnMute" title="静音">🔊</button>
     <button class="text-btn" id="btnShop">商店</button>
     <button class="text-btn" id="btnCollection">图鉴</button>
-    <button class="text-btn" id="btnExit">退出</button>
+    <button class="text-btn" id="btnMenu">菜单</button>
+    <button class="text-btn" id="btnExit">主页</button>
   </div>
   <div id="danmuLayer"></div>
   <button id="btnLike">👍 点赞</button>
@@ -41,16 +42,31 @@
     </div>
   </div>
   <div id="homeScreen" class="screen active">
-    <div class="home-title"><h1>滚蛋吧坏情绪</h1><p>疗 愈 直 播 间</p><div class="home-sub">消除坏情绪 · 收集花果 · 调香拍卖 · 直播养成</div></div>
+    <div class="home-title"><h1>滚蛋吧坏情绪</h1><p>疗 愈 直 播 间</p><div class="home-sub">一场温柔的直播，从一座小花园开始</div></div>
     <div class="home-buttons">
       <button class="main-btn primary" id="btnContinue">继 续 游 戏</button>
       <button class="main-btn" id="btnNewGame">新 游 戏</button>
+      <button class="main-btn" id="btnGardenHome">🌱 我 的 花 园</button>
       <button class="main-btn lucky-btn" id="btnShopHome">商 店</button>
+      <button class="main-btn" id="btnCollectionHome">收 藏 图 鉴</button>
       <button class="main-btn" id="btnData">直 播 数 据</button>
-      <button class="main-btn" id="btnCollectionHome">花 果 图 鉴</button>
       <button class="main-btn" id="btnAchievements">成 就</button>
+      <button class="main-btn" id="btnSaveHome">存 档 管 理</button>
     </div>
     <div id="perfumeCountdown"></div>
+  </div>
+  <div id="gardenScreen" class="screen">
+    <button class="back-btn" id="btnGardenBack">‹ 返回</button>
+    <div class="page-title">我的小花园</div>
+    <div class="garden-intro">每完成一场直播，花园里的植物就会向前生长一点。</div>
+    <div class="garden-balance"><span>🌱 种子 <b id="gardenSeeds">0</b></span><span>♡ 收益 <b id="gardenMoney">0</b></span></div>
+    <div class="garden-plots" id="gardenPlots"></div>
+    <div class="garden-actions">
+      <button class="garden-action primary" id="btnGardenPlant">种下一颗种子</button>
+      <button class="garden-action" id="btnGardenFertilize">使用营养液 · 30 元</button>
+      <button class="garden-action" id="btnGardenHarvest">收获成熟花朵</button>
+    </div>
+    <div class="garden-tip" id="gardenTip">完成直播可获得种子与收益。花园不需要打卡，想来的时候再来看看。</div>
   </div>
   <div id="dataScreen" class="screen">
     <button class="back-btn" id="btnDataBack">‹ 返回</button>
@@ -126,31 +142,22 @@
   </div>
   <div id="introTutorial">
     <div class="tut-card">
-      <div class="tut-step on">
-        <div class="tut-emoji">🌟</div>
-        <div class="tut-title">欢迎来到疗愈直播间</div>
-        <div class="tut-text">按住一个负面情绪气泡，拖向另一个相同文字的气泡即可消除。<br>先从「焦虑」或「烦恼」开始试试吧！</div>
-      </div>
-      <div class="tut-step">
-        <div class="tut-emoji">🎬</div>
-        <div class="tut-title">直播怎么玩</div>
-        <div class="tut-text">相同情绪配对消除可增加热度。<br>遇到绿色好情绪不要拖碰；点击好运果即可收集。<br>右下/左下的点赞按钮也能增加热度。</div>
-      </div>
-      <div class="tut-step">
-        <div class="tut-emoji">🧪</div>
-        <div class="tut-title">调香特别日</div>
-        <div class="tut-text">调香日会出现两种原料气泡。<br>把原料拖到另一种原料上进行融合，再完成拍卖。<br>普通直播日则继续配对相同情绪。</div>
-      </div>
-      <div class="tut-step">
-        <div class="tut-emoji">🍀</div>
-        <div class="tut-title">事件与成长</div>
-        <div class="tut-text">点击好运果可兑换皮肤、头像和道具。<br>随机事件、观众提问和 PK 会在直播中出现；<br>随时可点右上角商店或图鉴查看进度。</div>
-      </div>
+      <div class="tut-step on"><div class="tut-emoji">☁️</div><div class="tut-title">生活暂时按下了暂停键</div><div class="tut-text">你失去了一份工作，也暂时不知道下一步该往哪里走。<br>不如先给自己一点时间。</div></div>
+      <div class="tut-step"><div class="tut-emoji">☀️</div><div class="tut-title">试着开一场疗愈直播</div><div class="tut-text">你开始在直播间里陪伴那些疲惫的人。<br>一条暖心留言，一份小小的礼物，让你重新找到了价值。</div></div>
+      <div class="tut-step"><div class="tut-emoji">🌷</div><div class="tut-title">把日子慢慢种回来</div><div class="tut-text">你把直播的收益攒起来，买下种子和营养液。<br>从一盆小花开始，打造属于自己的花园。</div></div>
+      <div class="tut-step"><div class="tut-emoji">🫧</div><div class="tut-title">欢迎来到疗愈直播间</div><div class="tut-text">拖动一个情绪泡泡，碰到另一个相同的泡泡即可消除。<br>完成直播可获得粉丝、收益和种子；每完成一场，花园都会成长。</div></div>
       <div class="tut-dots"><span class="on"></span><span></span><span></span><span></span></div>
-      <button class="main-btn primary" id="tutNext" style="width:100%">下一步</button>
-      <button id="tutSkip">跳过引导</button>
+      <button class="main-btn primary" id="tutNext" style="width:100%">下一步</button><button id="tutSkip">跳过引导</button>
     </div>
   </div>
+  <div id="gameMenu" class="menu-overlay">
+    <div class="menu-card"><div class="menu-title">暂停一下</div><div class="menu-sub">你的进度会自动保存</div>
+      <button class="menu-action primary" id="btnResume">继续直播</button><button class="menu-action" id="btnSaveExport">导出存档</button>
+      <button class="menu-action" id="btnSaveImport">导入存档</button><button class="menu-action" id="btnMenuHome">返回主页</button>
+      <button class="menu-cancel" id="btnMenuClose">关闭</button>
+    </div>
+  </div>
+  <input type="file" id="saveFileInput" accept="application/json,.json" hidden>
 </div>
 
 <script src="game.js" defer></script>
