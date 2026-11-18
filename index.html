@@ -112,8 +112,16 @@
       <div class="result-stats" id="resultStats"></div>
       <div class="result-reward" id="resultReward"></div>
       <div id="resultAuction" class="result-auction" style="display:none"></div>
+      <button class="main-btn" id="resultGardenBtn" style="width:100%">🌱 去花园播种</button>
       <button class="main-btn primary" id="resultBtn" style="width:100%">进入第 2 天</button>
     </div>
+  </div>
+  <div id="flowerLiveScreen" class="screen flower-live-screen">
+    <button class="back-btn" id="btnFlowerLiveBack">‹ 返回花园</button>
+    <div class="flower-live-card"><div class="flower-live-kicker">🌷 花园特别企划 · 鲜花专场</div><div class="page-title">今日卖花直播</div>
+      <div class="flower-live-stage"><div class="flower-live-customer" id="flowerLiveCustomer">👩🏻‍🌾</div><div class="flower-live-order" id="flowerLiveOrder">有位客人正在等你准备花束……</div><div class="flower-live-progress" id="flowerLiveProgress">第 1 / 5 位顾客</div></div>
+      <div class="flower-live-stock">花篮库存：<b id="flowerLiveStock">0</b> 朵</div><div class="flower-live-options"><button class="flower-order-btn" data-bouquet="1">小花束 · 1 朵</button><button class="flower-order-btn" data-bouquet="2">日常花束 · 2 朵</button><button class="flower-order-btn" data-bouquet="3">心意花束 · 3 朵</button></div>
+      <div class="flower-live-tip" id="flowerLiveTip">根据顾客的心意选择花束数量。数量刚好会获得额外打赏！</div><div class="flower-live-earned" id="flowerLiveEarned">本场收入：0 元</div></div>
   </div>
   <div id="pkOverlay">
     <div class="question-card">
