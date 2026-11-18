@@ -1291,7 +1291,7 @@ function showResult(){
   resultTitleEl.textContent='第 '+day+' 天 · 完成';
   resultSubEl.textContent='恭喜完成今天的疗愈直播！获得 '+(state.seedRewards||[]).length+' 颗随机种子和 '+formatMoney(state.liveIncome||0)+' 元收益。花园里的每株植物都成长了一步。';
   resultStatsEl.innerHTML='<div class="rs-item"><span>消除坏情绪</span><b>'+state.dayStats.popped+'</b></div><div class="rs-item"><span>今日涨粉</span><b>+'+state.dayStats.fansGained+'</b></div><div class="rs-item"><span>回答提问</span><b>'+state.dayStats.answered+'</b></div>';
-  let rewardHtml=(state.seedRewards||[]).map(function(s){return '<div class="reward-item"><div class="reward-icon">'+(s.indexOf('神秘')>=0?'❔':(s.indexOf('疗愈')>=0?'✨':'🌱'))+'</div><div class="reward-name">'+s+'</div></div>';}).join('');
+  let rewardHtml=(state.seedRewards||[]).map(function(s){return '<div class="reward-item"><div class="reward-icon">'+(s.indexOf('随机')>=0?'❔':(s.indexOf('神奇')>=0?'✨':'🌱'))+'</div><div class="reward-name">'+s+'</div></div>';}).join('');
   /* 每日结算奖励统一为种子；好运果仅作为直播过程中的额外收集物。 */
   resultRewardEl.innerHTML=rewardHtml; resultRewardEl.style.display='flex';
   /* 调香拍卖竞价动画 */
@@ -1792,7 +1792,7 @@ const GARDEN_SEED_LIBRARY=[
  {id:'lily',label:'百合种子',name:'百合',emoji:'💮',desc:'平和与祝福'}
 ];
 const THERAPY_FLOWERS=[
- {id:'luck',name:'好运花',emoji:'🍀',effect:'愿你常有好事发生，幸运总会悄悄来到身边。'},
+ {id:'luck',name:'幸运花',emoji:'🍀',effect:'愿你常有好事发生，幸运总会悄悄来到身边。'},
  {id:'wealth',name:'发财花',emoji:'💰',effect:'愿努力都有回响，财富与机会慢慢向你靠近。'},
  {id:'brave',name:'勇气花',emoji:'🌟',effect:'愿你在害怕的时候，也有重新出发的勇气。'},
  {id:'peace',name:'平安心花',emoji:'🕊️',effect:'愿心里的风浪渐渐平息，日子安稳而明亮。'}
