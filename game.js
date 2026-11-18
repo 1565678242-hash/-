@@ -83,8 +83,8 @@ const CONFIG = {
   ],
 
   gameplay: {
-    radiusMin: 26,
-    radiusMax: 50,
+    radiusMin: 18,
+    radiusMax: 33,
     floatSpeed: 14,
     popAnimDuration: 0.42,
     heatPerPop: [8, 14],
@@ -418,7 +418,7 @@ let saveData = {
   unlockedAchievements: [], maxComboEver: 0,
   answeredCount: 0, ownedItems: [],
   currentDay: 1, hintedFruit: false, hintedPositive: false, hintedBlend: false, daySnapshot: null,
-  money: 0, totalEarned: 0, theme: "warm", avatar: "sun",
+  money: 0, totalEarned: 0, garden: { seeds: 0, plots: [], fertilizer: 0, doubleCards: 0, tripleCards: 0 }, theme: "warm", avatar: "sun",
   ownedThemes: [], ownedAvatars: [], perfumes: [], pkWins: 0, seenIntro: false
 };
 
@@ -472,6 +472,13 @@ const tabShopFruitEl = document.getElementById('tabShopFruit');
 const tabShopGoodsEl = document.getElementById('tabShopGoods');
 const comboBadgeEl = document.getElementById('comboBadge');
 const homeScreen = document.getElementById('homeScreen');
+const gardenScreen = document.getElementById('gardenScreen');
+const gardenPlotsEl = document.getElementById('gardenPlots');
+const gardenSeedsEl = document.getElementById('gardenSeeds');
+const gardenMoneyEl = document.getElementById('gardenMoney');
+const gardenTipEl = document.getElementById('gardenTip');
+const gameMenuEl = document.getElementById('gameMenu');
+const saveFileInput = document.getElementById('saveFileInput');
 const dataScreen = document.getElementById('dataScreen');
 const collectionScreen = document.getElementById('collectionScreen');
 const shopScreen = document.getElementById('shopScreen');
@@ -528,6 +535,8 @@ function loadSave(){
         saveData.daySnapshot = d.daySnapshot||null;
         saveData.money = d.money||0;
         saveData.totalEarned = d.totalEarned||0;
+        saveData.garden = d.garden && typeof d.garden==='object' ? Object.assign({seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0},d.garden) : {seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};
+        if(!Array.isArray(saveData.garden.plots)) saveData.garden.plots=[];
         saveData.theme = d.theme||"warm";
         saveData.avatar = d.avatar||"sun";
         saveData.ownedThemes = Array.isArray(d.ownedThemes)?d.ownedThemes:[];
@@ -629,8 +638,9 @@ function fitFontSize(word,r){ let fs=r*0.52; const maxW=r*1.55; ctx.font='500 '+
 function makeBubble(type,word,r){
   const h=hashStr(word); let hue,sat,light;
   /* 负面情绪：红/紫系；好情绪：金/绿系 */
-  if(type==='negative'){ hue=(h%2===0)?(340+(h%20)):(265+(h%40)); sat=30+(h%10); light=84+(h%4); }
-  else { hue=(h%2===0)?(38+(h%22)):(88+(h%52)); sat=62+(h%14); light=86+(h%4); }
+  const softPalette=[12,28,42,92,142,178,208,248,286,326];
+  if(type==='negative'){ hue=softPalette[h%softPalette.length]; sat=32+(h%9); light=82+(h%5); }
+  else { hue=[92,128,152,168][h%4]; sat=30+(h%8); light=84+(h%4); }
   return { type,word,r,x:0,y:0,vx:(Math.random()-0.5)*CONFIG.gameplay.floatSpeed*2,vy:(Math.random()-0.5)*CONFIG.gameplay.floatSpeed*2,hue,sat,light,fontSize:0,wobble:Math.random()*Math.PI*2,popping:false,popT:0,scale:1,alpha:1,dead:false,collected:false,flash:0,entering:false,enterT:0,enterDelay:0,targetY:0 };
 }
 function makeFruit(r){
@@ -1248,6 +1258,13 @@ function finishSuccess(){
   const pair=state.todayPair;
   if(saveData.unlocked.indexOf(pair.key)<0) saveData.unlocked.push(pair.key);
   if(state.fruitCollected) saveData.luckyCount+=1;
+  /* 每场直播带来一份小小的经营回报，并推动花园成长 */
+  const liveIncome=Math.max(18,Math.round(18+state.heat*0.12));
+  saveData.money+=liveIncome; saveData.totalEarned+=liveIncome;
+  if(!saveData.garden) saveData.garden={seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};
+  saveData.garden.seeds+=1;
+  saveData.garden.plots.forEach(function(plot){ plot.stage=Math.min(3,(plot.stage||0)+1); });
+  state.liveIncome=liveIncome;
   state.auctionPerfume=null;
   if(state.currentDay%CONFIG.perfumeEvery===0){
     const rar=pair.rarity||'common';
@@ -1277,7 +1294,7 @@ function showResult(){
   state.phase='result';
   const day=state.currentDay;
   resultTitleEl.textContent='第 '+day+' 天 · 完成';
-  resultSubEl.textContent='今天的花开好了';
+  resultSubEl.textContent='今天的直播带来 '+formatMoney(state.liveIncome||0)+' 元收益，也为花园添了一颗种子。';
   resultStatsEl.innerHTML='<div class="rs-item"><span>消除坏情绪</span><b>'+state.dayStats.popped+'</b></div><div class="rs-item"><span>今日涨粉</span><b>+'+state.dayStats.fansGained+'</b></div><div class="rs-item"><span>回答提问</span><b>'+state.dayStats.answered+'</b></div>';
   let rewardHtml='<div class="reward-item"><div class="reward-icon">'+flowerSVG(state.todayFlowerType)+'</div><div class="reward-name">'+state.todayFlower+'</div></div><div class="reward-item"><div class="reward-icon">'+fruitSVG(state.todayFruitType)+'</div><div class="reward-name">'+state.todayFruit+'</div></div>';
   if(state.fruitCollected) rewardHtml+='<div class="reward-item"><div class="reward-icon">'+luckyFruitSVG()+'</div><div class="reward-name">好运果</div></div>';
@@ -1764,6 +1781,55 @@ function checkDragCollision(a,fromX,fromY){
 }
 
 /* ============================================================
+   花园与存档管理
+   ============================================================ */
+function renderGarden(){
+  const g=saveData.garden||(saveData.garden={seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0});
+  gardenSeedsEl.textContent=g.seeds||0; gardenMoneyEl.textContent=formatMoney(saveData.money||0);
+  if(!g.plots.length) gardenPlotsEl.innerHTML='<div class="garden-empty">这里还空着呢。完成一场直播，就能获得一颗种子。<br>种下第一朵花，让小花园慢慢热闹起来。</div>';
+  else gardenPlotsEl.innerHTML=g.plots.map(function(p){const icons=['🌰','🌱','🌿','🌼'];const labels=['刚刚种下','长出嫩芽','正在生长','已经开花'];return '<div class="garden-plot"><div class="garden-plant">'+icons[Math.min(3,p.stage||0)]+'</div><div class="garden-plant-name">'+p.name+'</div><div class="garden-stage">'+labels[Math.min(3,p.stage||0)]+'</div></div>';}).join('');
+  document.getElementById('btnGardenPlant').disabled=(g.seeds||0)<1;
+  document.getElementById('btnGardenFertilize').disabled=(saveData.money||0)<30||!g.plots.some(p=>(p.stage||0)<3);
+  document.getElementById('btnGardenHarvest').disabled=!g.plots.some(p=>(p.stage||0)>=3);
+}
+function openGarden(){renderGarden();showScreen(gardenScreen);}
+document.getElementById('btnGardenHome').addEventListener('click',function(){AudioSys.click();openGarden();});
+document.getElementById('btnGardenBack').addEventListener('click',function(){AudioSys.click();showScreen(homeScreen);});
+document.getElementById('btnGardenPlant').addEventListener('click',function(){
+  const g=saveData.garden;if(!g||g.seeds<1)return;
+  const lastKey=saveData.unlocked[saveData.unlocked.length-1],pair=CONFIG.pairs.filter(function(p){return p.key===lastKey;})[0]||CONFIG.pairs[0];
+  g.seeds--;g.plots.push({key:pair.key,name:pair.flower,stage:0});
+  gardenTipEl.textContent='种下了 '+pair.flower+'。再完成几场直播，它就会慢慢开花。';persist();renderGarden();
+});
+document.getElementById('btnGardenFertilize').addEventListener('click',function(){
+  const g=saveData.garden;if(saveData.money<30||!g.plots.some(p=>(p.stage||0)<3))return;
+  saveData.money-=30;const plot=g.plots.filter(function(p){return(p.stage||0)<3;})[0];plot.stage=Math.min(3,(plot.stage||0)+1);
+  gardenTipEl.textContent='营养液让一株植物更快成长了一步。';persist();renderGarden();
+});
+document.getElementById('btnGardenHarvest').addEventListener('click',function(){
+  const g=saveData.garden,ready=g.plots.filter(function(p){return(p.stage||0)>=3;});if(!ready.length)return;
+  let multiplier=1;if(g.tripleCards>0){g.tripleCards--;if(Math.random()<0.12)multiplier=3;}else if(g.doubleCards>0){g.doubleCards--;if(Math.random()<0.32)multiplier=2;}
+  const amount=ready.length*multiplier,income=amount*16;g.plots=g.plots.filter(function(p){return(p.stage||0)<3;});
+  saveData.money+=income;saveData.totalEarned+=income;gardenTipEl.textContent='收获了 '+amount+' 朵鲜花，获得 '+formatMoney(income)+' 元。'+(multiplier>1?'今天的收成格外好！':'');
+  persist();renderGarden();
+});
+function exportSave(){
+  persist();const blob=new Blob([JSON.stringify(saveData,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='滚蛋吧坏情绪-存档.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);showToast('💾','存档已导出');
+}
+document.getElementById('btnSaveExport').addEventListener('click',exportSave);
+document.getElementById('btnSaveImport').addEventListener('click',function(){saveFileInput.click();});
+saveFileInput.addEventListener('change',function(){
+ const file=saveFileInput.files&&saveFileInput.files[0];if(!file)return;const reader=new FileReader();
+ reader.onload=function(){try{const data=JSON.parse(reader.result);if(!data||typeof data!=='object'||!('totalDays'in data)||!('currentDay'in data))throw new Error('invalid');if(!confirm('导入存档会覆盖当前进度，确定继续吗？'))return;localStorage.setItem(CONFIG.saveKey,JSON.stringify(data));location.reload();}catch(e){alert('存档文件无法识别，请选择本游戏导出的 JSON 文件。');}finally{saveFileInput.value='';}};
+ reader.readAsText(file);
+});
+function closeGameMenu(){gameMenuEl.classList.remove('show');if(state.phase==='playing'||state.phase==='tree')state.paused=false;}
+document.getElementById('btnMenu').addEventListener('click',function(e){e.stopPropagation();AudioSys.click();if(state.phase==='playing'||state.phase==='tree'){state.paused=true;state.dragging=null;state.pointerId=null;saveDaySnapshot();persist();}gameMenuEl.classList.add('show');});
+document.getElementById('btnResume').addEventListener('click',function(){AudioSys.click();closeGameMenu();});
+document.getElementById('btnMenuClose').addEventListener('click',function(){AudioSys.click();closeGameMenu();});
+document.getElementById('btnMenuHome').addEventListener('click',function(){AudioSys.click();saveDaySnapshot();persist();closeGameMenu();state.phase='idle';state.paused=false;stopDanmu();stopViewers();AudioSys.stopBgm();if(giftTimer){clearInterval(giftTimer);giftTimer=null;}showHud(false);updateHome();showScreen(homeScreen);});
+/* ============================================================
    三十一、UI 事件
    ============================================================ */
 function updateHome(){
@@ -1793,7 +1859,7 @@ document.getElementById('btnNewGame').addEventListener('click',function(){
     unlocked:[], luckyCount:0, daysSinceLucky:0, unlockedAchievements:[],
     maxComboEver:0, answeredCount:0, ownedItems:[],
     currentDay:1, hintedFruit:false, hintedPositive:false, hintedBlend:false, daySnapshot:null,
-    money:0, totalEarned:0, theme:"warm", avatar:"sun",
+    money:0, totalEarned:0, garden:{seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0}, theme:"warm", avatar:"sun",
     ownedThemes:[], ownedAvatars:[], perfumes:[], pkWins:0, seenIntro:true };
   persist();
   applyBuffsForNewDay();
@@ -1915,6 +1981,8 @@ updateDataScreen();
 renderCollection();
 renderAchievements();
 renderShop();
+if(!saveData.garden) saveData.garden={seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};
+renderGarden();
 showScreen(homeScreen);
 
 requestAnimationFrame(function(now){ state.lastTime=now; requestAnimationFrame(loop); });
