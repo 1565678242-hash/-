@@ -1624,8 +1624,8 @@ function fruitSVG(type){
    二十九、主循环
    ============================================================ */
 function update(dt){
-  state.time+=dt; updateHudNumbers(dt);
   if(state.paused) return;
+  state.time+=dt; updateHudNumbers(dt);
   updateParticles(dt); updateFloats(dt); updateGifts(dt);
   if(state.positiveCooldown>0) state.positiveCooldown=Math.max(0,state.positiveCooldown-dt);
   if(likeCd>0) likeCd-=dt;
