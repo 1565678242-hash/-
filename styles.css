@@ -272,9 +272,6 @@ canvas#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block
 
 
 /* ---- 花园入口与花圃美化 ---- */
-#btnGardenRibbon{position:absolute;z-index:12;top:calc(190px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:9px;padding:8px 16px;border:1px solid rgba(255,255,255,.95);border-radius:22px;background:linear-gradient(120deg,rgba(255,250,244,.96),rgba(238,247,232,.96));color:#718d74;font-size:12px;font-weight:800;letter-spacing:.04em;box-shadow:0 7px 20px rgba(112,143,112,.16);cursor:pointer;white-space:nowrap}
-#btnGardenRibbon small{font-size:9px;font-weight:500;color:#a1ad9b}
-#btnGardenRibbon:active{transform:translateX(-50%) scale(.97)}
 #btnGardenQuick{font-weight:800;box-shadow:0 4px 14px rgba(130,155,125,.15)}
 #gardenScreen{justify-content:flex-start;padding-top:calc(42px + env(safe-area-inset-top));padding-bottom:20px;overflow-y:auto}
 #gardenScreen .page-title{margin:5px 0 12px;font-size:23px;color:#718d74;letter-spacing:.1em}
@@ -302,10 +299,11 @@ canvas#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block
 .garden-tip{max-width:350px;padding:9px 13px;border-radius:14px;background:rgba(255,255,255,.65);color:#849781}
 .shop-section{color:#9b9b80}
 @media(max-width:520px){
- #btnGardenRibbon{top:calc(184px + env(safe-area-inset-top));padding:7px 13px;font-size:11px}
- #btnGardenRibbon small{font-size:8px}
  #gardenScreen{padding-top:calc(40px + env(safe-area-inset-top))}
  .garden-plots{width:min(94vw,430px);gap:9px}
  .garden-plot{min-height:145px;padding:8px 5px}
 }
 @media(max-height:740px){#gardenScreen{justify-content:flex-start}.garden-plots{gap:8px}.garden-plot{min-height:132px}.garden-actions{margin-top:9px}}
+
+/* 顶部花园入口始终清晰可见，泡泡从导航区下方开始 */
+#btnGardenQuick{height:34px;padding:0 13px;font-size:11px;background:linear-gradient(135deg,#eaf4e4,#fff8ef);border:1px solid #fff;color:#6f8d72;box-shadow:0 4px 12px rgba(130,155,125,.18)}
