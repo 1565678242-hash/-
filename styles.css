@@ -242,3 +242,28 @@ canvas#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block
 @media(max-width:360px){#topRight .text-btn{padding:0 7px;font-size:9px}}
 
 @media(max-height:700px){.home-buttons{max-height:58vh;overflow-y:auto;padding:2px 8px}.home-title{margin-bottom:18px}.home-title h1{font-size:24px}}
+
+/* ---- 六块花园土地与柔和田园质感 ---- */
+#btnGardenQuick{background:linear-gradient(135deg,#edf5e9,#fff);color:#78947d;border:1px solid rgba(255,255,255,.9)}
+.garden-progress{font-size:11px;color:#8e9e8e;background:rgba(255,255,255,.72);padding:7px 13px;border-radius:15px;margin:-5px 0 12px;box-shadow:0 3px 12px rgba(100,130,100,.07)}
+.garden-balance{flex-wrap:wrap;justify-content:center}.garden-balance span{box-shadow:0 4px 12px rgba(115,145,115,.08)}
+.garden-plots{grid-template-columns:repeat(2,minmax(0,1fr));max-height:44vh;gap:12px}
+.garden-plot{position:relative;min-height:150px;padding:10px 7px 8px;border:1px solid rgba(255,255,255,.95);border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.88),rgba(241,247,235,.9));overflow:hidden}
+.soil-bed{position:relative;width:100%;height:65px;display:flex;align-items:center;justify-content:center;margin:4px 0 5px}
+.soil-bed:before{content:"";position:absolute;bottom:3px;width:88px;height:31px;border-radius:50%;background:radial-gradient(ellipse at 50% 35%,#a98267,#87664f 72%,#745741);box-shadow:inset 0 4px 7px rgba(255,225,190,.25),0 5px 8px rgba(104,117,83,.13)}
+.soil-bed:after{content:"";position:absolute;bottom:17px;width:76px;height:5px;border-radius:50%;background:rgba(91,66,48,.35)}
+.soil-sprout{position:relative;z-index:2;font-size:29px;filter:drop-shadow(0 3px 3px rgba(80,110,80,.16))}
+.soil-sprout.stage-1{font-size:34px}.soil-sprout.stage-2{font-size:39px}.soil-sprout.stage-3{font-size:44px}
+.soil-leaf{position:absolute;z-index:1;bottom:28px;width:19px;height:10px;border-radius:100% 0 100% 0;background:linear-gradient(135deg,#b8d6a5,#7fa77d)}
+.leaf-one{left:calc(50% - 28px);transform:rotate(15deg)}.leaf-two{right:calc(50% - 28px);transform:scaleX(-1) rotate(15deg)}
+.garden-plant-name{position:relative;z-index:2;font-size:12px;color:#718477;font-weight:700}
+.garden-stage{position:relative;z-index:2;font-size:10px;color:#a1afa2}
+.plot-actions{display:flex;gap:5px;width:100%;margin-top:6px}.plot-actions button{flex:1;min-height:26px;border:1px solid #e7eee4;border-radius:10px;background:#fff;color:#829785;font-size:10px}.plot-actions button:disabled{opacity:.35}
+.empty-plot{border:1px dashed rgba(153,181,151,.45);background:linear-gradient(180deg,rgba(255,255,255,.6),rgba(237,245,232,.7))}
+.empty-plot .soil-bed:before{background:radial-gradient(ellipse at 50% 35%,#c5aa8d,#a78a6d 75%,#92775f)}
+.empty-plot .soil-seed{position:relative;z-index:2;color:#f7e6a5;font-size:22px}
+.locked-plot{cursor:pointer;border:1px dashed rgba(174,183,158,.55);background:linear-gradient(160deg,rgba(246,246,235,.88),rgba(232,239,226,.9));color:#9ba997}
+.plot-lock{font-size:27px}.plot-title{font-size:12px;font-weight:700}.plot-cost{font-size:10px;color:#b49b78}
+.garden-actions{grid-template-columns:1fr 1fr}.garden-action.flower-live{grid-column:1/-1;background:linear-gradient(135deg,#f2d9df,#e7dff0);color:#8d7588;border:0}
+#tabPerfume{display:none!important}#auctionOverlay{display:none!important}
+@media(max-width:380px){.garden-plot{min-height:138px}.garden-plots{gap:8px}.garden-actions{gap:6px}.garden-action{font-size:10px}}
