@@ -1798,7 +1798,8 @@ function renderGarden(){
   if(!g.plots.length) gardenPlotsEl.innerHTML='<div class="garden-empty">这里还空着呢。完成一场直播，就能获得一颗种子。<br>种下第一朵花，让小花园慢慢热闹起来。</div>';
   else gardenPlotsEl.innerHTML=g.plots.map(function(p){const icons=['🌰','🌱','🌿','🌼'];const labels=['刚刚种下','长出嫩芽','正在生长','已经开花'];return '<div class="garden-plot"><div class="garden-plant">'+icons[Math.min(3,p.stage||0)]+'</div><div class="garden-plant-name">'+p.name+'</div><div class="garden-stage">'+labels[Math.min(3,p.stage||0)]+'</div></div>';}).join('');
   document.getElementById('btnGardenPlant').disabled=(g.seeds||0)<1;
-  document.getElementById('btnGardenFertilize').disabled=(saveData.money||0)<30||!g.plots.some(p=>(p.stage||0)<3);
+  document.getElementById('btnGardenFertilize').textContent='使用营养液（库存 '+(g.fertilizer||0)+'）';
+  document.getElementById('btnGardenFertilize').disabled=(!(g.fertilizer>0)&&(saveData.money||0)<30)||!g.plots.some(p=>(p.stage||0)<3);
   document.getElementById('btnGardenHarvest').disabled=!g.plots.some(p=>(p.stage||0)>=3);
 }
 function openGarden(){renderGarden();showScreen(gardenScreen);}
@@ -1811,8 +1812,9 @@ document.getElementById('btnGardenPlant').addEventListener('click',function(){
   gardenTipEl.textContent='种下了 '+pair.flower+'。再完成几场直播，它就会慢慢开花。';persist();renderGarden();
 });
 document.getElementById('btnGardenFertilize').addEventListener('click',function(){
-  const g=saveData.garden;if(saveData.money<30||!g.plots.some(p=>(p.stage||0)<3))return;
-  saveData.money-=30;const plot=g.plots.filter(function(p){return(p.stage||0)<3;})[0];plot.stage=Math.min(3,(plot.stage||0)+1);
+  const g=saveData.garden;if(!g.plots.some(p=>(p.stage||0)<3))return;
+  if(g.fertilizer>0) g.fertilizer--; else {if(saveData.money<30)return;saveData.money-=30;}
+  const plot=g.plots.filter(function(p){return(p.stage||0)<3;})[0];plot.stage=Math.min(3,(plot.stage||0)+1);
   gardenTipEl.textContent='营养液让一株植物更快成长了一步。';persist();renderGarden();
 });
 document.getElementById('btnGardenHarvest').addEventListener('click',function(){
@@ -1827,6 +1829,7 @@ function exportSave(){
   a.href=url;a.download='滚蛋吧坏情绪-存档.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);showToast('💾','存档已导出');
 }
 document.getElementById('btnSaveExport').addEventListener('click',exportSave);
+document.getElementById('btnSaveHome').addEventListener('click',function(){AudioSys.click();gameMenuEl.classList.add('show');});
 document.getElementById('btnSaveImport').addEventListener('click',function(){saveFileInput.click();});
 saveFileInput.addEventListener('change',function(){
  const file=saveFileInput.files&&saveFileInput.files[0];if(!file)return;const reader=new FileReader();
