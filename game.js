@@ -243,12 +243,8 @@ const CONFIG = {
   ],
 
   shopItems: [
-    { id:'unlockCommon', name:'普通花果盲盒', desc:'随机解锁一组未收集的普通花果', cost:3, type:'unlockCommon', icon:'🌸' },
-    { id:'unlockRare',   name:'稀有花果盲盒', desc:'随机解锁一组未收集的稀有花果', cost:6, type:'unlockRare', icon:'💎' },
-    { id:'unlockLegend', name:'传说花果盲盒', desc:'随机解锁一组未收集的传说花果', cost:12, type:'unlockLegend', icon:'🐉' },
-    { id:'comboShield',  name:'连击护符',     desc:'下一局第一次断连击时自动保护', cost:5, type:'comboShield', icon:'🛡️' },
-    { id:'doubleHeat',   name:'热度翻倍券',   desc:'下一局热度获取 ×2', cost:8, type:'doubleHeat', icon:'🔥' },
-    { id:'extraFans',    name:'涨粉加速器',   desc:'下一局粉丝获取 ×1.5', cost:6, type:'extraFans', icon:'📈' }
+    { id:'doubleHeat', name:'热度翻倍券', desc:'下一局热度获取 ×2', cost:8, type:'doubleHeat', icon:'🔥' },
+    { id:'extraFans', name:'涨粉加速器', desc:'下一局粉丝获取 ×1.5', cost:6, type:'extraFans', icon:'📈' }
   ],
 
   /* 直播间皮肤（好运果兑换，买后即换） */
@@ -1384,7 +1380,7 @@ function renderShop(){
     else html+='<button class="shop-buy avatar-buy" data-id="'+av.id+'" '+(canBuy?'':'disabled')+'>'+av.cost+' 果</button>';
     html+='</div>';
   });
-  html+='<div class="shop-section">好运果兑换</div>';
+  html+='<div class="shop-section">直播加成道具</div>';
   CONFIG.shopItems.forEach(function(item){
     const owned=saveData.ownedItems.filter(function(i){ return i.id===item.id; }).length;
     const canBuy=saveData.luckyCount>=item.cost;
