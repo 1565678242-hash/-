@@ -1396,7 +1396,6 @@ function showResult(){
     resultAuctionEl.classList.remove('show'); resultAuctionEl.innerHTML='';
     auctionOverlay.classList.remove('show');
   }
-  resultAuctionEl.classList.remove('show'); resultAuctionEl.innerHTML='';
   resultBtnEl.textContent='进入第 '+(day+1)+' 天';
   resultBtnEl.onclick=function(){ AudioSys.click(); beginDayTransition(day+1); };
   document.getElementById('resultGardenBtn').onclick=function(){AudioSys.click();openGarden();};
@@ -1894,7 +1893,7 @@ function startFlowerLive(){
    const bids=[];let price=0,buyer='';
    for(let n=0;n<3;n++){buyer=viewers[randInt(0,viewers.length-1)];price+=randInt(3,8)*qty;bids.push({buyer:buyer,price:price});}
    return {id:id,name:flower.name,emoji:flower.emoji,qty:qty,buyer:buyer,price:price,bids:bids,sold:false};
-  }),startedAt:Date.now()};
+  }),earned:0,sold:0,finished:false,startedAt:Date.now()};
   persist();
  }
  flowerLiveState=g.flowerAuction;renderFlowerLiveAuction();showScreen(document.getElementById('flowerLiveScreen'));
@@ -1921,7 +1920,7 @@ function dealFlowerLot(id){
  const income=Math.round(lot.price*(getMoneyMult?getMoneyMult():1));
  g.flowerStockById[id]=Math.max(0,available-qty);g.flowers=Math.max(0,(Number(g.flowers)||0)-qty);
  lot.qty=qty;lot.sold=true;lot.income=income;
- flowerLiveState.sold+=qty;flowerLiveState.earned=(flowerLiveState.earned||0)+income;
+ flowerLiveState.sold=(Number(flowerLiveState.sold)||0)+qty;flowerLiveState.earned=(Number(flowerLiveState.earned)||0)+income;
  const feed=document.getElementById('flowerLiveReceipts');
  if(feed.querySelector('.receipt-empty'))feed.innerHTML='';
  const receipt=document.createElement('div');receipt.className='sale-receipt';
