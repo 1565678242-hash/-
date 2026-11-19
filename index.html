@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>滚蛋吧坏情绪：疗愈直播间</title>
-<link rel="stylesheet" href="styles.css?v=20261119-screen-isolation-1">
+<link rel="stylesheet" href="styles.css?v=20261119-save-reset-1">
 </head>
 <body>
 <div id="app">
@@ -190,12 +190,12 @@
   <div id="gameMenu" class="menu-overlay">
     <div class="menu-card"><div class="menu-title">暂停一下</div><div class="menu-sub">你的进度会自动保存</div>
       <button class="menu-action primary" id="btnResume">继续直播</button><button class="menu-action" id="btnSaveExport">导出存档</button>
-      <button class="menu-action" id="btnSaveImport">导入存档</button><button class="menu-action" id="btnMenuHome">返回主页</button>
+      <button class="menu-action" id="btnSaveImport">导入存档</button><button class="menu-action danger" id="btnSaveReset">重开游戏（清除本地数据）</button><button class="menu-action" id="btnMenuHome">返回主页</button>
       <button class="menu-cancel" id="btnMenuClose">关闭</button>
     </div>
   </div>
   <input type="file" id="saveFileInput" accept="application/json,.json" hidden>
 </div>
-<script src="game.js?v=20261119-screen-isolation-1" defer></script>
+<script src="game.js?v=20261119-save-reset-1" defer></script>
 </body>
 </html>
