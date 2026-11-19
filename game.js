@@ -200,73 +200,85 @@ const CONFIG = {
   fruitPity: 2,
 
   questions: [
-    { avatar:'🌙', name:'夜猫子', text:'主播，我每天加班到很晚，回家就报复性熬夜刷手机，明知道该睡就是停不下来。怎么办？', options:[
-      { text:'别跟自己较劲，先设一个「关屏闹钟」，响了就把手机放客厅，人回卧室。', heat:18, fans:4 },
-      { text:'你不是不想睡，你是舍不得那点「属于自己的时间」。把下班后的第一小时留给自己，别等到半夜。', heat:28, fans:7 }
+    { avatar:'🌙', name:'夜猫子', text:'我每天加班到很晚，回家就报复性熬夜刷手机，明知道该睡就是停不下来。', options:[
+      { text:'给自己设个关屏闹钟，手机放远一点，先赢一小步。', heat:22, fans:5 },
+      { text:'下班后留一小时做自己的事，别把自由全熬到凌晨。', heat:28, fans:7 }
     ]},
-    { avatar:'🍋', name:'柠檬茶', text:'我特别在意别人的看法，发消息没人回就会想是不是自己说错话了，内耗到不行。', options:[
-      { text:'你不是在意别人，你是在刷存在感。把注意力放回自己身上，别人的沉默大多数时候跟你无关。', heat:30, fans:8 },
-      { text:'下次发完消息就把手机放下，去做一件具体的小事。行动会把你从脑子里拽出来。', heat:18, fans:4 }
+    { avatar:'🍋', name:'柠檬茶', text:'发消息没人回，我就开始复盘自己是不是说错话了。', options:[
+      { text:'先把聊天框关了，去吃点东西，脑补暂停营业。', heat:26, fans:6 },
+      { text:'给对方一点时间，也给自己一点清净。', heat:22, fans:5 }
     ]},
-    { avatar:'🐱', name:'路过的猫', text:'我总是三分钟热度，想学很多东西，但一遇到困难就想放弃，觉得自己特别没用。', options:[
-      { text:'三分钟热度不是缺点，是你在试错。但选一件事，允许自己做得烂，先做完再做好。', heat:26, fans:6 },
-      { text:'别用「坚持」绑架自己。把目标砍到小得不可能失败，比如每天只做五分钟。', heat:20, fans:5 }
+    { avatar:'🐱', name:'路过的猫', text:'我总是三分钟热度，想学很多东西，一遇到困难就想放弃。', options:[
+      { text:'今天只学十分钟，先把三分钟热度续个杯。', heat:24, fans:6 },
+      { text:'挑一个最想学的，其他先放进收藏夹吃灰。', heat:28, fans:7 }
     ]},
-    { avatar:'🌿', name:'晚风', text:'我和朋友闹掰了，其实我还想和好，但又拉不下面子主动找她。', options:[
-      { text:'面子是给别人看的，朋友是自己选的。发一句「最近怎么样」，不丢人。', heat:24, fans:6 },
-      { text:'先别急着和好，想清楚你是因为珍惜这个人，还是只是不习惯身边空了一块。', heat:16, fans:4 }
+    { avatar:'🌿', name:'晚风', text:'我和朋友闹掰了，其实还想和好，又拉不下面子。', options:[
+      { text:'发句「最近咋样」，成年人也可以先递台阶。', heat:26, fans:6 },
+      { text:'先想想你想念的是这个人，还是以前的热闹。', heat:22, fans:5 }
     ]},
-    { avatar:'☕', name:'安静的人', text:'我快三十了，感觉一事无成，每天上班下班，不知道生活的意义是什么。', options:[
-      { text:'意义不是想出来的，是做出来的。先找一件能让你进入「心流」的小事，哪怕只是做饭。', heat:28, fans:7 },
-      { text:'三十岁一事无成是正常的，别被互联网骗了。你还在场上，就已经赢了很多人。', heat:20, fans:5 }
+    { avatar:'☕', name:'安静的人', text:'每天上班下班，感觉生活像复制粘贴。', options:[
+      { text:'给今天加个小彩蛋，下班绕路买束花也行。', heat:24, fans:6 },
+      { text:'周末安排一件新鲜事，哪怕只是去没去过的街区。', heat:28, fans:7 }
     ]},
-    { avatar:'🎈', name:'小鹿', text:'我特别害怕冲突，别人一凶我我就想哭，事后又觉得自己很怂。', options:[
-      { text:'你不是怂，你是在保护自己。但下次试着把「我害怕」说出口，对方往往会先愣住。', heat:26, fans:6 },
-      { text:'宁可你狂一点，也别当个怂人。先从小事开始练习说「不」，攻击力要用在外面，别对着自己。', heat:32, fans:9 }
+    { avatar:'🎈', name:'小鹿', text:'我特别害怕冲突，别人一凶我就想哭，事后又觉得自己很怂。', options:[
+      { text:'先练习说「我想想再回复」，给自己争取点缓冲。', heat:24, fans:6 },
+      { text:'眼泪可以掉，边界也可以立，两件事不冲突。', heat:28, fans:7 }
     ]},
-    { avatar:'🧸', name:'糖糖', text:'我分手三个月了，还是走不出来，总觉得再也遇不到那么喜欢的人了。', options:[
-      { text:'你现在怀念的不一定是他，是那段关系里的自己。先把自己养好，别急着找下一个。', heat:24, fans:6 },
-      { text:'走不出来就走不出来，别逼自己「必须放下」。时间不负责治愈，但你在时间里做的事会。', heat:18, fans:4 }
+    { avatar:'🧸', name:'糖糖', text:'分手三个月了，还是会偷偷点开前任主页。', options:[
+      { text:'先把主页屏蔽一阵，给手指放个假。', heat:26, fans:6 },
+      { text:'想看就承认自己还在难过，然后去做点让自己舒服的事。', heat:22, fans:5 }
     ]},
-    { avatar:'🌊', name:'山海', text:'我爸妈总拿我和别人家孩子比，我明明已经很努力了，还是觉得不够。', options:[
-      { text:'他们的比较是他们的焦虑，不是你的成绩单。你不需要向任何人证明你值得被爱。', heat:30, fans:8 },
-      { text:'下次他们再说，你就问一句「那你觉得我怎么做才算够」。把问题还回去，别接。', heat:22, fans:5 }
+    { avatar:'🌊', name:'山海', text:'爸妈总拿我和别人家孩子比，我已经很努力了。', options:[
+      { text:'下次就回一句：我也想听听你们觉得我哪里做得好。', heat:28, fans:7 },
+      { text:'别人的进度条归别人，你的日子按自己的节奏来。', heat:24, fans:6 }
     ]},
-    { avatar:'🕯️', name:'不熬夜', text:'我最近对什么都提不起兴趣，以前喜欢的事现在也不想做了，是不是抑郁了？', options:[
-      { text:'先别给自己贴标签。从最简单的事开始：每天出门走十分钟，晒太阳。如果持续两周以上，去看看医生。', heat:22, fans:5 },
-      { text:'兴趣不是等来的，是碰出来的。随便做一件以前没做过的小事，不用喜欢，做完就行。', heat:16, fans:4 }
+    { avatar:'🕯️', name:'不熬夜', text:'最近对什么都提不起兴趣，以前喜欢的事也懒得做。', options:[
+      { text:'今天先出门走十分钟，别给自己布置大工程。', heat:22, fans:5 },
+      { text:'找个信任的人聊聊，最近辛苦的事可以分一点出去。', heat:26, fans:6 }
     ]},
-    { avatar:'🎐', name:'橘子汽水', text:'我在公司总是讨好型人格，谁找我帮忙我都答应，结果自己累得要死，又不敢拒绝。', options:[
-      { text:'下次帮忙前先停三秒，问自己「我想帮吗」。不想就说「这次不太方便」，不用解释。', heat:22, fans:5 },
-      { text:'先把「我考虑一下」练熟，别人的需求不用秒回。', heat:26, fans:6 }
+    { avatar:'🎐', name:'橘子汽水', text:'同事一找我帮忙我就答应，结果自己忙到飞起。', options:[
+      { text:'把「我考虑一下」设成快捷回复，先别秒答。', heat:26, fans:6 },
+      { text:'今天先拒绝一件小事，练练手感。', heat:24, fans:6 }
     ]},
-    { avatar:'🍿', name:'吃瓜群众', text:'我对象说「随便」，结果我真随便选了餐厅，现在冷战两小时了。', options:[
-      { text:'下次把选择题改成判断题：火锅还是烧烤，二选一。', heat:28, fans:7 },
-      { text:'先点外卖吧，饿着肚子吵架真的很亏。', heat:24, fans:6 }
+    { avatar:'🍿', name:'吃瓜群众', text:'对象说「随便」，我真随便选了餐厅，现在冷战两小时。', options:[
+      { text:'下次给二选一：火锅还是烧烤，别开放填空题。', heat:28, fans:7 },
+      { text:'先点外卖吧，饿着肚子吵架太亏了。', heat:24, fans:6 }
     ]},
-    { avatar:'🧋', name:'续命中', text:'同事每天都说马上下班，结果每次都把活留给我，我已经快成公司公共充电宝了。', options:[
-      { text:'今天到点就撤，充电宝也得回家充电。', heat:30, fans:8 },
-      { text:'下次直接问：这件事今天必须做完吗？', heat:24, fans:6 }
+    { avatar:'🧋', name:'续命中', text:'同事总说马上下班，最后把活留给我，我快成公共充电宝了。', options:[
+      { text:'到点就撤，充电宝也得回家充电。', heat:30, fans:8 },
+      { text:'问清楚优先级，别默默把所有人的任务都接住。', heat:24, fans:6 }
     ]},
-    { avatar:'🕵️', name:'侦探小周', text:'朋友发朋友圈说「有些人真让人失望」，我怀疑在说我，已经脑补八十集了。', options:[
-      { text:'先别急着认领，朋友圈又没写身份证号。', heat:26, fans:7 },
-      { text:'去喝口水，别给一条朋友圈写连续剧。', heat:22, fans:5 }
+    { avatar:'🕵️', name:'侦探小周', text:'朋友发朋友圈说「有些人真让人失望」，我怀疑在说我。', options:[
+      { text:'朋友圈没写身份证号，先别急着认领。', heat:26, fans:7 },
+      { text:'真有误会就直接问，别在脑内开庭到天亮。', heat:24, fans:6 }
     ]},
-    { avatar:'🐈', name:'猫猫教教主', text:'我想早睡早起、健身读书、学英语，结果每天最稳定的习惯就是点奶茶。', options:[
-      { text:'先保留奶茶，其他目标每天挑一个做，别给自己排满日程。', heat:25, fans:6 },
-      { text:'今天先读两页书，奶茶算精神赞助。', heat:22, fans:5 }
+    { avatar:'🐈', name:'猫猫教教主', text:'我想早睡、健身、读书、学英语，结果每天最稳定的是点奶茶。', options:[
+      { text:'奶茶先留着，今天只完成一个小目标。', heat:25, fans:6 },
+      { text:'读两页书就算开张，别一上来给自己排满 KPI。', heat:22, fans:5 }
     ]},
-    { avatar:'💬', name:'已读乱回', text:'我给喜欢的人发了三段话，对方回了一个「嗯」，我现在想把手机扔进海里。', options:[
-      { text:'手机先别扔，挺贵的。把注意力收回来，去吃点好的。', heat:30, fans:8 },
-      { text:'一个「嗯」撑不起你的自我怀疑，先忙自己的。', heat:26, fans:7 }
+    { avatar:'💬', name:'已读乱回', text:'我给喜欢的人发了三段话，对方只回一个「嗯」。', options:[
+      { text:'手机先放下，别让一个字决定你今天的心情。', heat:30, fans:8 },
+      { text:'去找朋友吃饭，现实里还有很多人会好好接话。', heat:26, fans:7 }
     ]},
-    { avatar:'🎭', name:'戏精本人', text:'开会时老板突然问我意见，我脑子一片空白，只挤出一句「都挺好的」。', options:[
+    { avatar:'🎭', name:'戏精本人', text:'开会时老板突然问我意见，我脑子空白，只说了句「都挺好的」。', options:[
       { text:'下次先说「我捋一下重点」，给大脑三秒加载。', heat:24, fans:6 },
-      { text:'会后补一句也行，职场没有抢答器。', heat:22, fans:5 }
+      { text:'会后补充也来得及，职场又没有抢答器。', heat:22, fans:5 }
     ]},
-    { avatar:'🧳', name:'周末失踪人口', text:'周末本来想休息，结果家里人安排了三场饭局，我连沙发都没坐热。', options:[
-      { text:'挑一场最想去的，剩下的说改天，周末也有使用权。', heat:28, fans:7 },
-      { text:'给自己留半天放空，谁也别预约你。', heat:24, fans:6 }
+    { avatar:'🧳', name:'周末失踪人口', text:'周末本来想休息，家里人却安排了三场饭局。', options:[
+      { text:'挑一场最想去的，剩下的改天再约。', heat:28, fans:7 },
+      { text:'给自己留半天放空，周末也需要预约制。', heat:24, fans:6 }
+    ]},
+    { avatar:'🫠', name:'工位融化中', text:'我发工资当天很快乐，三天后就开始研究怎么省钱。', options:[
+      { text:'先给自己留一笔快乐基金，别把日子过成纯存档。', heat:25, fans:6 },
+      { text:'记一周花销，看看钱到底偷偷溜去哪儿了。', heat:22, fans:5 }
+    ]},
+    { avatar:'🥲', name:'社交电量1%', text:'朋友约我出门，我想去又想宅，出门前已经累了。', options:[
+      { text:'约短一点，喝杯东西就回家，社交也能轻量化。', heat:24, fans:6 },
+      { text:'今天想宅就宅，给自己发张免打扰通行证。', heat:22, fans:5 }
+    ]},
+    { avatar:'🪴', name:'盆栽观察员', text:'我总觉得别人都在进步，只有我停在原地。', options:[
+      { text:'翻翻半年前的自己，你可能已经走了挺远。', heat:28, fans:7 },
+      { text:'今天做一件能让明天轻松一点的小事，就算进度。', heat:24, fans:6 }
     ]}
   ],
 
@@ -1296,7 +1308,7 @@ function finishSuccess(){
   garden.seeds=garden.seedInventory.length;
   const maturedNames=[];
   garden.plots.forEach(function(p){const before=p.stage||0;p.stage=Math.min(3,before+1);if(before<3&&p.stage>=3)maturedNames.push(p.name);});
-  garden.pendingMaturedFlowers=(garden.pendingMaturedFlowers||[]).concat(maturedNames);state.maturedFlowers=maturedNames;state.seedRewards=seedRewards;state.liveIncome=liveIncome;state.flowerSale=null;if(garden.harvestCount>=10&&state.currentDay%3===0&&garden.flowers>0){const keys=Object.keys(garden.flowerStockById||{}).filter(function(k){return Number(garden.flowerStockById[k])>0;});if(keys.length){const key=keys[randInt(0,keys.length-1)],available=Math.min(garden.flowers,Number(garden.flowerStockById[key])||0),qty=Math.min(available,randInt(2,5));if(qty>0){const f=GARDEN_SEED_LIBRARY.find(function(x){return x.id===key;})||THERAPY_FLOWERS.find(function(x){return x.id===key;}),flowerName=f?f.name:'鲜花花束';garden.flowerStockById[key]-=qty;garden.flowers-=qty;const buyer=CONFIG.viewerNames[randInt(0,CONFIG.viewerNames.length-1)],income=qty*randInt(18,28);saveData.money+=income;saveData.totalEarned+=income;garden.flowerLives=(garden.flowerLives||0)+1;state.flowerSale={buyer:buyer,name:flowerName,qty:qty,income:income};}}}state.auctionPerfume=null;
+  garden.pendingMaturedFlowers=(garden.pendingMaturedFlowers||[]).concat(maturedNames);state.maturedFlowers=maturedNames;state.seedRewards=seedRewards;state.liveIncome=liveIncome;state.flowerSale=null;if(garden.harvestCount>=10){if(garden.nextFlowerSaleDay==null)garden.nextFlowerSaleDay=state.currentDay+3;if(state.currentDay>=garden.nextFlowerSaleDay){const keys=Object.keys(garden.flowerStockById||{}).filter(function(k){return Number(garden.flowerStockById[k])>0;});if(garden.flowers>0&&keys.length){const key=keys[randInt(0,keys.length-1)],available=Math.min(garden.flowers,Number(garden.flowerStockById[key])||0),qty=Math.min(available,randInt(2,5));if(qty>0){const f=GARDEN_SEED_LIBRARY.find(function(x){return x.id===key;})||THERAPY_FLOWERS.find(function(x){return x.id===key;}),flowerName=f?f.name:'鲜花花束';garden.flowerStockById[key]-=qty;garden.flowers-=qty;const buyer=CONFIG.viewerNames[randInt(0,CONFIG.viewerNames.length-1)],income=qty*randInt(18,28);saveData.money+=income;saveData.totalEarned+=income;garden.flowerLives=(garden.flowerLives||0)+1;state.flowerSale={buyer:buyer,name:flowerName,qty:qty,income:income};}}garden.nextFlowerSaleDay=state.currentDay+3;}}state.auctionPerfume=null;
   saveData.totalHeat+=state.heat; saveData.totalFans=state.fans;
   saveData.totalPopped+=state.dayStats.popped; saveData.totalDays+=1;
   if(state.currentDay>saveData.bestDay) saveData.bestDay=state.currentDay;
@@ -1817,7 +1829,7 @@ const GARDEN_SEED_LIBRARY=[
  {id:'lily',label:'百合种子',name:'百合',emoji:'💮',desc:'平和与祝福'}
 ];
 /* 补足花园普通花卉至 100 种 */
-GARDEN_SEED_LIBRARY.push(...[["camellia","山茶花","🌺","热烈而克制"],["gardenia","栀子花","🤍","清香与安心"],["jasmine","茉莉","🌼","温柔的陪伴"],["hydrangea","绣球花","💠","圆满与团聚"],["orchid","兰花","🪷","从容与优雅"],["chrysanthemum","菊花","🏵️","自在与长久"],["osmanthus","桂花","🌼","甜甜的好消息"],["magnolia","玉兰","🤍","坦荡与纯粹"],["lotus","荷花","🪷","清澈与坚定"],["hibiscus","木槿","🌺","每一天都重新开始"],["plumeria","鸡蛋花","🌼","轻松的小旅行"],["iris","鸢尾","💜","好消息正在路上"],["freesia","小苍兰","🌸","清新与希望"],["gypsophila","满天星","✨","平凡日子也闪光"],["pansy","三色堇","💜","把心事说出来"],["violet","紫罗兰","🪻","安静的喜欢"],["primrose","报春花","🌼","新的开始"],["begonia","海棠","🌺","温柔的想念"],["azalea","杜鹃花","🌺","热闹与生机"],["dahlia","大丽花","🌸","闪闪发光"],["gerbera","扶郎花","🌼","积极与快乐"],["anemone","银莲花","🌸","勇敢面对变化"],["ranunculus","花毛茛","🌷","小小的惊喜"],["cosmos","格桑花","🌼","自由与自在"],["zinnia","百日草","🌺","长久的友谊"],["marigold","金盏花","🧡","温暖与守护"],["snapdragon","金鱼草","🌸","勇敢表达"],["gladiolus","剑兰","🌺","坚定向前"],["delphinium","飞燕草","💙","轻盈与自由"],["larkspur","翠雀","💜","清爽的心情"],["bluebell","风铃草","🔔","等一阵好风"],["campanula","风铃花","🔔","温柔回应"],["heather","石楠花","🌸","独立与坚韧"],["heliconia","鹤望兰","🧡","自由的灵魂"],["birdofparadise","天堂鸟","🧡","勇敢去远方"],["anthurium","红掌","❤️","热情与活力"],["calla","马蹄莲","🤍","优雅与平和"],["tuberose","晚香玉","🤍","夜晚也有芬芳"],["hyacinth","风信子","🪻","重拾好心情"],["narcissus","水仙","🌼","自信与新生"],["snowdrop","雪滴花","🤍","寒冬过后有春天"],["cyclamen","仙客来","🌸","欢迎好事到来"],["amaryllis","朱顶红","🌺","闪耀的勇气"],["carnation","康乃馨","🌸","感谢与珍惜"],["sweetpea","香豌豆花","🌸","甜甜的回忆"],["morningglory","牵牛花","💜","迎接清晨"],["clematis","铁线莲","💜","柔韧的力量"],["wisteria","紫藤花","💜","浪漫与期待"],["honeysuckle","金银花","🌼","甜蜜的日常"],["passionflower","西番莲花","💜","好奇与探索"],["bleedingheart","荷包牡丹","💗","真诚的心意"],["foxglove","毛地黄","🌸","独特的美"],["hollyhock","蜀葵","🌺","向上生长"],["mallow","锦葵","🌸","温和而有力量"],["verbena","马鞭草","💜","安定与清醒"],["salvia","鼠尾草花","💜","整理思绪"],["echinacea","松果菊","🌸","恢复元气"],["rudbeckia","黑心菊","🌻","迎着阳光"],["coreopsis","金鸡菊","🌼","快乐不打烊"],["gaillardia","天人菊","🌺","热情生活"],["aster","紫菀","💜","耐心等待"],["statice","勿忘我","💜","记得爱自己"],["phlox","福禄考","🌸","平凡也美好"],["alyssum","香雪球","🤍","细小的幸福"],["lobelia","半边莲","💙","清凉与宁静"],["nemesia","海角樱草","🌸","可爱的小确幸"],["diascia","囊距花","🌺","温暖的陪伴"],["osteospermum","非洲菊","🌼","明亮的心情"],["gazania","勋章菊","🌼","把日子过闪亮"],["portulaca","太阳花","🌸","热爱每个晴天"],["impatiens","凤仙花","🌺","轻松自在"],["petunia","矮牵牛","🌺","自在绽放"],["calibrachoa","百万小铃","🌸","快乐加倍"],["periwinkle","长春花","💜","平安顺遂"],["lantana","马缨丹","🌺","热闹又可爱"],["bouvardia","宝石花","🌸","珍惜眼前"],["scabiosa","松虫草","💜","认真生活"],["tithonia","墨西哥向日葵","🧡","热烈的阳光"],["cleome","醉蝶花","🌸","自在摇曳"],["tropaeolum","旱金莲","🧡","勇敢尝试"],["canna","美人蕉","🌺","大方与热情"],["alstroemeria","六出花","🌸","长久的陪伴"],["leucanthemum","大滨菊","🌼","简单的快乐"],["tanacetum","小白菊","🌼","平安与健康"],["matricaria","洋甘菊","🌼","放松一下"],["calendula","金盏菊","🧡","温暖的拥抱"],["bellis","雏菊2","🌼","重新发现快乐"],["armeria","海石竹","🌸","坚定又柔软"],["iberis","屈曲花","🤍","纯粹的心意"],["linaria","柳穿鱼","💜","轻盈向前"],["eschscholzia","加州花菱草","🧡","自在做自己"]].map(function(r){return {id:r[0],label:r[1]+'种子',name:r[1],emoji:r[2],desc:r[3]};}));
+GARDEN_SEED_LIBRARY.push(...[["camellia","山茶花","🌺","热烈而克制"],["gardenia","栀子花","🤍","清香与安心"],["jasmine","茉莉","🌼","温柔的陪伴"],["hydrangea","绣球花","💠","圆满与团聚"],["orchid","兰花","🪷","从容与优雅"],["chrysanthemum","菊花","🏵️","自在与长久"],["osmanthus","桂花","🌼","甜甜的好消息"],["magnolia","玉兰","🤍","坦荡与纯粹"],["lotus","荷花","🪷","清澈与坚定"],["hibiscus","木槿","🌺","每一天都重新开始"],["plumeria","鸡蛋花","🌼","轻松的小旅行"],["iris","鸢尾","💜","好消息正在路上"],["freesia","小苍兰","🌸","清新与希望"],["gypsophila","满天星","✨","平凡日子也闪光"],["pansy","三色堇","💜","把心事说出来"],["violet","紫罗兰","🪻","安静的喜欢"],["primrose","报春花","🌼","新的开始"],["begonia","海棠","🌺","温柔的想念"],["azalea","杜鹃花","🌺","热闹与生机"],["dahlia","大丽花","🌸","闪闪发光"],["gerbera","扶郎花","🌼","积极与快乐"],["anemone","银莲花","🌸","勇敢面对变化"],["ranunculus","花毛茛","🌷","小小的惊喜"],["cosmos","格桑花","🌼","自由与自在"],["zinnia","百日草","🌺","长久的友谊"],["marigold","金盏花","🧡","温暖与守护"],["snapdragon","金鱼草","🌸","勇敢表达"],["gladiolus","剑兰","🌺","坚定向前"],["delphinium","飞燕草","💙","轻盈与自由"],["larkspur","翠雀","💜","清爽的心情"],["bluebell","风铃草","🔔","等一阵好风"],["campanula","风铃花","🔔","温柔回应"],["heather","石楠花","🌸","独立与坚韧"],["heliconia","鹤望兰","🧡","自由的灵魂"],["birdofparadise","天堂鸟","🧡","勇敢去远方"],["anthurium","红掌","❤️","热情与活力"],["calla","马蹄莲","🤍","优雅与平和"],["tuberose","晚香玉","🤍","夜晚也有芬芳"],["hyacinth","风信子","🪻","重拾好心情"],["narcissus","水仙","🌼","自信与新生"],["snowdrop","雪滴花","🤍","寒冬过后有春天"],["cyclamen","仙客来","🌸","欢迎好事到来"],["amaryllis","朱顶红","🌺","闪耀的勇气"],["carnation","康乃馨","🌸","感谢与珍惜"],["sweetpea","香豌豆花","🌸","甜甜的回忆"],["morningglory","牵牛花","💜","迎接清晨"],["clematis","铁线莲","💜","柔韧的力量"],["wisteria","紫藤花","💜","浪漫与期待"],["honeysuckle","金银花","🌼","甜蜜的日常"],["passionflower","西番莲花","💜","好奇与探索"],["bleedingheart","荷包牡丹","💗","真诚的心意"],["foxglove","毛地黄","🌸","独特的美"],["hollyhock","蜀葵","🌺","向上生长"],["mallow","锦葵","🌸","温和而有力量"],["verbena","马鞭草","💜","安定与清醒"],["salvia","鼠尾草花","💜","整理思绪"],["echinacea","松果菊","🌸","恢复元气"],["rudbeckia","黑心菊","🌻","迎着阳光"],["coreopsis","金鸡菊","🌼","快乐不打烊"],["gaillardia","天人菊","🌺","热情生活"],["aster","紫菀","💜","耐心等待"],["statice","勿忘我","💜","记得爱自己"],["phlox","福禄考","🌸","平凡也美好"],["alyssum","香雪球","🤍","细小的幸福"],["lobelia","半边莲","💙","清凉与宁静"],["nemesia","海角樱草","🌸","可爱的小确幸"],["diascia","囊距花","🌺","温暖的陪伴"],["osteospermum","非洲菊","🌼","明亮的心情"],["gazania","勋章菊","🌼","把日子过闪亮"],["portulaca","太阳花","🌸","热爱每个晴天"],["impatiens","凤仙花","🌺","轻松自在"],["petunia","矮牵牛","🌺","自在绽放"],["calibrachoa","百万小铃","🌸","快乐加倍"],["periwinkle","长春花","💜","平安顺遂"],["lantana","马缨丹","🌺","热闹又可爱"],["bouvardia","宝石花","🌸","珍惜眼前"],["scabiosa","松虫草","💜","认真生活"],["tithonia","墨西哥向日葵","🧡","热烈的阳光"],["cleome","醉蝶花","🌸","自在摇曳"],["tropaeolum","旱金莲","🧡","勇敢尝试"],["canna","美人蕉","🌺","大方与热情"],["alstroemeria","六出花","🌸","长久的陪伴"],["leucanthemum","大滨菊","🌼","简单的快乐"],["tanacetum","小白菊","🌼","平安与健康"],["matricaria","洋甘菊","🌼","放松一下"],["calendula","金盏菊","🧡","温暖的拥抱"],["bellis","雏菊2","🌼","重新发现快乐"],["armeria","海石竹","🌸","坚定又柔软"],["iberis","屈曲花","🤍","纯粹的心意"],["linaria","柳穿鱼","💜","轻盈向前"],["eschscholzia","加州花菱草","🧡","自在做自己"],["tulbaghia","韭兰","🌸","雨后也会重新盛开"]].map(function(r){return {id:r[0],label:r[1]+'种子',name:r[1],emoji:r[2],desc:r[3]};}));
 const THERAPY_FLOWERS=[
  {id:'luck',name:'幸运花',emoji:'🍀',effect:'愿你常有好事发生，幸运总会悄悄来到身边。'},
  {id:'wealth',name:'发财花',emoji:'💰',effect:'愿努力都有回响，财富与机会慢慢向你靠近。'},
@@ -1825,7 +1837,7 @@ const THERAPY_FLOWERS=[
  {id:'peace',name:'平安心花',emoji:'🕊️',effect:'愿心里的风浪渐渐平息，日子安稳而明亮。'}
 ];
 function rollGardenSeed(){const n=Math.random();if(n<0.06)return {kind:'random',label:'随机种子'};if(n<0.11)return {kind:'magic',label:'神奇种子'};const f=GARDEN_SEED_LIBRARY[randInt(0,GARDEN_SEED_LIBRARY.length-1)];return {kind:'normal',flowerId:f.id,label:f.label};}
-function ensureGarden(){if(!saveData.garden)saveData.garden={seeds:0,seedInventory:[],lastWaterDay:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};const g=saveData.garden;if(!Array.isArray(g.plots))g.plots=[];if(!Array.isArray(g.seedInventory))g.seedInventory=[];g.seedInventory=g.seedInventory.map(function(seed){if(seed.kind==='mystery')return Object.assign({},seed,{kind:'random',label:'随机种子'});if(seed.kind==='therapy')return Object.assign({},seed,{kind:'magic',label:'神奇种子'});return seed;});g.plots.forEach(function(p){if(p.seedKind==='mystery')p.seedKind='random';if(p.seedKind==='therapy')p.seedKind='magic';});while(g.seedInventory.length<(Number(g.seeds)||0))g.seedInventory.push(rollGardenSeed());g.seeds=g.seedInventory.length;if(g.lastWaterDay==null)g.lastWaterDay=0;if(g.unlockedPlots==null)g.unlockedPlots=1;if(g.flowers==null)g.flowers=0;if(!Array.isArray(g.flowerCollection))g.flowerCollection=[];if(!Array.isArray(g.magicCollection))g.magicCollection=[];g.magicCollection=g.magicCollection.filter(function(f,i,a){return f&&f.id&&a.findIndex(function(x){return x&&x.id===f.id;})===i;});g.flowerCollection=g.flowerCollection.filter(function(id){const magic=THERAPY_FLOWERS.find(function(f){return f.id===id;});if(magic){if(!g.magicCollection.some(function(x){return x.id===id;}))g.magicCollection.push({id:magic.id,name:magic.name,emoji:magic.emoji,effect:magic.effect});return false;}return true;});if(!g.flowerStockById||typeof g.flowerStockById!=='object')g.flowerStockById={};if(g.harvestCount==null)g.harvestCount=0;if(g.totalFlowers==null)g.totalFlowers=0;if(!Array.isArray(g.pendingMaturedFlowers))g.pendingMaturedFlowers=[];if(g.totalPlanted==null)g.totalPlanted=g.plots.length;if(g.maxHarvestBatch==null)g.maxHarvestBatch=0;if(g.flowerLives==null)g.flowerLives=0;g.unlockedPlots=clamp(Math.max(Number(g.unlockedPlots)||1,Math.min(6,g.plots.length)),1,6);return g;}
+function ensureGarden(){if(!saveData.garden)saveData.garden={seeds:0,seedInventory:[],lastWaterDay:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};const g=saveData.garden;if(!Array.isArray(g.plots))g.plots=[];if(!Array.isArray(g.seedInventory))g.seedInventory=[];g.seedInventory=g.seedInventory.map(function(seed){if(seed.kind==='mystery')return Object.assign({},seed,{kind:'random',label:'随机种子'});if(seed.kind==='therapy')return Object.assign({},seed,{kind:'magic',label:'神奇种子'});return seed;});g.plots.forEach(function(p){if(p.seedKind==='mystery')p.seedKind='random';if(p.seedKind==='therapy')p.seedKind='magic';});while(g.seedInventory.length<(Number(g.seeds)||0))g.seedInventory.push(rollGardenSeed());g.seeds=g.seedInventory.length;if(g.lastWaterDay==null)g.lastWaterDay=0;if(g.unlockedPlots==null)g.unlockedPlots=1;if(g.flowers==null)g.flowers=0;if(!Array.isArray(g.flowerCollection))g.flowerCollection=[];if(!Array.isArray(g.magicCollection))g.magicCollection=[];g.magicCollection=g.magicCollection.filter(function(f,i,a){return f&&f.id&&a.findIndex(function(x){return x&&x.id===f.id;})===i;});g.flowerCollection=g.flowerCollection.filter(function(id){const magic=THERAPY_FLOWERS.find(function(f){return f.id===id;});if(magic){if(!g.magicCollection.some(function(x){return x.id===id;}))g.magicCollection.push({id:magic.id,name:magic.name,emoji:magic.emoji,effect:magic.effect});return false;}return true;});if(!g.flowerStockById||typeof g.flowerStockById!=='object')g.flowerStockById={};if(g.harvestCount==null)g.harvestCount=0;if(g.totalFlowers==null)g.totalFlowers=0;if(!Array.isArray(g.pendingMaturedFlowers))g.pendingMaturedFlowers=[];if(g.totalPlanted==null)g.totalPlanted=g.plots.length;if(g.maxHarvestBatch==null)g.maxHarvestBatch=0;if(g.flowerLives==null)g.flowerLives=0;if(g.harvestCount>=10&&g.nextFlowerSaleDay==null)g.nextFlowerSaleDay=(Number(saveData.currentDay)||1)+3;g.unlockedPlots=clamp(Math.max(Number(g.unlockedPlots)||1,Math.min(6,g.plots.length)),1,6);return g;}
 function renderGarden(){
  const g=ensureGarden();
  gardenSeedsEl.textContent=g.seeds||0;
