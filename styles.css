@@ -1197,3 +1197,22 @@ body.screen-overlay-open #gardenScreen{
 .plant-growth-meter{height:5px;width:min(76%,92px);margin:5px auto 2px;overflow:hidden;border-radius:99px;background:#e8eee4;box-shadow:inset 0 1px 2px rgba(74,102,76,.08)}
 .plant-growth-meter span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#a8cf9c,#dfb2a4);transition:width .35s ease}
 .garden-plot.growth-stage-3 .plant-growth-meter span{background:linear-gradient(90deg,#a5c99b,#e7a1b5)}
+
+
+/* Garden / flower basket separation and automatic flower-live settlement */
+#gardenScreen .garden-top-nav{position:absolute;top:calc(27px + env(safe-area-inset-top));right:14px;display:flex;gap:7px;z-index:1001;}
+#gardenScreen .garden-nav-btn{min-height:36px;padding:7px 12px;border:1px solid rgba(255,255,255,.95);border-radius:13px;background:rgba(255,255,255,.9);color:#718b73;font-size:11px;font-weight:800;box-shadow:0 5px 16px rgba(105,135,111,.1);}
+#gardenScreen .page-title{margin-top:8px!important;padding-top:0!important;}
+#basketScreen{align-items:center;justify-content:flex-start;gap:14px;padding:calc(76px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));overflow-y:auto;background:linear-gradient(165deg,#faf7fc,#f4f8fa);}
+#basketScreen .page-title{width:100%;text-align:center;margin:4px 0 0;font-size:22px;}
+#basketScreen .basket-summary{padding:9px 18px;border-radius:15px;background:rgba(255,255,255,.84);color:#829783;font-size:12px;}
+#basketScreen .basket-screen-items{width:min(100%,620px);max-height:none;min-height:130px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px;border-radius:20px;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.9);box-shadow:0 8px 24px rgba(122,145,126,.08);}
+#basketScreen .basket-screen-items .basket-flower{min-height:58px;display:flex;align-items:center;justify-content:flex-start;gap:9px;padding:10px;border-radius:14px;background:linear-gradient(130deg,#fff,#f3f8ef);color:#718b73;font-size:12px;}
+#basketScreen .basket-screen-items .basket-flower span{font-size:23px;}#basketScreen .basket-screen-items .basket-flower b{flex:1;min-width:0;}#basketScreen .basket-screen-items .basket-flower em{font-style:normal;color:#c18e83;font-weight:800;}
+#basketScreen .basket-empty{grid-column:1/-1;align-self:center;text-align:center;padding:30px 10px;color:#9aaa91;font-size:12px;}
+#basketScreen .basket-pager{display:flex;align-items:center;justify-content:center;gap:14px;}
+.flower-live-settlement{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(61,76,62,.42);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
+.flower-live-settlement.show{display:flex;}
+.flower-live-settlement-card{width:min(100%,360px);padding:27px 22px 22px;border:1px solid rgba(255,255,255,.95);border-radius:26px;background:linear-gradient(150deg,#fff,#f2f8ef);box-shadow:0 20px 60px rgba(61,91,67,.22);text-align:center;}
+.flower-live-settlement-card .settlement-emoji{font-size:42px;margin-bottom:8px;}.flower-live-settlement-card .settlement-title{font-size:20px;font-weight:900;color:#637e67;}.flower-live-settlement-card .settlement-sub{margin-top:9px;font-size:12px;line-height:1.6;color:#91a08e;}.flower-live-settlement-card .settlement-income{margin:17px 0 8px;font-size:32px;font-weight:900;color:#c18e63;}.flower-live-settlement-card .settlement-total{margin-bottom:18px;font-size:11px;color:#8e9b8b;}.flower-live-settlement-card .main-btn{width:100%;}
+@media(max-width:420px){#gardenScreen .garden-top-nav{top:calc(25px + env(safe-area-inset-top));right:9px;gap:5px}#gardenScreen .garden-nav-btn{padding:6px 9px;font-size:10px}#basketScreen .basket-screen-items{grid-template-columns:1fr}}
