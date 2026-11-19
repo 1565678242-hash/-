@@ -464,8 +464,6 @@ let saveData = {
 /* ============================================================
    三、DOM
    ============================================================ */
-function updatePhoneClock(){const el=document.getElementById('phoneClock');if(!el)return;const now=new Date();el.textContent=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');}
-updatePhoneClock();setInterval(updatePhoneClock,15000);
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const hudEl = document.getElementById('hud');
@@ -1387,7 +1385,25 @@ function showResult(){
 /* ============================================================
    二十五、页面 / 果篮商店
    ============================================================ */
-function showScreen(el){ const ss=document.querySelectorAll('.screen'); for(let i=0;i<ss.length;i++) ss[i].classList.remove('active'); if(el) el.classList.add('active'); }
+function hideGameplayLayers(){
+  showHud(false);
+  stopDanmu();
+  stopViewers();
+  introHintEl.classList.remove('show');
+  questionOverlay.classList.remove('show');
+  pkOverlay.classList.remove('show');
+  auctionOverlay.classList.remove('show');
+  document.getElementById('gardenNotice').classList.remove('show');
+  state.questionOpen=false;
+}
+function showScreen(el){
+  const ss=document.querySelectorAll('.screen');
+  for(let i=0;i<ss.length;i++) ss[i].classList.remove('active');
+  if(el){
+    hideGameplayLayers();
+    el.classList.add('active');
+  }
+}
 function showGardenNotice(emoji,title,message){if(state.phase==='playing')state.paused=true;const box=document.getElementById('gardenNotice'),go=document.getElementById('gardenNoticeGo'),actions=box.querySelector('.notice-actions');const showGo=(title.indexOf('成熟')>=0||title.indexOf('收获')>=0||message.indexOf('已成熟')>=0)&&!gardenScreen.classList.contains('active');go.style.display=showGo?'block':'none';actions.classList.toggle('single-action',!showGo);document.getElementById('gardenNoticeEmoji').textContent=emoji;document.getElementById('gardenNoticeTitle').textContent=title;document.getElementById('gardenNoticeText').textContent=message;box.classList.add('show');}
 document.getElementById('gardenNoticeClose').addEventListener('click',function(){document.getElementById('gardenNotice').classList.remove('show');const pending=ensureGarden().pendingMaturedFlowers;if(pending.length){pending.length=0;persist();}if(state.phase==='playing'&&!gardenScreen.classList.contains('active'))state.paused=false;AudioSys.click();});
 document.getElementById('gardenNoticeGo').addEventListener('click',function(){document.getElementById('gardenNotice').classList.remove('show');const pending=ensureGarden().pendingMaturedFlowers;if(pending.length){pending.length=0;persist();}if(!gardenScreen.classList.contains('active')){if(state.phase==='playing')state.paused=false;openGarden();}});
@@ -1798,8 +1814,33 @@ function renderGarden(){
 }
 
 let gardenReturnScreen=null,gardenReturnPaused=false,gardenReturnPhase=null;
-function openGarden(){if(!gardenScreen.classList.contains('active')){gardenReturnScreen=document.querySelector('.screen.active');gardenReturnPhase=state.phase;gardenReturnPaused=state.paused;}if(state.phase==='playing')state.paused=true;renderGarden();showScreen(gardenScreen);}
-function closeGarden(){let target=gardenReturnScreen;if(gardenReturnPhase==='playing'||state.phase==='playing'){showScreen(null);state.paused=gardenReturnPaused;}else{if(!target||!document.body.contains(target)){target=gardenReturnPhase==='result'?resultScreen:homeScreen;}showScreen(target);}gardenReturnScreen=null;gardenReturnPhase=null;}
+function openGarden(){
+  if(!gardenScreen.classList.contains('active')){
+    gardenReturnScreen=document.querySelector('.screen.active');
+    gardenReturnPhase=state.phase;
+    gardenReturnPaused=state.paused;
+  }
+  if(state.phase==='playing'||state.phase==='tree')state.paused=true;
+  renderGarden();
+  showScreen(gardenScreen);
+}
+function closeGarden(){
+  let target=gardenReturnScreen;
+  if(gardenReturnPhase==='playing'||gardenReturnPhase==='tree'){
+    showScreen(null);
+    state.paused=gardenReturnPaused;
+    showHud(true);
+    startViewers();
+    startDanmu();
+  }else{
+    if(!target||!document.body.contains(target)){
+      target=gardenReturnPhase==='result'?resultScreen:homeScreen;
+    }
+    showScreen(target);
+  }
+  gardenReturnScreen=null;
+  gardenReturnPhase=null;
+}
 document.getElementById('btnGardenHome').addEventListener('click',function(){AudioSys.click();openGarden();});
 btnGardenQuickEl.addEventListener('click',function(){AudioSys.click();openGarden();});
 document.getElementById('btnGardenBack').addEventListener('click',function(){AudioSys.click();closeGarden();});
@@ -1947,9 +1988,17 @@ btnLikeEl.addEventListener('click',function(e){
 document.getElementById('btnShopHome').addEventListener('click',function(){ AudioSys.click(); renderShop(); showScreen(shopScreen); });
 function backFromOverlay(){
   AudioSys.click();
-  if(state.phase==='playing'||state.phase==='tree'){ hideAllScreens(); state.paused=false; }
-  else if(state.phase==='result'){ showScreen(resultScreen); }
-  else showScreen(homeScreen);
+  if(state.phase==='playing'||state.phase==='tree'){
+    hideAllScreens();
+    state.paused=false;
+    showHud(true);
+    startViewers();
+    startDanmu();
+  }else if(state.phase==='result){
+    showScreen(resultScreen);
+  }else{
+    showScreen(homeScreen);
+  }
 }
 document.getElementById('btnShopBack').addEventListener('click',backFromOverlay);
 btnShop.addEventListener('click',function(e){ e.stopPropagation(); AudioSys.click(); if(state.phase==='playing'||state.phase==='tree'){ state.paused=true; state.dragging=null; state.pointerId=null; if(state.phase==='playing'){ saveDaySnapshot(); persist(); } } renderShop(); showScreen(shopScreen); });
