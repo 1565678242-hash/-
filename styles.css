@@ -1140,3 +1140,49 @@ body.screen-overlay-open #gardenScreen{
   line-height:1.4!important;
 }
 #gardenScreen .basket-empty{grid-column:1/-1!important;font-size:11px!important}
+
+
+/* === Unified botanical interface polish · 2026-11-19 === */
+:root{--botanical-ink:#526d5c;--botanical-muted:#8c9b8d;--botanical-rose:#d98d9e;--botanical-gold:#c69a63;--botanical-glass:rgba(255,255,255,.84)}
+.screen{scrollbar-width:thin;scrollbar-color:#d8e4d7 transparent}
+.page-title{color:var(--botanical-ink);letter-spacing:.04em;text-shadow:0 2px 12px rgba(118,150,121,.08)}
+.main-btn,.garden-action,.tab,.text-btn,.back-btn{transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+.main-btn:active,.garden-action:active,.tab:active,.text-btn:active{transform:scale(.97)}
+.main-btn,.garden-action{border-radius:15px}
+.home-title h1{letter-spacing:.08em;text-shadow:0 5px 24px rgba(180,135,150,.15)}
+.home-title p{letter-spacing:.32em;color:#a28d9d}
+.home-sub{max-width:330px;margin:10px auto 0;line-height:1.8}
+.garden-balance,.garden-progress,.garden-tip,.flower-basket,.data-card,.shop-grid>*{border:1px solid rgba(255,255,255,.8);box-shadow:0 8px 24px rgba(122,145,126,.08)}
+.garden-plot{border:1px solid rgba(255,255,255,.92)!important;box-shadow:0 5px 16px rgba(120,145,124,.09)!important}
+.garden-plot:not(.locked-plot){background:linear-gradient(155deg,rgba(255,255,255,.96),rgba(239,247,236,.9))!important}
+.flower-live-screen{justify-content:flex-start!important;overflow-y:auto!important;padding:calc(58px + env(safe-area-inset-top)) 12px calc(22px + env(safe-area-inset-bottom))!important;background:radial-gradient(ellipse at 10% 10%,rgba(247,218,226,.65),transparent 42%),radial-gradient(ellipse at 90% 80%,rgba(210,233,211,.7),transparent 45%),linear-gradient(145deg,#fbf8f1,#f0f6ef 58%,#f8eff2)!important}
+.flower-live-card{width:min(100%,650px)!important;margin:0 auto!important;padding:clamp(16px,4vw,28px)!important;border-radius:28px!important;background:var(--botanical-glass)!important;box-shadow:0 18px 50px rgba(105,135,111,.15)!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.flower-live-kicker{font-size:10px;letter-spacing:.2em;color:#9aaa91}
+.flower-live-intro{font-size:12px;line-height:1.7;color:#89998a;margin:4px auto 16px;max-width:440px}
+.flower-live-banner{display:flex;align-items:center;gap:12px;text-align:left;padding:13px 15px;border-radius:19px;background:linear-gradient(110deg,#f8e9ed,#edf5e9);border:1px solid rgba(255,255,255,.9)}
+.flower-live-banner .flower-live-customer{font-size:34px;margin:0}
+.flower-live-banner>div{display:flex;flex:1;min-width:0;flex-direction:column;gap:4px}
+.flower-live-banner b{font-size:12px;color:#667e6a}
+.flower-live-banner small{font-size:10px;color:#96a493}
+.live-pill{padding:5px 8px;border-radius:20px;background:#df8797;color:white;font-size:9px;font-weight:900;letter-spacing:.1em}
+.flower-live-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:12px 0}
+.flower-live-summary>span{padding:9px 5px;border-radius:13px;background:rgba(244,248,239,.9);font-size:10px;color:#91a08e}
+.flower-live-summary b{display:block;margin-top:4px;font-size:14px;color:#718c73}
+.flower-live-lots{display:grid;grid-template-columns:1fr;gap:10px;text-align:left}
+.flower-auction-lot{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:10px;padding:12px;border-radius:18px;background:linear-gradient(125deg,#fff,#f4f8f0);border:1px solid #e8eee4;box-shadow:0 5px 16px rgba(120,145,124,.07);animation:qIn .25s ease}
+.flower-auction-lot.is-sold{background:linear-gradient(120deg,#f5f5ef,#edf4eb);opacity:.78}
+.flower-lot-emoji{width:46px;height:46px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(145deg,#f9e8ed,#edf5e9);font-size:28px}
+.flower-lot-main{min-width:0;display:flex;flex-direction:column;gap:4px}
+.flower-lot-title{font-size:13px;font-weight:900;color:#627b66}
+.flower-lot-meta,.flower-lot-bid{font-size:10px;line-height:1.5;color:#97a393}
+.flower-lot-bid strong{color:#c18e63;font-size:13px}
+.flower-lot-action{min-width:66px;min-height:38px;padding:7px 10px;border:0;border-radius:12px;background:linear-gradient(135deg,#d88d9d,#c77d91);color:white;font-size:11px;font-weight:900;box-shadow:0 5px 12px rgba(205,130,151,.2)}
+.flower-lot-action:disabled{background:#b7c5b5;box-shadow:none}
+.flower-lot-bids{grid-column:2/-1;display:flex;flex-wrap:wrap;gap:5px;margin-top:-2px}
+.flower-lot-bids span{padding:4px 7px;border-radius:9px;background:#f8f0ed;color:#9d8c87;font-size:9px}
+.flower-live-tip{padding:10px 12px;border-radius:13px;background:#f7f5ed;color:#8d9b88!important;font-size:10px!important;line-height:1.65!important}
+.flower-live-earned{color:#bd916b!important}
+.flower-live-receipts{max-height:210px!important}
+.flower-live-launch{width:min(100%,620px);margin:4px auto 0;min-height:46px;border:1px solid #e6eee2;background:linear-gradient(110deg,#f8e9ed,#edf5e9);color:#718b73;font-weight:800}
+@media(min-width:600px){.flower-live-lots{grid-template-columns:repeat(2,minmax(0,1fr))}.flower-auction-lot{grid-template-columns:44px minmax(0,1fr) auto}.flower-lot-bids{grid-column:1/-1}}
+@media(max-width:380px){.flower-auction-lot{grid-template-columns:40px minmax(0,1fr) auto;gap:7px;padding:9px}.flower-lot-emoji{width:38px;height:38px;font-size:23px}.flower-lot-action{min-width:58px;padding:6px}}

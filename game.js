@@ -1337,7 +1337,7 @@ function finishSuccess(){
   garden.seeds=garden.seedInventory.length;
   const maturedNames=[];
   garden.plots.forEach(function(p){const before=p.stage||0;p.stage=Math.min(3,before+1);if(before<3&&p.stage>=3)maturedNames.push(p.name);});
-  garden.pendingMaturedFlowers=(garden.pendingMaturedFlowers||[]).concat(maturedNames);state.maturedFlowers=maturedNames;state.seedRewards=seedRewards;state.liveIncome=liveIncome;state.flowerSale=null;state.flowerSales=[];if(garden.harvestCount>=10){if(garden.nextFlowerSaleDay==null)garden.nextFlowerSaleDay=state.currentDay+3;if(state.currentDay>=garden.nextFlowerSaleDay){const rounds=randInt(2,4);for(let saleNo=0;saleNo<rounds&&garden.flowers>0;saleNo++){const keys=Object.keys(garden.flowerStockById||{}).filter(function(k){return Number(garden.flowerStockById[k])>0;});if(!keys.length)break;const key=keys[randInt(0,keys.length-1)],available=Math.min(garden.flowers,Number(garden.flowerStockById[key])||0),qty=Math.min(available,randInt(1,3));if(qty<1)continue;const f=GARDEN_SEED_LIBRARY.find(function(x){return x.id===key;})||THERAPY_FLOWERS.find(function(x){return x.id===key;}),flowerName=f?f.name:'鲜花花束',buyer=CONFIG.viewerNames[randInt(0,CONFIG.viewerNames.length-1)],income=Math.round(qty*randInt(18,28)*getMoneyMult());garden.flowerStockById[key]-=qty;garden.flowers-=qty;saveData.money+=income;saveData.totalEarned+=income;state.flowerSales.push({buyer:buyer,name:flowerName,qty:qty,income:income});}if(state.flowerSales.length){garden.flowerLives=(garden.flowerLives||0)+1;state.flowerSale=state.flowerSales[0];}garden.nextFlowerSaleDay=state.currentDay+3;}}state.auctionPerfume=null;
+  garden.pendingMaturedFlowers=(garden.pendingMaturedFlowers||[]).concat(maturedNames);state.maturedFlowers=maturedNames;state.seedRewards=seedRewards;state.liveIncome=liveIncome;state.flowerSale=null;state.flowerSales=[];if(garden.harvestCount>=10&&garden.nextFlowerSaleDay==null)garden.nextFlowerSaleDay=state.currentDay+3;state.auctionPerfume=null;
   saveData.totalHeat+=state.heat; saveData.totalFans=state.fans;
   saveData.totalPopped+=state.dayStats.popped; saveData.totalDays+=1;
   if(state.currentDay>saveData.bestDay) saveData.bestDay=state.currentDay;
@@ -1396,12 +1396,12 @@ function showResult(){
     resultAuctionEl.classList.remove('show'); resultAuctionEl.innerHTML='';
     auctionOverlay.classList.remove('show');
   }
-  if(state.flowerSale){const sales=state.flowerSales&&state.flowerSales.length?state.flowerSales:[state.flowerSale],total=sales.reduce(function(n,x){return n+x.income;},0);resultAuctionEl.innerHTML='<div class="ra-title">🌷 鲜花专场 · 今日成交 '+sales.length+' 单</div>'+sales.map(function(fs,index){const reactions=['这束花也太好看了吧！','收到啦，今天心情都变好了。','给自己买束花，奖励努力生活的我。','包装得好温柔，已经推荐给朋友啦！'];return '<div class="sale-receipt"><span>💐</span><div><b>'+fs.buyer+' 买下了 '+fs.qty+' 朵 '+fs.name+'</b><small>顾客留言：「'+reactions[index%reactions.length]+'」 · 已成交</small></div><strong>+'+formatMoney(fs.income)+' 元</strong></div>';}).join('')+'<div class="ra-price">本场合计 +'+formatMoney(total)+' 元</div><div class="ra-note">订单已自动成交，收益已经计入账户。</div><button class="q-option" id="flowerSaleDeal" type="button">查看成交记录 ✓</button>';resultAuctionEl.classList.add('show');const dealBtn=document.getElementById('flowerSaleDeal');if(dealBtn)dealBtn.addEventListener('click',function(){AudioSys.deal();dealBtn.textContent='已确认 ✓';dealBtn.disabled=true;});}
+  resultAuctionEl.classList.remove('show'); resultAuctionEl.innerHTML='';
   resultBtnEl.textContent='进入第 '+(day+1)+' 天';
   resultBtnEl.onclick=function(){ AudioSys.click(); beginDayTransition(day+1); };
   document.getElementById('resultGardenBtn').onclick=function(){AudioSys.click();openGarden();};
   showScreen(resultScreen);
-  const pendingMatured=ensureGarden().pendingMaturedFlowers;const notes=[];if(state.flowerSale){const fs=state.flowerSale;notes.push(fs.buyer+' 买下了 '+fs.qty+' 朵 '+fs.name+'，成交 '+formatMoney(fs.income)+' 元！');}if(pendingMatured.length)notes.push('花园里的 '+pendingMatured.join('、')+' 已经成熟，记得去收获。');if(notes.length)showGardenNotice(state.flowerSale?'💐':'🌸',state.flowerSale?'鲜花专场成交啦！':'花儿成熟啦！',notes.join(' '));
+    const pendingMatured=ensureGarden().pendingMaturedFlowers; if(pendingMatured.length)showGardenNotice('🌸','花儿成熟啦！','花园里的 '+pendingMatured.join('、')+' 已经成熟，记得去收获。');
 }
 
 /* ============================================================
@@ -1816,10 +1816,11 @@ function rollGardenSeed(){const n=Math.random();if(n<0.06)return {kind:'random',
 function ensureGarden(){if(!saveData.garden)saveData.garden={seeds:0,seedInventory:[],lastWaterDay:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};const g=saveData.garden;if(!Array.isArray(g.plots))g.plots=[];if(!Array.isArray(g.seedInventory))g.seedInventory=[];g.seedInventory=g.seedInventory.map(function(seed){if(seed.kind==='mystery')return Object.assign({},seed,{kind:'random',label:'随机种子'});if(seed.kind==='therapy')return Object.assign({},seed,{kind:'magic',label:'神奇种子'});return seed;});g.plots.forEach(function(p){if(p.seedKind==='mystery')p.seedKind='random';if(p.seedKind==='therapy')p.seedKind='magic';});while(g.seedInventory.length<(Number(g.seeds)||0))g.seedInventory.push(rollGardenSeed());g.seeds=g.seedInventory.length;if(g.lastWaterDay==null)g.lastWaterDay=0;if(g.unlockedPlots==null)g.unlockedPlots=1;if(g.flowers==null)g.flowers=0;if(!Array.isArray(g.flowerCollection))g.flowerCollection=[];if(!Array.isArray(g.magicCollection))g.magicCollection=[];g.magicCollection=g.magicCollection.filter(function(f,i,a){return f&&f.id&&a.findIndex(function(x){return x&&x.id===f.id;})===i;});g.flowerCollection=g.flowerCollection.filter(function(id){const magic=THERAPY_FLOWERS.find(function(f){return f.id===id;});if(magic){if(!g.magicCollection.some(function(x){return x.id===id;}))g.magicCollection.push({id:magic.id,name:magic.name,emoji:magic.emoji,effect:magic.effect});return false;}return true;});if(!g.flowerStockById||typeof g.flowerStockById!=='object')g.flowerStockById={};if(g.harvestCount==null)g.harvestCount=0;if(g.totalFlowers==null)g.totalFlowers=0;if(!Array.isArray(g.pendingMaturedFlowers))g.pendingMaturedFlowers=[];if(g.totalPlanted==null)g.totalPlanted=g.plots.length;if(g.maxHarvestBatch==null)g.maxHarvestBatch=0;if(g.flowerLives==null)g.flowerLives=0;if(g.harvestCount>=10&&g.nextFlowerSaleDay==null)g.nextFlowerSaleDay=(Number(saveData.currentDay)||1)+3;g.unlockedPlots=clamp(Math.max(Number(g.unlockedPlots)||1,Math.min(24,g.plots.length)),1,24);g.gardenPage=clamp(Number(g.gardenPage)||0,0,2);g.basketPage=clamp(Number(g.basketPage)||0,0,999);return g;}
 function renderGarden(){
  const g=ensureGarden(),pageSize=6,totalPages=4;
+ const liveLaunch=document.getElementById('btnStartFlowerLive');if(liveLaunch){liveLaunch.disabled=g.harvestCount<10||(!g.flowerAuction&&g.flowers<1);liveLaunch.textContent=g.flowerAuction?'▶ 继续花卉直播（拍卖未完成）':'🌷 开启花卉直播';}
  g.gardenPage=clamp(Number(g.gardenPage)||0,0,totalPages-1);
  gardenSeedsEl.textContent=g.seeds||0;gardenMoneyEl.textContent=formatMoney(saveData.money||0);
  document.getElementById('gardenFlowerStock').textContent=g.flowers||0;
- document.getElementById('gardenProgress').textContent='已收获 '+g.harvestCount+' 株 · '+(g.harvestCount>=10?'鲜花专场每 3 天自动开启（下次：第 '+(g.nextFlowerSaleDay||((Number(saveData.currentDay)||1)+3))+' 天）':'再收获 '+(10-g.harvestCount)+' 株，解锁每 3 天自动开启的鲜花专场');
+ document.getElementById('gardenProgress').textContent='已收获 '+g.harvestCount+' 株 · '+(g.harvestCount>=10?'已解锁独立花卉直播间，可逐项竞价拍卖花篮鲜花':'再收获 '+(10-g.harvestCount)+' 株，即可解锁花卉直播');
  const icons=['🌰','🌱','🌿','🌸'],labels=['刚种下','正在发芽','枝叶舒展','鲜花成熟'];let cards='';
  for(let i=g.gardenPage*pageSize;i<Math.min(24,(g.gardenPage+1)*pageSize);i++){const p=g.plots[i];
   if(i>=g.unlockedPlots)cards+='<button class="garden-plot locked-plot" data-unlock-plot="'+i+'"><span class="plot-lock">🔒</span><span class="plot-title">土地 '+(i+1)+'</span><span class="plot-cost">开垦 · '+formatMoney(GARDEN_PLOT_COSTS[i])+' 元</span></button>';
@@ -1879,14 +1880,76 @@ document.getElementById('btnGardenWater').addEventListener('click',function(){co
 document.getElementById('btnGardenFertilize').addEventListener('click',function(){const g=ensureGarden(),stock=Math.max(0,Number(g.fertilizer)||0),targets=g.plots.filter(function(p){return p&&(p.stage||0)<3;});if(stock<1){g.fertilizer=0;gardenTipEl.textContent='营养液库存为 0，先去花园商城购买吧。';renderGarden();showToast('🧴','营养液库存不足');return;}if(!targets.length){gardenTipEl.textContent='现在没有需要加速的花苗。';return;}const used=Math.min(stock,targets.length),ready=[];g.fertilizer=stock-used;targets.slice(0,used).forEach(function(p){p.stage=Math.min(3,(Number(p.stage)||0)+1);if(p.stage>=3)ready.push(p.name);});gardenTipEl.textContent='营养液已为 '+used+' 株花苗加速成长。';persist();renderGarden();if(ready.length)showGardenNotice('🌸','有花儿成熟啦！',ready.join('、')+' 已经成熟，快去收获吧！');});
 function harvestGardenPlot(i,quiet){const g=ensureGarden(),p=g.plots[i];if(!p||(p.stage||0)<3||p.harvested)return null;if((p.seedKind==='random'||p.seedKind==='mystery')&&!p.revealed){const f=GARDEN_SEED_LIBRARY[randInt(0,GARDEN_SEED_LIBRARY.length-1)];p.name=f.name;p.emoji=f.emoji;p.flowerId=f.id;p.revealed=true;}if((p.seedKind==='magic'||p.seedKind==='therapy')&&!p.revealed){const f=THERAPY_FLOWERS[randInt(0,THERAPY_FLOWERS.length-1)];p.name=f.name;p.emoji=f.emoji;p.effect=f.effect;p.flowerId=f.id;p.revealed=true;}let m=1;if(g.tripleCards>0){g.tripleCards--;if(Math.random()<0.12)m=3;}else if(g.doubleCards>0){g.doubleCards--;if(Math.random()<0.32)m=2;}const n=randInt(2,4)*m;g.flowers+=n;g.totalFlowers+=n;g.harvestCount++;g.maxHarvestBatch=Math.max(Number(g.maxHarvestBatch)||0,n);if(p.seedKind==='magic'||p.seedKind==='therapy'){if(p.flowerId&&!g.magicCollection.some(function(f){return f.id===p.flowerId;})){const magicDef=THERAPY_FLOWERS.find(function(f){return f.id===p.flowerId;});g.magicCollection.push({id:p.flowerId,name:p.name,emoji:p.emoji,effect:p.effect||(magicDef&&magicDef.effect)||''});}}else if(p.flowerId&&!g.flowerCollection.includes(p.flowerId))g.flowerCollection.push(p.flowerId);const stockId=p.flowerId||'misc';g.flowerStockById[stockId]=(g.flowerStockById[stockId]||0)+n;delete g.plots[i];gardenTipEl.textContent='收获 '+p.name+'！这一株结出了 '+n+' 朵鲜花。'+(p.effect?' '+p.effect:'')+' 鲜花已经存进花篮。';persist();renderGarden();checkAchievements();if(!quiet)showGardenNotice(p.seedKind==='magic'?'✨':(p.emoji||'🌸'),'恭喜收获 '+n+' 朵'+p.name+'花！','这一株收获了 '+n+' 朵鲜花。'+(p.effect?'特别功效：'+p.effect:'')+' 鲜花已经存进花篮。');return {count:n,name:p.name};}
 document.getElementById('btnGardenHarvest').addEventListener('click',function(){const g=ensureGarden();let n=0,total=0;for(let i=23;i>=0;i--){if(g.plots[i]&&(g.plots[i].stage||0)>=3){const result=harvestGardenPlot(i,true);if(result){n++;total+=result.count;}}}if(n){persist();renderGarden();gardenTipEl.textContent='一键收获 '+n+' 株花，共 '+total+' 朵鲜花。';showGardenNotice('🌼','收获完成！','共收获 '+n+' 株花、'+total+' 朵鲜花，已经放进花篮。');}});
-let flowerLiveState={round:0,earned:0,sold:0,order:1,finished:false};
-function renderFlowerLiveRound(){const g=ensureGarden();document.getElementById('flowerLiveStock').textContent=g.flowers;document.getElementById('flowerLiveProgress').textContent='第 '+Math.min(5,flowerLiveState.round+1)+' / 5 位顾客';document.getElementById('flowerLiveOrder').textContent='顾客想要一束 '+flowerLiveState.order+' 朵的花束。你会怎么搭配？';document.getElementById('flowerLiveTip').textContent='数量刚好会获得额外打赏；数量不符也能成交，但收入会少一些。';document.getElementById('flowerLiveEarned').textContent='本场收入：'+formatMoney(flowerLiveState.earned)+' 元';document.querySelectorAll('.flower-order-btn').forEach(function(b){b.disabled=g.flowers<1;});}
-function startFlowerLive(){const g=ensureGarden();if(g.harvestCount<10||g.flowers<1)return;flowerLiveState={round:0,earned:0,sold:0,order:randInt(1,3),finished:false};document.getElementById('flowerLiveReceipts').innerHTML='<div class="receipt-empty">直播开始啦，等第一位顾客下单 🌷</div>';document.getElementById('flowerLiveCustomer').textContent=['👩🏻‍🌾','🧑🏻‍🎨','👵🏻','👩🏽‍💻','🧑🏻‍🍳'][randInt(0,4)];renderFlowerLiveRound();showScreen(document.getElementById('flowerLiveScreen'));}
-function finishFlowerLive(){if(flowerLiveState.finished)return;flowerLiveState.finished=true;const g=ensureGarden();if(flowerLiveState.sold>0){saveData.money=(saveData.money||0)+flowerLiveState.earned;saveData.totalEarned=(saveData.totalEarned||0)+flowerLiveState.earned;g.flowerLives=(g.flowerLives||0)+1;persist();checkAchievements();gardenTipEl.textContent='卖花直播结束！售出 '+flowerLiveState.sold+' 朵鲜花，收入 '+formatMoney(flowerLiveState.earned)+' 元。';showToast('🌷','卖花直播成交，收入 +'+formatMoney(flowerLiveState.earned)+' 元');}renderGarden();showScreen(gardenScreen);}
-function sellFlowerBouquet(quantity){const g=ensureGarden();if(g.flowers<1){finishFlowerLive();return;}const sold=Math.min(quantity,g.flowers),perfect=quantity===flowerLiveState.order&&sold===quantity,income=sold*(perfect?24:14)+(perfect?18:0);g.flowers-=sold;flowerLiveState.sold+=sold;flowerLiveState.earned+=income;flowerLiveState.round++;const receipt=document.createElement('div');receipt.className='sale-receipt';receipt.innerHTML='<span>🧾</span><div><b>'+CONFIG.viewerNames[randInt(0,CONFIG.viewerNames.length-1)]+' 成交啦</b><small>'+sold+' 朵鲜花 · '+(perfect?'顾客超满意':'顺利成交')+'</small></div><strong>+'+income+' 元</strong>';const feed=document.getElementById('flowerLiveReceipts');if(feed.querySelector('.receipt-empty'))feed.innerHTML='';feed.prepend(receipt);document.getElementById('flowerLiveTip').textContent=perfect?'顾客特别满意！花束刚好合心意，额外打赏 +18 元。':'花束顺利成交啦。下一位顾客也在等着你～';if(flowerLiveState.round>=5||g.flowers<=0){document.getElementById('flowerLiveOrder').textContent='今天的顾客都被你的鲜花治愈啦！';document.getElementById('flowerLiveProgress').textContent='本场直播完成';document.getElementById('flowerLiveStock').textContent=g.flowers;document.getElementById('flowerLiveEarned').textContent='本场收入：'+formatMoney(flowerLiveState.earned)+' 元';document.querySelectorAll('.flower-order-btn').forEach(function(b){b.disabled=true;});persist();setTimeout(finishFlowerLive,850);return;}flowerLiveState.order=randInt(1,3);document.getElementById('flowerLiveCustomer').textContent=['👩🏻‍🌾','🧑🏻‍🎨','👵🏻','👩🏽‍💻','🧑🏻‍🍳'][flowerLiveState.round%5];persist();renderFlowerLiveRound();}
-/* 鲜花专场已并入每三天一次的疗愈直播结算，不再单独开播。 */
-document.getElementById('btnFlowerLiveBack').addEventListener('click',finishFlowerLive);
-document.querySelectorAll('.flower-order-btn').forEach(function(b){b.addEventListener('click',function(){sellFlowerBouquet(Number(b.getAttribute('data-bouquet')));});});
+let flowerLiveState={lots:[],earned:0,sold:0,finished:false};
+function flowerNameById(id){const f=THERAPY_FLOWERS.find(function(x){return x.id===id;})||GARDEN_SEED_LIBRARY.find(function(x){return x.id===id;});return f?{name:f.name,emoji:f.emoji}:{name:'惊喜花束',emoji:'💐'};}
+function startFlowerLive(){
+ const g=ensureGarden();
+ if(g.harvestCount<10){showToast('🌱','累计收获 10 株鲜花后即可开启花卉直播');return;}
+ if(!g.flowerAuction){
+  const ids=Object.keys(g.flowerStockById||{}).filter(function(id){return Number(g.flowerStockById[id])>0;});
+  if(!ids.length){showToast('🧺','花篮里暂时没有可拍卖的鲜花');return;}
+  const viewers=CONFIG.viewerNames;
+  g.flowerAuction={lots:ids.map(function(id){
+   const flower=flowerNameById(id),qty=Number(g.flowerStockById[id])||0;
+   const bids=[];let price=0,buyer='';
+   for(let n=0;n<3;n++){buyer=viewers[randInt(0,viewers.length-1)];price+=randInt(3,8)*qty;bids.push({buyer:buyer,price:price});}
+   return {id:id,name:flower.name,emoji:flower.emoji,qty:qty,buyer:buyer,price:price,bids:bids,sold:false};
+  }),startedAt:Date.now()};
+  persist();
+ }
+ flowerLiveState=g.flowerAuction;renderFlowerLiveAuction();showScreen(document.getElementById('flowerLiveScreen'));
+}
+function renderFlowerLiveAuction(){
+ const lots=flowerLiveState.lots||[],pending=lots.filter(function(l){return !l.sold;}),totalQty=lots.reduce(function(n,l){return n+(l.sold?0:l.qty);},0);
+ document.getElementById('flowerLiveCustomer').textContent=pending.length?'🌷':'💐';
+ document.getElementById('flowerLiveOrder').textContent=pending.length?'多位观众正在为你的鲜花举牌，逐项确认成交吧。':'所有花卉均已成交！';
+ document.getElementById('flowerLiveProgress').textContent=pending.length+' / '+lots.length+' 项待成交';
+ document.getElementById('flowerLiveStock').textContent=totalQty+' 朵';
+ document.getElementById('flowerLiveEarned').textContent='¥'+formatMoney(flowerLiveState.earned||0);
+ const list=document.getElementById('flowerLiveLots');
+ list.innerHTML=lots.map(function(lot){
+  const bidHtml=(lot.bids||[]).map(function(b,i){return '<span>'+(i+1)+'号牌 '+b.buyer+' · ¥'+formatMoney(b.price)+'</span>';}).join('');
+  return '<article class="flower-auction-lot '+(lot.sold?'is-sold':'')+'"><div class="flower-lot-emoji">'+lot.emoji+'</div><div class="flower-lot-main"><b class="flower-lot-title">'+lot.name+'</b><span class="flower-lot-meta">本项拍品 · '+lot.qty+' 朵 · '+(lot.sold?'已成交':'竞价进行中')+'</span><span class="flower-lot-bid">'+(lot.sold?'成交价':'当前最高价')+'：<strong>¥'+formatMoney(lot.price)+'</strong> · '+lot.buyer+'</span></div><button class="flower-lot-action" type="button" data-flower-deal="'+lot.id+'" '+(lot.sold?'disabled':'')+'>'+(lot.sold?'已成交':'成交')+'</button><div class="flower-lot-bids">'+bidHtml+'</div></article>';
+ }).join('');
+ if(!lots.length)list.innerHTML='<div class="receipt-empty">花篮里暂时没有可拍卖的鲜花</div>';
+}
+function dealFlowerLot(id){
+ const g=ensureGarden(),lot=(flowerLiveState.lots||[]).find(function(x){return x.id===id;});
+ if(!lot||lot.sold)return;
+ const available=Number(g.flowerStockById[id])||0,qty=Math.min(lot.qty,available);
+ if(qty<=0){lot.sold=true;renderFlowerLiveAuction();return;}
+ const income=Math.round(lot.price*(getMoneyMult?getMoneyMult():1));
+ g.flowerStockById[id]=Math.max(0,available-qty);g.flowers=Math.max(0,(Number(g.flowers)||0)-qty);
+ lot.qty=qty;lot.sold=true;lot.income=income;
+ flowerLiveState.sold+=qty;flowerLiveState.earned=(flowerLiveState.earned||0)+income;
+ const feed=document.getElementById('flowerLiveReceipts');
+ if(feed.querySelector('.receipt-empty'))feed.innerHTML='';
+ const receipt=document.createElement('div');receipt.className='sale-receipt';
+ receipt.innerHTML='<span>'+lot.emoji+'</span><div><b>'+lot.buyer+' 以 '+formatMoney(income)+' 元拍下 '+qty+' 朵'+lot.name+'</b><small>本项拍卖已成交 · '+lot.bids.length+' 轮竞价</small></div><strong>+'+formatMoney(income)+' 元</strong>';
+ feed.prepend(receipt);persist();renderFlowerLiveAuction();
+ const pending=flowerLiveState.lots.some(function(x){return !x.sold;});
+ document.getElementById('flowerLiveTip').textContent=pending?'成交成功！继续为剩余花卉确认成交，全部拍完才会结束直播。':'最后一项也成交啦！正在结算本场直播……';
+ if(!pending)setTimeout(finishFlowerLive,700);
+}
+function finishFlowerLive(){
+ const g=ensureGarden(),lots=flowerLiveState.lots||[];
+ if(!lots.length||lots.some(function(l){return !l.sold;})){showToast('🌷','请先完成花篮中所有花卉的拍卖');return;}
+ if(flowerLiveState.finished)return;
+ flowerLiveState.finished=true;
+ if(flowerLiveState.sold>0){
+  saveData.money=(saveData.money||0)+flowerLiveState.earned;saveData.totalEarned=(saveData.totalEarned||0)+flowerLiveState.earned;
+  g.flowerLives=(g.flowerLives||0)+1;g.flowerAuction=null;persist();checkAchievements();
+  gardenTipEl.textContent='花卉直播圆满结束！成交 '+lots.length+' 项、'+flowerLiveState.sold+' 朵鲜花，收入 '+formatMoney(flowerLiveState.earned)+' 元。';
+  showToast('🌷','全部鲜花拍卖完成，收入 +'+formatMoney(flowerLiveState.earned)+' 元');
+ }
+ renderGarden();showScreen(gardenScreen);
+}
+document.getElementById('btnFlowerLiveBack').addEventListener('click',function(){finishFlowerLive();});
+document.getElementById('flowerLiveLots').addEventListener('click',function(e){
+ const button=e.target.closest('[data-flower-deal]');if(!button)return;
+ AudioSys.init();AudioSys.deal();dealFlowerLot(button.getAttribute('data-flower-deal'));
+});
+document.getElementById('btnStartFlowerLive').addEventListener('click',function(){AudioSys.click();startFlowerLive();});
 function exportSave(){
   persist();const blob=new Blob([JSON.stringify(saveData,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
   a.href=url;a.download='滚蛋吧坏情绪-存档.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);showToast('💾','存档已导出');
