@@ -283,8 +283,12 @@ const CONFIG = {
   ],
 
   shopItems: [
-    { id:'doubleHeat', name:'热度翻倍券', desc:'下一局热度获取 ×2', cost:8, type:'doubleHeat', icon:'🔥' },
-    { id:'extraFans', name:'涨粉加速器', desc:'下一局粉丝获取 ×1.5', cost:6, type:'extraFans', icon:'📈' }
+    { id:'doubleIncome', name:'直播收益双倍卡', desc:'下一轮直播的礼物与成交收益 ×2', cost:12, type:'doubleIncome', icon:'💰' },
+    { id:'doubleHeatFans', name:'热度与粉丝双倍卡', desc:'下一轮直播消除获得的热度、粉丝 ×2', cost:14, type:'doubleHeatFans', icon:'🔥' },
+    { id:'doubleHeat', name:'热度加速卡', desc:'下一轮直播热度获取 ×2', cost:8, type:'doubleHeat', icon:'✨' },
+    { id:'extraFans', name:'涨粉加速卡', desc:'下一轮直播粉丝获取 ×1.5', cost:8, type:'extraFans', icon:'📈' },
+    { id:'coffee', name:'连击续航咖啡', desc:'下一轮直播连击时间延长 2 秒', cost:7, type:'coffee', icon:'☕' },
+    { id:'cake', name:'好运小蛋糕', desc:'下一轮直播必定出现好运果', cost:9, type:'cake', icon:'🍰' }
   ],
 
   /* 直播间皮肤（好运果兑换，买后即换） */
@@ -312,8 +316,7 @@ const CONFIG = {
   goodsItems: [
     { id:'fertilizer', name:'花园营养液', desc:'让一株植物立即成长一步', cost:30, kind:'gardenItem', stockKey:'fertilizer', icon:'🧴' },
     { id:'doubleHarvest', name:'双倍收获卡', desc:'下次收获有概率获得双倍鲜花', cost:50, kind:'gardenItem', stockKey:'doubleCards', icon:'🌼' },
-    { id:'tripleHarvest', name:'三倍收获卡', desc:'下次收获有较低概率获得三倍鲜花', cost:90, kind:'gardenItem', stockKey:'tripleCards', icon:'🌷' },
-    { id:'seedPack', name:'种子盲盒', desc:'打开后随机获得 3 颗普通、随机或神奇种子', cost:75, kind:'seedBox', amount:3, icon:'🎁' },
+        { id:'seedPack', name:'种子盲盒', desc:'打开后随机获得 3 颗普通、随机或神奇种子', cost:75, kind:'seedBox', amount:3, icon:'🎁' },
     { id:'magicSeed', name:'神奇种子', desc:'收获时揭晓特别花种与疗愈功效', cost:95, kind:'magicSeed', amount:1, icon:'✨' }
   ],
 
@@ -678,9 +681,9 @@ function fitFontSize(word,r){ let fs=r*0.52; const maxW=r*1.55; ctx.font='500 '+
 function makeBubble(type,word,r){
   const h=hashStr(word); let hue,sat,light;
   /* 负面情绪：红/紫系；好情绪：金/绿系 */
-  const softPalette=[12,28,42,92,142,178,208,248,286,326];
-  if(type==='negative'){ hue=softPalette[h%softPalette.length]; sat=32+(h%9); light=82+(h%5); }
-  else { hue=[92,128,152,168][h%4]; sat=30+(h%8); light=84+(h%4); }
+  const coolPalette=[188,202,216,230,244,258,272,286,300,174],warmPalette=[8,18,28,38,48,340,352,24,44,330];
+  if(type==='negative'){ hue=coolPalette[h%coolPalette.length]; sat=48+(h%13); light=77+(h%8); }
+  else { hue=warmPalette[h%warmPalette.length]; sat=58+(h%15); light=75+(h%9); }
   return { type,word,r,x:0,y:0,vx:(Math.random()-0.5)*CONFIG.gameplay.floatSpeed*2,vy:(Math.random()-0.5)*CONFIG.gameplay.floatSpeed*2,hue,sat,light,fontSize:0,wobble:Math.random()*Math.PI*2,popping:false,popT:0,scale:1,alpha:1,dead:false,collected:false,flash:0,entering:false,enterT:0,enterDelay:0,targetY:0 };
 }
 function makeFruit(r){
@@ -1150,7 +1153,7 @@ function getComboWindow(){ return CONFIG.gameplay.comboWindow + (state.activeBuf
 function countAsset(key){ if(!saveData.ownedItems) return 0; let n=0; for(let i=0;i<saveData.ownedItems.length;i++){ if(saveData.ownedItems[i].key===key) n++; } return Math.min(5,n); }
 function getHeatMult(){ let m=1; m+=countAsset("light")*0.05; m+=countAsset("chair")*0.08; if(state.activeBuffs&&state.activeBuffs.milkTea) m+=0.25; return m; }
 function getFansMult(){ let m=1; m+=countAsset("plant")*0.02; m+=countAsset("chair")*0.08; if(state.activeBuffs&&state.activeBuffs.snacks) m+=0.4; return m; }
-function getMoneyMult(){ let m=1; m+=countAsset("mic")*0.10; m+=countAsset("chair")*0.08; return m; }
+function getMoneyMult(){ let m=1; m+=countAsset("mic")*0.10; m+=countAsset("chair")*0.08; if(state.activeBuffs&&state.activeBuffs.doubleIncome)m*=2; return m; }
 function addIncome(n){ n=Math.round(n); if(!n) return; saveData.money+=n; saveData.totalEarned+=n; persist(); }
 function formatMoney(n){ n=Math.round(n); if(n>=100000000) return (n/100000000).toFixed(2)+"亿"; if(n>=10000) return (n/10000).toFixed(1)+"万"; return String(n); }
 function applyTheme(id){ const th=CONFIG.themes.filter(function(x){ return x.id===id; })[0]; if(!th) return; const app=document.getElementById("app"); if(th.bg) app.style.background=th.bg; else app.style.background=""; }
@@ -1197,7 +1200,7 @@ function blendPair(a,b){
   spawnParticles(mx,my,'rgba(255,255,255,.88)',8);
   AudioSys.pop();
   addCombo();
-  if(state.combo>=3) AudioSys.combo();
+  if(state.combo>=3){AudioSys.combo();playComboPraise(state.combo);}
   const h=Math.round(randInt(10,16)*getHeatMult());
   state.heat+=h;
   if(state.heat>state.dayStats.heatPeak) state.dayStats.heatPeak=state.heat;
@@ -1209,6 +1212,8 @@ function blendPair(a,b){
   if(state.blendCount>=CONFIG.blendNeed){ setTimeout(function(){ finishSuccess(); },420); }
 }
 
+let lastPraiseAt=0;
+function playComboPraise(combo){if(!('speechSynthesis' in window)||!window.SpeechSynthesisUtterance)return;const now=Date.now();if(now-lastPraiseAt<1800)return;lastPraiseAt=now;const words=combo>=10?['Amazing!','Fantastic!','Unbelievable!']:['Great!','Nice!','Good job!'];const u=new SpeechSynthesisUtterance(words[randInt(0,words.length-1)]);u.lang='en-US';u.rate=1.08;u.pitch=1.15;u.volume=.65;window.speechSynthesis.cancel();window.speechSynthesis.speak(u);}
 function popPair(a,b){
   if(a.popping||b.popping) return;
   a.popping=true; a.popT=0; b.popping=true; b.popT=0;
@@ -1221,7 +1226,8 @@ function popPair(a,b){
   const g=CONFIG.gameplay;
   let heatGain=Math.round(randInt(g.heatPerPop[0],g.heatPerPop[1])*mult*getHeatMult());
   let fanGain=Math.round(randInt(g.fansPerPop[0],g.fansPerPop[1])*mult*getFansMult());
-  if(state.activeBuffs.doubleHeat) heatGain*=2;
+  if(state.activeBuffs.doubleHeat||state.activeBuffs.doubleHeatFans) heatGain*=2;
+  if(state.activeBuffs.doubleHeatFans) fanGain*=2;
   if(state.activeBuffs.extraFans) fanGain=Math.round(fanGain*1.5);
   state.heat+=heatGain; state.fans+=fanGain; saveData.totalFans=state.fans;
   state.dayStats.popped+=1; state.dayStats.fansGained+=fanGain;
@@ -1387,122 +1393,25 @@ function hideAllScreens(){ showScreen(null); }
 
 function showToast(icon,msg){ const el=document.createElement('div'); el.className='achievement-toast'; el.innerHTML='<div class="at-icon">'+icon+'</div><div class="at-content"><div class="at-label">花 园 与 好 运</div><div class="at-name">'+msg+'</div></div>'; document.body.appendChild(el); setTimeout(function(){ el.classList.add('show'); },60); setTimeout(function(){ el.classList.remove('show'); setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); },600); },2400); }
 
-let shopTab='fruit';
+let shopTab='fruit',shopPage=0;
 function renderShop(){
-  tabShopFruitEl.classList.toggle('active',shopTab==='fruit');
-  tabShopGoodsEl.classList.toggle('active',shopTab==='goods');
-  shopBalanceEl.textContent=saveData.luckyCount;
-  shopMoneyEl.textContent=formatMoney(saveData.money);
-  if(shopTab==='goods'){ renderGoodsShop(); return; }
-  let html='';
-  /* 主题皮肤 */
-  html+='<div class="shop-section">直播间皮肤</div>';
-  CONFIG.themes.forEach(function(th){
-    if(th.cost===0) return;
-    const owned=saveData.ownedThemes.indexOf(th.id)>=0;
-    const cur=saveData.theme===th.id;
-    const canBuy=saveData.luckyCount>=th.cost;
-    html+='<div class="shop-card">';
-    html+='<div class="shop-icon">'+CONFIG.themeEmoji[th.id]+'</div>';
-    html+='<div class="shop-info"><div class="shop-name">'+th.name+(cur?' <span style="color:#7a9a5a">使用中</span>':(owned?' 已拥有':''))+'</div><div class="shop-desc">直播间背景皮肤</div></div>';
-    if(cur){ html+='<button class="shop-buy" disabled>使用中</button>'; }
-    else if(owned){ html+='<button class="shop-buy theme-use" data-id="'+th.id+'">换上</button>'; }
-    else html+='<button class="shop-buy theme-buy" data-id="'+th.id+'" '+(canBuy?'':'disabled')+'>'+th.cost+' 果</button>';
-    html+='</div>';
-  });
-  /* 主播头像 */
-  html+='<div class="shop-section">主播头像</div>';
-  CONFIG.avatars.forEach(function(av){
-    if(av.cost===0) return;
-    const owned=saveData.ownedAvatars.indexOf(av.id)>=0;
-    const cur=saveData.avatar===av.id;
-    const canBuy=saveData.luckyCount>=av.cost;
-    html+='<div class="shop-card">';
-    html+='<div class="shop-icon">'+av.emoji+'</div>';
-    html+='<div class="shop-info"><div class="shop-name">'+av.name+(cur?' <span style="color:#7a9a5a">使用中</span>':(owned?' 已拥有':''))+'</div><div class="shop-desc">直播画面左上角头像 · 游戏中点头像可切换</div></div>';
-    if(cur){ html+='<button class="shop-buy" disabled>使用中</button>'; }
-    else if(owned){ html+='<button class="shop-buy avatar-use" data-id="'+av.id+'">换上</button>'; }
-    else html+='<button class="shop-buy avatar-buy" data-id="'+av.id+'" '+(canBuy?'':'disabled')+'>'+av.cost+' 果</button>';
-    html+='</div>';
-  });
-  html+='<div class="shop-section">直播加成道具</div>';
-  CONFIG.shopItems.forEach(function(item){
-    const owned=saveData.ownedItems.filter(function(i){ return i.id===item.id; }).length;
-    const canBuy=saveData.luckyCount>=item.cost;
-    html+='<div class="shop-card">';
-    html+='<div class="shop-icon">'+item.icon+'</div>';
-    html+='<div class="shop-info"><div class="shop-name">'+item.name+(owned?' ×'+owned:'')+'</div><div class="shop-desc">'+item.desc+'</div></div>';
-    html+='<button class="shop-buy" data-id="'+item.id+'" '+(canBuy?'':'disabled')+'>'+item.cost+' 果</button>';
-    html+='</div>';
-  });
-  shopGridEl.innerHTML=html;
-  bindShopFruit();
+ tabShopFruitEl.classList.toggle('active',shopTab==='fruit');tabShopGoodsEl.classList.toggle('active',shopTab==='goods');
+ shopBalanceEl.textContent=saveData.luckyCount;shopMoneyEl.textContent=formatMoney(saveData.money);
+ if(shopTab==='goods'){renderGoodsShop();return;}
+ const items=CONFIG.shopItems,pageSize=4,total=Math.max(1,Math.ceil(items.length/pageSize));shopPage=clamp(shopPage,0,total-1);
+ shopGridEl.innerHTML=items.slice(shopPage*pageSize,(shopPage+1)*pageSize).map(function(item){
+  const owned=saveData.ownedItems.filter(function(x){return x.id===item.id;}).length;
+  return '<div class="shop-card"><div class="shop-icon">'+item.icon+'</div><div class="shop-info"><div class="shop-name">'+item.name+(owned?' ×'+owned:'')+'</div><div class="shop-desc">'+item.desc+'</div></div><button class="shop-buy" data-id="'+item.id+'" '+(saveData.luckyCount>=item.cost?'':'disabled')+'>'+item.cost+' 果</button></div>';
+ }).join('');updateShopPager(total);
+ shopGridEl.querySelectorAll('.shop-buy').forEach(function(btn){btn.addEventListener('click',function(){const item=CONFIG.shopItems.find(function(x){return x.id===btn.getAttribute('data-id');});if(!item||saveData.luckyCount<item.cost)return;saveData.luckyCount-=item.cost;saveData.ownedItems.push({id:item.id,type:item.type});persist();AudioSys.collect();showToast(item.icon,'获得 '+item.name+'，下一轮直播生效');renderShop();});});
 }
-function bindShopFruit(){
-  shopGridEl.querySelectorAll('.theme-buy').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      const id=btn.getAttribute('data-id');
-      const th=CONFIG.themes.filter(function(x){ return x.id===id; })[0];
-      if(!th||saveData.luckyCount<th.cost) return;
-      AudioSys.collect();
-      saveData.luckyCount-=th.cost; saveData.ownedThemes.push(th.id); saveData.theme=th.id;
-      persist(); applyTheme(th.id);
-      showToast(CONFIG.themeEmoji[th.id],'皮肤已换上：'+th.name);
-      renderShop(); updateHudNumbers(1);
-    });
-  });
-  shopGridEl.querySelectorAll('.theme-use').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      AudioSys.click();
-      saveData.theme=btn.getAttribute('data-id'); persist(); applyTheme(saveData.theme);
-      showToast(CONFIG.themeEmoji[saveData.theme],'皮肤已换上'); renderShop();
-    });
-  });
-  shopGridEl.querySelectorAll('.avatar-buy').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      const id=btn.getAttribute('data-id');
-      const av=CONFIG.avatars.filter(function(x){ return x.id===id; })[0];
-      if(!av||saveData.luckyCount<av.cost) return;
-      AudioSys.collect();
-      saveData.luckyCount-=av.cost; saveData.ownedAvatars.push(av.id); saveData.avatar=av.id;
-      persist(); updateAvatar();
-      showToast(av.emoji,'头像已换上：'+av.name);
-      renderShop();
-    });
-  });
-  shopGridEl.querySelectorAll('.avatar-use').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      AudioSys.click();
-      saveData.avatar=btn.getAttribute('data-id'); persist(); updateAvatar();
-      showToast('✨','头像已换上'); renderShop();
-    });
-  });
-  shopGridEl.querySelectorAll('.shop-buy:not(.theme-buy):not(.theme-use):not(.avatar-buy):not(.avatar-use)').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      const id=btn.getAttribute('data-id');
-      const item=CONFIG.shopItems.filter(function(i){ return i.id===id; })[0];
-      if(!item||saveData.luckyCount<item.cost) return;
-      AudioSys.collect();
-      if(item.type==='unlockCommon'||item.type==='unlockRare'||item.type==='unlockLegend'){
-        const rarity=item.type.replace('unlock','').toLowerCase();
-        const locked=CONFIG.pairs.filter(function(p){ return saveData.unlocked.indexOf(p.key)<0 && p.rarity===rarity; });
-        if(locked.length>0){
-          const pick=locked[randInt(0,locked.length-1)];
-          saveData.unlocked.push(pick.key); saveData.luckyCount-=item.cost; persist();
-          showToast('🌸','解锁 '+pick.flower+' · '+pick.fruit);
-        } else { showToast('🍀','该稀有度已全部收集'); return; }
-      } else {
-        saveData.ownedItems.push({ id:item.id, type:item.type });
-        saveData.luckyCount-=item.cost; persist();
-        showToast(item.icon,'获得 '+item.name+'（下一局生效）');
-      }
-      renderShop(); checkAchievements();
-    });
-  });
-}
+function updateShopPager(total){if(!document.querySelector('.shop-pager'))return;document.getElementById('shopPageLabel').textContent=(shopPage+1)+' / '+total;document.getElementById('shopPrev').disabled=shopPage<=0;document.getElementById('shopNext').disabled=shopPage>=total-1;}
+document.getElementById('shopPrev').addEventListener('click',function(){shopPage=Math.max(0,shopPage-1);renderShop();});
+document.getElementById('shopNext').addEventListener('click',function(){shopPage++;renderShop();});
+function bindShopFruit(){}
 function renderGoodsShop(){
-  let html='<div class="shop-section">花园种植用品 · 使用收益购买</div>';
-  CONFIG.goodsItems.forEach(function(item){
+  const pageSize=4,total=Math.max(1,Math.ceil(CONFIG.goodsItems.length/pageSize));shopPage=clamp(shopPage,0,total-1);let html='';
+  CONFIG.goodsItems.slice(shopPage*pageSize,(shopPage+1)*pageSize).forEach(function(item){
     let owned=0;
     if(item.kind==='asset'||item.kind==='milestone') owned=countAsset(item.key)+(item.kind==='milestone'&&saveData.ownedItems.filter(function(i){ return i.id===item.id; }).length?1:0);
     const canBuy=saveData.money>=item.cost;
@@ -1514,7 +1423,7 @@ function renderGoodsShop(){
     else html+='<button class="shop-buy money-buy" data-id="'+item.id+'" '+(canBuy?'':'disabled')+'>'+formatMoney(item.cost)+' 元</button>';
     html+='</div>';
   });
-  shopGridEl.innerHTML=html;
+  shopGridEl.innerHTML=html;updateShopPager(total);
   shopGridEl.querySelectorAll('.money-buy').forEach(function(btn){
     btn.addEventListener('click',function(){
       const id=btn.getAttribute('data-id');
@@ -1552,12 +1461,14 @@ function renderGoodsShop(){
 }
 
 function applyBuffsForNewDay(){
-  state.activeBuffs={comboShield:false,doubleHeat:false,extraFans:false,milkTea:false,snacks:false,coffee:false,cake:false};
+  state.activeBuffs={comboShield:false,doubleHeat:false,extraFans:false,doubleHeatFans:false,doubleIncome:false,milkTea:false,snacks:false,coffee:false,cake:false};
   const keep=[];
   saveData.ownedItems.forEach(function(it){
     if(it.type==='comboShield'&&!state.activeBuffs.comboShield){ state.activeBuffs.comboShield=true; }
     else if(it.type==='doubleHeat'&&!state.activeBuffs.doubleHeat){ state.activeBuffs.doubleHeat=true; }
     else if(it.type==='extraFans'&&!state.activeBuffs.extraFans){ state.activeBuffs.extraFans=true; }
+    else if(it.type==='doubleHeatFans'&&!state.activeBuffs.doubleHeatFans){state.activeBuffs.doubleHeatFans=true;}
+    else if(it.type==='doubleIncome'&&!state.activeBuffs.doubleIncome){state.activeBuffs.doubleIncome=true;}
     else if(it.id==='milkTea'&&!state.activeBuffs.milkTea){ state.activeBuffs.milkTea=true; showToast('🧋','快乐奶茶生效：今日热度 +25%'); }
     else if(it.id==='snacks'&&!state.activeBuffs.snacks){ state.activeBuffs.snacks=true; showToast('🍿','零食大礼包生效：今日涨粉 +40%'); }
     else if(it.id==='coffee'&&!state.activeBuffs.coffee){ state.activeBuffs.coffee=true; showToast('☕','冰美式生效：连击窗口 +2 秒'); }
@@ -1586,12 +1497,13 @@ function renderAchievements(){ let html=''; for(let i=0;i<ACHIEVEMENTS.length;i+
    二十七、图鉴 / 数据
    ============================================================ */
 let collectionCategory='normal',collectionPage=0;
+function flowerArtSVG(f,index){const hue=(index*37+18)%360;const petals=Array.from({length:8},function(_,i){return '<ellipse cx="50" cy="25" rx="8" ry="18" fill="hsl('+((hue+i*3)%360)+',48%,78%)" stroke="hsl('+hue+',34%,62%)" stroke-width="1.1" transform="rotate('+(i*45)+' 50 50)"/>';}).join('');return '<svg class="flower-art" viewBox="0 0 100 100"><path d="M50 57 Q48 78 50 94" stroke="#829d76" stroke-width="4" fill="none"/><path d="M49 79 Q30 65 25 79 Q38 91 49 82 M51 84 Q68 68 77 81 Q66 94 51 87" fill="#a8c79b"/><g>'+petals+'</g><circle cx="50" cy="50" r="10" fill="#e6bd70"/><circle cx="47" cy="47" r="3" fill="#fff5ce" opacity=".8"/></svg>';}
 function renderCollection(){
  const g=ensureGarden(),all=collectionCategory==='normal'?GARDEN_SEED_LIBRARY:THERAPY_FLOWERS;
  const owned=collectionCategory==='normal'?g.flowerCollection:g.magicCollection.map(function(f){return f.id;});
  const pageSize=12,totalPages=Math.max(1,Math.ceil(all.length/pageSize));collectionPage=clamp(collectionPage,0,totalPages-1);
  const items=all.slice(collectionPage*pageSize,(collectionPage+1)*pageSize);let html='';
- items.forEach(function(f){const un=owned.indexOf(f.id)>=0;html+='<div class="pair-card flower-only-card'+(un?'':' locked')+'"><div class="pair-icons"><div class="pair-icon">'+(un?f.emoji:'<div class="silhouette"></div>')+'</div></div><div class="pair-name">'+(un?f.name:'???')+'</div><div class="pair-desc">'+(un?(f.effect||f.desc||'已收入花园图鉴'):'尚未收集')+'</div></div>';});
+ items.forEach(function(f,index){const un=owned.indexOf(f.id)>=0;html+='<div class="pair-card flower-only-card'+(un?'':' locked')+'"><div class="pair-icons"><div class="pair-icon">'+(un?flowerArtSVG(f,index):'<div class="silhouette"></div>')+'</div></div><div class="pair-name">'+(un?f.name:'???')+'</div><div class="pair-desc">'+(un?(f.effect||f.desc||'已收入花园图鉴'):'尚未收集')+'</div></div>';});
  collectionGridEl.innerHTML=html;
  const total=document.getElementById('collectionPageLabel');total.textContent=(collectionPage+1)+' / '+totalPages;
  document.getElementById('collectionPrev').disabled=collectionPage<=0;document.getElementById('collectionNext').disabled=collectionPage>=totalPages-1;
@@ -1835,7 +1747,15 @@ const THERAPY_FLOWERS=[
  {id:'luck',name:'幸运花',emoji:'🍀',effect:'愿你常有好事发生，幸运总会悄悄来到身边。'},
  {id:'wealth',name:'发财花',emoji:'💰',effect:'愿努力都有回响，财富与机会慢慢向你靠近。'},
  {id:'brave',name:'勇气花',emoji:'🌟',effect:'愿你在害怕的时候，也有重新出发的勇气。'},
- {id:'peace',name:'平安心花',emoji:'🕊️',effect:'愿心里的风浪渐渐平息，日子安稳而明亮。'}
+ {id:'peace',name:'平安心花',emoji:'🕊️',effect:'愿心里的风浪渐渐平息，日子安稳而明亮。'},
+ {id:'hope',name:'希望花',emoji:'🌈',effect:'愿阴天也有一道光，新的可能正在靠近。'},
+ {id:'sleep',name:'安眠花',emoji:'🌙',effect:'愿今晚好梦，醒来时心里轻一点。'},
+ {id:'friend',name:'友谊花',emoji:'🫶',effect:'愿你遇见真诚的人，也自在地做自己。'},
+ {id:'calm',name:'宁静花',emoji:'🪷',effect:'愿纷乱慢慢散去，给自己一点安静。'},
+ {id:'joy',name:'欢喜花',emoji:'🎀',effect:'愿平凡日子里，也常有值得开心的小事。'},
+ {id:'healing',name:'治愈花',emoji:'💗',effect:'愿你被温柔接住，也学会温柔照顾自己。'},
+ {id:'dream',name:'梦想花',emoji:'🌠',effect:'愿你敢想敢试，喜欢的事都能慢慢靠近。'},
+ {id:'freedom',name:'自由花',emoji:'🦋',effect:'愿你不被别人的期待困住，轻盈地走自己的路。'}
 ];
 function rollGardenSeed(){const n=Math.random();if(n<0.06)return {kind:'random',label:'随机种子'};if(n<0.11)return {kind:'magic',label:'神奇种子'};const f=GARDEN_SEED_LIBRARY[randInt(0,GARDEN_SEED_LIBRARY.length-1)];return {kind:'normal',flowerId:f.id,label:f.label};}
 function ensureGarden(){if(!saveData.garden)saveData.garden={seeds:0,seedInventory:[],lastWaterDay:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};const g=saveData.garden;if(!Array.isArray(g.plots))g.plots=[];if(!Array.isArray(g.seedInventory))g.seedInventory=[];g.seedInventory=g.seedInventory.map(function(seed){if(seed.kind==='mystery')return Object.assign({},seed,{kind:'random',label:'随机种子'});if(seed.kind==='therapy')return Object.assign({},seed,{kind:'magic',label:'神奇种子'});return seed;});g.plots.forEach(function(p){if(p.seedKind==='mystery')p.seedKind='random';if(p.seedKind==='therapy')p.seedKind='magic';});while(g.seedInventory.length<(Number(g.seeds)||0))g.seedInventory.push(rollGardenSeed());g.seeds=g.seedInventory.length;if(g.lastWaterDay==null)g.lastWaterDay=0;if(g.unlockedPlots==null)g.unlockedPlots=1;if(g.flowers==null)g.flowers=0;if(!Array.isArray(g.flowerCollection))g.flowerCollection=[];if(!Array.isArray(g.magicCollection))g.magicCollection=[];g.magicCollection=g.magicCollection.filter(function(f,i,a){return f&&f.id&&a.findIndex(function(x){return x&&x.id===f.id;})===i;});g.flowerCollection=g.flowerCollection.filter(function(id){const magic=THERAPY_FLOWERS.find(function(f){return f.id===id;});if(magic){if(!g.magicCollection.some(function(x){return x.id===id;}))g.magicCollection.push({id:magic.id,name:magic.name,emoji:magic.emoji,effect:magic.effect});return false;}return true;});if(!g.flowerStockById||typeof g.flowerStockById!=='object')g.flowerStockById={};if(g.harvestCount==null)g.harvestCount=0;if(g.totalFlowers==null)g.totalFlowers=0;if(!Array.isArray(g.pendingMaturedFlowers))g.pendingMaturedFlowers=[];if(g.totalPlanted==null)g.totalPlanted=g.plots.length;if(g.maxHarvestBatch==null)g.maxHarvestBatch=0;if(g.flowerLives==null)g.flowerLives=0;if(g.harvestCount>=10&&g.nextFlowerSaleDay==null)g.nextFlowerSaleDay=(Number(saveData.currentDay)||1)+3;g.unlockedPlots=clamp(Math.max(Number(g.unlockedPlots)||1,Math.min(24,g.plots.length)),1,24);g.gardenPage=clamp(Number(g.gardenPage)||0,0,3);return g;}
@@ -1879,9 +1799,9 @@ function harvestGardenPlot(i,quiet){const g=ensureGarden(),p=g.plots[i];if(!p||(
 document.getElementById('btnGardenHarvest').addEventListener('click',function(){const g=ensureGarden();let n=0,total=0;for(let i=23;i>=0;i--){if(g.plots[i]&&(g.plots[i].stage||0)>=3){const result=harvestGardenPlot(i,true);if(result){n++;total+=result.count;}}}if(n){persist();renderGarden();gardenTipEl.textContent='一键收获 '+n+' 株花，共 '+total+' 朵鲜花。';showGardenNotice('🌼','收获完成！','共收获 '+n+' 株花、'+total+' 朵鲜花，已经放进花篮。');}});
 let flowerLiveState={round:0,earned:0,sold:0,order:1,finished:false};
 function renderFlowerLiveRound(){const g=ensureGarden();document.getElementById('flowerLiveStock').textContent=g.flowers;document.getElementById('flowerLiveProgress').textContent='第 '+Math.min(5,flowerLiveState.round+1)+' / 5 位顾客';document.getElementById('flowerLiveOrder').textContent='顾客想要一束 '+flowerLiveState.order+' 朵的花束。你会怎么搭配？';document.getElementById('flowerLiveTip').textContent='数量刚好会获得额外打赏；数量不符也能成交，但收入会少一些。';document.getElementById('flowerLiveEarned').textContent='本场收入：'+formatMoney(flowerLiveState.earned)+' 元';document.querySelectorAll('.flower-order-btn').forEach(function(b){b.disabled=g.flowers<1;});}
-function startFlowerLive(){const g=ensureGarden();if(g.harvestCount<10||g.flowers<1)return;flowerLiveState={round:0,earned:0,sold:0,order:randInt(1,3),finished:false};document.getElementById('flowerLiveCustomer').textContent=['👩🏻‍🌾','🧑🏻‍🎨','👵🏻','👩🏽‍💻','🧑🏻‍🍳'][randInt(0,4)];renderFlowerLiveRound();showScreen(document.getElementById('flowerLiveScreen'));}
+function startFlowerLive(){const g=ensureGarden();if(g.harvestCount<10||g.flowers<1)return;flowerLiveState={round:0,earned:0,sold:0,order:randInt(1,3),finished:false};document.getElementById('flowerLiveReceipts').innerHTML='<div class="receipt-empty">直播开始啦，等第一位顾客下单 🌷</div>';document.getElementById('flowerLiveCustomer').textContent=['👩🏻‍🌾','🧑🏻‍🎨','👵🏻','👩🏽‍💻','🧑🏻‍🍳'][randInt(0,4)];renderFlowerLiveRound();showScreen(document.getElementById('flowerLiveScreen'));}
 function finishFlowerLive(){if(flowerLiveState.finished)return;flowerLiveState.finished=true;const g=ensureGarden();if(flowerLiveState.sold>0){saveData.money=(saveData.money||0)+flowerLiveState.earned;saveData.totalEarned=(saveData.totalEarned||0)+flowerLiveState.earned;g.flowerLives=(g.flowerLives||0)+1;persist();checkAchievements();gardenTipEl.textContent='卖花直播结束！售出 '+flowerLiveState.sold+' 朵鲜花，收入 '+formatMoney(flowerLiveState.earned)+' 元。';showToast('🌷','卖花直播成交，收入 +'+formatMoney(flowerLiveState.earned)+' 元');}renderGarden();showScreen(gardenScreen);}
-function sellFlowerBouquet(quantity){const g=ensureGarden();if(g.flowers<1){finishFlowerLive();return;}const sold=Math.min(quantity,g.flowers),perfect=quantity===flowerLiveState.order&&sold===quantity,income=sold*(perfect?24:14)+(perfect?18:0);g.flowers-=sold;flowerLiveState.sold+=sold;flowerLiveState.earned+=income;flowerLiveState.round++;document.getElementById('flowerLiveTip').textContent=perfect?'顾客特别满意！花束刚好合心意，额外打赏 +18 元。':'花束顺利成交啦。下一位顾客也在等着你～';if(flowerLiveState.round>=5||g.flowers<=0){document.getElementById('flowerLiveOrder').textContent='今天的顾客都被你的鲜花治愈啦！';document.getElementById('flowerLiveProgress').textContent='本场直播完成';document.getElementById('flowerLiveStock').textContent=g.flowers;document.getElementById('flowerLiveEarned').textContent='本场收入：'+formatMoney(flowerLiveState.earned)+' 元';document.querySelectorAll('.flower-order-btn').forEach(function(b){b.disabled=true;});persist();setTimeout(finishFlowerLive,850);return;}flowerLiveState.order=randInt(1,3);document.getElementById('flowerLiveCustomer').textContent=['👩🏻‍🌾','🧑🏻‍🎨','👵🏻','👩🏽‍💻','🧑🏻‍🍳'][flowerLiveState.round%5];persist();renderFlowerLiveRound();}
+function sellFlowerBouquet(quantity){const g=ensureGarden();if(g.flowers<1){finishFlowerLive();return;}const sold=Math.min(quantity,g.flowers),perfect=quantity===flowerLiveState.order&&sold===quantity,income=sold*(perfect?24:14)+(perfect?18:0);g.flowers-=sold;flowerLiveState.sold+=sold;flowerLiveState.earned+=income;flowerLiveState.round++;const receipt=document.createElement('div');receipt.className='sale-receipt';receipt.innerHTML='<span>🧾</span><div><b>'+CONFIG.viewerNames[randInt(0,CONFIG.viewerNames.length-1)]+' 成交啦</b><small>'+sold+' 朵鲜花 · '+(perfect?'顾客超满意':'顺利成交')+'</small></div><strong>+'+income+' 元</strong>';const feed=document.getElementById('flowerLiveReceipts');if(feed.querySelector('.receipt-empty'))feed.innerHTML='';feed.prepend(receipt);document.getElementById('flowerLiveTip').textContent=perfect?'顾客特别满意！花束刚好合心意，额外打赏 +18 元。':'花束顺利成交啦。下一位顾客也在等着你～';if(flowerLiveState.round>=5||g.flowers<=0){document.getElementById('flowerLiveOrder').textContent='今天的顾客都被你的鲜花治愈啦！';document.getElementById('flowerLiveProgress').textContent='本场直播完成';document.getElementById('flowerLiveStock').textContent=g.flowers;document.getElementById('flowerLiveEarned').textContent='本场收入：'+formatMoney(flowerLiveState.earned)+' 元';document.querySelectorAll('.flower-order-btn').forEach(function(b){b.disabled=true;});persist();setTimeout(finishFlowerLive,850);return;}flowerLiveState.order=randInt(1,3);document.getElementById('flowerLiveCustomer').textContent=['👩🏻‍🌾','🧑🏻‍🎨','👵🏻','👩🏽‍💻','🧑🏻‍🍳'][flowerLiveState.round%5];persist();renderFlowerLiveRound();}
 /* 鲜花专场已并入每三天一次的疗愈直播结算，不再单独开播。 */
 document.getElementById('btnFlowerLiveBack').addEventListener('click',finishFlowerLive);
 document.querySelectorAll('.flower-order-btn').forEach(function(b){b.addEventListener('click',function(){sellFlowerBouquet(Number(b.getAttribute('data-bouquet')));});});
