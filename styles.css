@@ -595,3 +595,70 @@ canvas#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block
   #gardenScreen .garden-plots{grid-auto-rows:minmax(88px,auto)!important}
   #gardenScreen .garden-plot{min-height:88px!important}
 }
+
+/* ===== 2026-11-19：整理直播顶部信息层，恢复清晰的横向滚动层级 ===== */
+#topRight{top:calc(30px + env(safe-area-inset-top));z-index:30}
+#danmuLayer{
+  position:absolute!important;
+  top:calc(72px + env(safe-area-inset-top))!important;
+  bottom:auto!important;
+  left:0!important;right:0!important;
+  height:30px!important;
+  overflow:hidden!important;
+  z-index:27!important;
+  pointer-events:none!important;
+}
+#danmuLayer .danmu-float{
+  pointer-events:none!important;
+  max-width:82vw;
+  white-space:nowrap;
+  font-size:11px;
+}
+#eventBanner{
+  position:absolute!important;
+  top:calc(106px + env(safe-area-inset-top))!important;
+  bottom:auto!important;
+  left:0!important;right:0!important;
+  width:100%!important;
+  max-width:none!important;
+  height:30px!important;
+  margin:0!important;
+  padding:0 8px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  z-index:26!important;
+  pointer-events:none!important;
+}
+#eventBanner .eb-inner{
+  display:inline-block;
+  width:max-content;
+  max-width:none!important;
+  padding:5px 14px!important;
+  border:1px solid rgba(255,255,255,.82);
+  border-radius:16px!important;
+  background:rgba(255,255,255,.84)!important;
+  box-shadow:0 3px 12px rgba(160,145,175,.12)!important;
+  color:#b47b96!important;
+  font-size:clamp(10px,2.8vw,12px)!important;
+  line-height:1.4!important;
+  white-space:nowrap!important;
+  overflow-wrap:normal!important;
+  text-align:center!important;
+  text-shadow:none!important;
+  animation:ebScroll 17s linear forwards!important;
+}
+#hud{top:calc(145px + env(safe-area-inset-top))!important}
+#hostAvatar{top:calc(148px + env(safe-area-inset-top))!important}
+#pkBar{top:calc(188px + env(safe-area-inset-top))!important}
+@media(max-width:420px){
+  #danmuLayer{top:calc(70px + env(safe-area-inset-top))!important}
+  #eventBanner{top:calc(102px + env(safe-area-inset-top))!important}
+  #hud{top:calc(138px + env(safe-area-inset-top))!important}
+  #hostAvatar{top:calc(142px + env(safe-area-inset-top))!important}
+}
