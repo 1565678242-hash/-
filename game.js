@@ -1,4 +1,4 @@
-/* Release: 20261119-save-nav-fix-1 — HTML/CSS/JS synchronized */
+/* Release: 20261119-soft-praise-voice-1 — HTML/CSS/JS synchronized */
 (function(){
 'use strict';
 
@@ -1258,7 +1258,27 @@ function blendPair(a,b){
 }
 
 let lastPraiseAt=0;
-function playComboPraise(combo){if(!('speechSynthesis' in window)||!window.SpeechSynthesisUtterance)return;const now=Date.now();if(now-lastPraiseAt<1800)return;lastPraiseAt=now;const words=combo>=10?['Amazing!','Fantastic!','Unbelievable!']:['Great!','Nice!','Good job!'];const u=new SpeechSynthesisUtterance(words[randInt(0,words.length-1)]);u.lang='en-US';u.rate=1.08;u.pitch=1.15;u.volume=.65;window.speechSynthesis.cancel();window.speechSynthesis.speak(u);}
+function playComboPraise(combo){
+  if(!('speechSynthesis' in window)||!window.SpeechSynthesisUtterance)return;
+  const now=Date.now();
+  if(now-lastPraiseAt<2600)return;
+  lastPraiseAt=now;
+  /* 温柔、轻声的英文夸奖；优先选择系统中较自然的女性英语音色。 */
+  const words=combo>=10?['Lovely!','Wonderful!','So sweet!']:['Lovely!','Nice!','Well done!'];
+  const u=new SpeechSynthesisUtterance(words[randInt(0,words.length-1)]);
+  const voices=window.speechSynthesis.getVoices?window.speechSynthesis.getVoices():[];
+  const english=voices.filter(function(v){return /^en[-_]/i.test(v.lang||'');});
+  const female=english.filter(function(v){return /female|samantha|ava|aria|jenny|sara|victoria|karen|serena|moira|tessa|zira|google.*(us|uk).*english/i.test(v.name||'');});
+  const preferred=female[0]||english[0];
+  if(preferred)u.voice=preferred;
+  u.lang=preferred?preferred.lang:'en-US';
+  u.rate=0.94;
+  u.pitch=1.28;
+  /* SpeechSynthesis 音量独立于 WebAudio 背景音乐，压到轻声提示级别。 */
+  u.volume=0.16;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
 function popPair(a,b){
   if(a.popping||b.popping) return;
   a.popping=true; a.popT=0; b.popping=true; b.popT=0;
