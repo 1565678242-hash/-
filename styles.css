@@ -516,3 +516,7 @@ canvas#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block
  #gardenScreen .garden-plot{min-height:74px}
  .flower-basket{min-height:48px;max-height:64px;padding:5px 8px}
 }
+
+/* 状态栏下方的返回键避让 */
+.screen>.back-btn{top:calc(29px + env(safe-area-inset-top));}
+@media(max-height:700px){.screen>.back-btn{top:calc(27px + env(safe-area-inset-top));}}
