@@ -463,38 +463,135 @@ canvas#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block
 
 
 
-/* ============================================================
-   页面隔离规则：页面是独立视图，游戏 HUD 只属于直播画面
-   ============================================================ */
-.screen{
-  isolation:isolate;
-  background:linear-gradient(160deg,#fdf7f2 0%,#f7f3fa 52%,#f0f8f4 100%);
-}
-#homeScreen{
-  background:radial-gradient(circle at 50% 26%,rgba(255,255,255,.88),transparent 60%),linear-gradient(170deg,#fff7fa 0%,#f6f8ff 100%);
-}
-#gardenScreen{
-  z-index:30;
-  background:linear-gradient(160deg,#fff5f7 0%,#f7f3fa 54%,#edf7f2 100%);
-  overflow-x:hidden;
-  overflow-y:auto;
-  overscroll-behavior:contain;
-  -webkit-overflow-scrolling:touch;
-}
-#flowerLiveScreen{
-  z-index:30;
-  background:linear-gradient(160deg,#fff5f7 0%,#f8f4fa 55%,#eef7f1 100%);
-}
-#resultScreen,#shopScreen,#collectionScreen,#achievementScreen,#dataScreen{
-  background:linear-gradient(160deg,#fdf7f2 0%,#f7f3fa 52%,#f0f8f4 100%);
-}
-/* Save management: destructive reset action is visually separated. */
-.menu-action.danger{
-  border:1px solid #f0d5d5;
-  background:#fff5f4;
-  color:#b97878;
-}
-.menu-action.danger:active{background:#fce9e7;transform:scale(.99)}
 
-/* Dedicated save management window, separate from the live pause menu. */
-.save-manage-card{max-height:calc(100% - 32px);overflow-y:auto}
+
+/* ============================================================
+   Responsive layout pass — garden controls and live overlays
+   ============================================================ */
+
+/* Garden: smaller guidance, comfortable touch targets, adaptive grid. */
+#gardenScreen{
+  box-sizing:border-box;
+  width:100%;
+  padding:calc(48px + env(safe-area-inset-top)) clamp(10px,3vw,24px) calc(14px + env(safe-area-inset-bottom))!important;
+  gap:clamp(5px,1.2vh,10px)!important;
+}
+#gardenScreen .garden-intro{
+  width:min(100%,620px);
+  margin:0 auto;
+  font-size:clamp(10px,2.7vw,12px)!important;
+  line-height:1.45!important;
+  padding:7px 10px!important;
+  border-radius:12px;
+}
+#gardenScreen .garden-balance,
+#gardenScreen .garden-progress,
+#gardenScreen .garden-tip{
+  width:min(100%,620px);
+  margin-left:auto!important;
+  margin-right:auto!important;
+  font-size:clamp(10px,2.6vw,12px)!important;
+  line-height:1.4!important;
+}
+#gardenScreen .garden-toolbar{
+  width:min(100%,620px)!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;
+}
+#gardenScreen .garden-toolbar .garden-action{
+  min-width:0;
+  min-height:44px!important;
+  padding:9px 7px!important;
+  font-size:clamp(11px,2.9vw,13px)!important;
+  line-height:1.25;
+  white-space:normal;
+  touch-action:manipulation;
+}
+#gardenScreen .garden-plots{
+  width:min(100%,620px)!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:clamp(6px,1.8vw,10px)!important;
+}
+#gardenScreen .garden-plot{min-width:0;min-height:clamp(104px,25vw,128px)!important;padding:7px 4px!important}
+#gardenScreen .plot-actions{gap:4px!important}
+#gardenScreen .plot-actions button{
+  min-height:38px!important;
+  padding:5px 2px!important;
+  font-size:clamp(10px,2.5vw,12px)!important;
+  touch-action:manipulation;
+}
+#gardenScreen .garden-pager .tab,
+#gardenScreen .basket-pager .tab{min-width:44px!important;min-height:40px!important}
+#gardenScreen .flower-basket{width:min(100%,620px)!important}
+#gardenScreen .garden-tip{font-size:10px!important}
+
+/* Live game: overlays occupy a dedicated footer band, never the bubble field. */
+#eventBanner{
+  position:absolute!important;
+  top:auto!important;
+  bottom:calc(12px + env(safe-area-inset-bottom))!important;
+  left:10px!important;
+  right:10px!important;
+  width:auto!important;
+  max-width:620px;
+  margin:0 auto;
+  z-index:24!important;
+  pointer-events:none!important;
+  display:flex;
+  justify-content:center;
+}
+#eventBanner .eb-inner{
+  max-width:100%;
+  padding:7px 12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.9);
+  box-shadow:0 3px 14px rgba(90,90,90,.12);
+  font-size:clamp(10px,2.7vw,12px);
+  line-height:1.35;
+  text-align:center;
+  overflow-wrap:anywhere;
+}
+#danmuLayer{
+  position:absolute!important;
+  top:auto!important;
+  bottom:calc(58px + env(safe-area-inset-bottom))!important;
+  left:0!important;
+  right:0!important;
+  height:30px!important;
+  z-index:23!important;
+  pointer-events:none!important;
+  overflow:hidden!important;
+}
+#danmuLayer .danmu-float{pointer-events:none!important;max-width:78vw}
+#introHint{
+  top:auto!important;
+  bottom:calc(100px + env(safe-area-inset-bottom))!important;
+  left:50%!important;
+  width:max-content;
+  max-width:min(88vw,440px)!important;
+  transform:translate(-50%,10px) scale(.96)!important;
+  padding:10px 14px!important;
+  border-radius:16px!important;
+  font-size:clamp(11px,2.9vw,13px)!important;
+  line-height:1.45!important;
+  letter-spacing:0!important;
+  z-index:25!important;
+  pointer-events:none!important;
+}
+#introHint.show{transform:translate(-50%,0) scale(1)!important}
+
+/* Keep the lower interaction area clear and respect short phone screens. */
+@media(max-width:420px){
+  #gardenScreen{padding-left:10px!important;padding-right:10px!important}
+  #gardenScreen .garden-plots{grid-auto-rows:minmax(100px,auto)!important}
+  #gardenScreen .garden-plot{min-height:100px!important}
+  #eventBanner{bottom:calc(8px + env(safe-area-inset-bottom))!important}
+  #danmuLayer{bottom:calc(52px + env(safe-area-inset-bottom))!important}
+  #introHint{bottom:calc(88px + env(safe-area-inset-bottom))!important}
+}
+@media(max-height:680px){
+  #gardenScreen{gap:5px!important;padding-top:calc(42px + env(safe-area-inset-top))!important}
+  #gardenScreen .garden-intro{padding:5px 8px!important}
+  #gardenScreen .garden-plots{grid-auto-rows:minmax(88px,auto)!important}
+  #gardenScreen .garden-plot{min-height:88px!important}
+}
