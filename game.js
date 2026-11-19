@@ -660,9 +660,10 @@ if('ResizeObserver' in window){
    八、每日配置
    ============================================================ */
 function getDayConfig(day){
-  const negTypes=Math.min(5+Math.floor((day-1)/2),9);
-  const negPairs=day>=8?2:1;
-  const posTypes=day>=2?Math.min(1+Math.floor((day-2)/2),6):0;
+  const mobile=window.innerWidth<600;
+  const negTypes=Math.min(5+Math.floor((day-1)/2),mobile?6:8);
+  const negPairs=day>=8&&!mobile?2:1;
+  const posTypes=day>=2?Math.min(1+Math.floor((day-2)/2),mobile?4:5):0;
   let hasFruit=false;
   if(day>1){ if(saveData.daysSinceLucky>=CONFIG.fruitPity) hasFruit=true; else hasFruit=Math.random()<CONFIG.fruitChance; }
   return { negTypes, negPairs, posTypes, hasFruit };
@@ -1925,7 +1926,6 @@ btnLikeEl.addEventListener('click',function(e){
   if(Math.random()<0.22) addDanmu('点亮了爱心','gift');
 });
 
-document.getElementById('btnData').addEventListener('click',function(){ AudioSys.click(); updateDataScreen(); showScreen(dataScreen); });
 document.getElementById('btnDataBack').addEventListener('click',function(){ AudioSys.click(); showScreen(homeScreen); });
 
 document.getElementById('btnShopHome').addEventListener('click',function(){ AudioSys.click(); renderShop(); showScreen(shopScreen); });
