@@ -1052,7 +1052,8 @@ function startDay(day){
     state.bubbles=bubbleList;
   }
 
-  hudDayEl.textContent=String(day);
+  /* 天数 HUD 已从页面移除；保留兼容性保护，避免空引用中断新游戏启动。 */
+  if(hudDayEl) hudDayEl.textContent=String(day);
   hudHeatEl.textContent=formatNum(state.heat);
   hudFansEl.textContent=formatNum(state.fans||0);
   hudLuckyEl.textContent=String(saveData.luckyCount);
