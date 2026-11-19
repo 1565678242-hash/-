@@ -1868,7 +1868,13 @@ function exportSave(){
   a.href=url;a.download='滚蛋吧坏情绪-存档.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);showToast('💾','存档已导出');
 }
 document.getElementById('btnSaveExport').addEventListener('click',exportSave);
-document.getElementById('btnSaveReset').addEventListener('click',function(){
+
+const saveManageMenuEl=document.getElementById('saveManageMenu');
+document.getElementById('btnSaveHome').addEventListener('click',function(){AudioSys.click();saveManageMenuEl.classList.add('show');});
+document.getElementById('btnSaveManageClose').addEventListener('click',function(){AudioSys.click();saveManageMenuEl.classList.remove('show');});
+document.getElementById('btnSaveManageExport').addEventListener('click',function(){AudioSys.click();exportSave();});
+document.getElementById('btnSaveManageImport').addEventListener('click',function(){AudioSys.click();saveFileInput.click();});
+document.getElementById('btnSaveManageReset').addEventListener('click',function(){
   AudioSys.click();
   const ok=confirm('确定重开游戏吗？\n\n这会清除当前浏览器保存的本游戏全部进度，包括直播数据、金币、花园、图鉴和成就，并从初始状态重新开始。\n\n此操作无法撤销，建议先导出存档备份。');
   if(!ok)return;
@@ -1876,7 +1882,6 @@ document.getElementById('btnSaveReset').addEventListener('click',function(){
   catch(e){alert('清除本地存档失败，请检查浏览器的存储权限。');return;}
   location.reload();
 });
-document.getElementById('btnSaveHome').addEventListener('click',function(){AudioSys.click();gameMenuEl.classList.add('show');});
 document.getElementById('btnSaveImport').addEventListener('click',function(){saveFileInput.click();});
 saveFileInput.addEventListener('change',function(){
  const file=saveFileInput.files&&saveFileInput.files[0];if(!file)return;const reader=new FileReader();
