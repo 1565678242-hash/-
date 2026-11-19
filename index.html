@@ -46,6 +46,7 @@
     <div class="home-title"><h1>滚蛋吧坏情绪</h1><p>疗 愈 直 播 间</p><div class="home-sub">一场温柔的直播，从一座小花园开始</div></div>
     <div class="home-buttons">
       <button class="main-btn primary" id="btnContinue">继 续 游 戏</button>
+      <button class="main-btn" id="btnGameGuide">📖 新手玩法说明</button>
       <button class="main-btn" id="btnNewGame">新 游 戏</button>
       <button class="main-btn" id="btnGardenHome">🌱 我 的 花 园</button>
       <button class="main-btn lucky-btn" id="btnShopHome">商 店</button>
@@ -59,7 +60,7 @@
   <div id="gardenScreen" class="screen">
     <button class="back-btn" id="btnGardenBack">‹ 返回</button>
     <div class="page-title">我的小花园</div>
-    <div class="garden-intro">点空土地直接播种；每天一键浇水，成熟后点土地收获。直播结束也会让花苗成长。</div>
+    <div class="garden-intro">点空土地播种，点花苗浇水，成熟后点花朵收获。也可以使用上方的一键操作。每场疗愈直播结束，花苗都会成长一步。</div>
     <div class="garden-balance"><span>🌱 种子 <b id="gardenSeeds">0</b></span><span>🌷 鲜花 <b id="gardenFlowerStock">0</b></span><span>♡ 收益 <b id="gardenMoney">0</b></span></div>
     <div class="garden-progress" id="gardenProgress">已收获 0 次 · 再收获 10 次解锁卖花直播</div>
     <div class="garden-toolbar">
@@ -166,6 +167,18 @@
       <div class="tut-dots"><span class="on"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
       <button class="main-btn primary" id="tutNext" style="width:100%">下一页</button>
       <button id="tutSkip">跳过故事</button>
+    </div>
+  </div>
+  <div id="gameGuide" class="game-guide" aria-hidden="true">
+    <div class="game-guide-card">
+      <button class="game-guide-close" id="btnGuideClose" aria-label="关闭">×</button>
+      <div class="game-guide-kicker">WELCOME · 新手指南</div>
+      <div class="game-guide-title">这是一场疗愈直播，也是一座会长大的花园</div>
+      <div class="game-guide-item"><span>🫧</span><div><b>疗愈直播怎么玩</b><p>用手指拖动写着相同坏情绪的泡泡，让它们碰在一起就能消除。粉色/明亮的好情绪不要碰；出现好运果时，轻点它收集。</p></div></div>
+      <div class="game-guide-item"><span>💬</span><div><b>直播里还有什么</b><p>回答观众提问、参加随机互动，会带来热度和粉丝。清除当天所有坏情绪，就能完成今天的直播。</p></div></div>
+      <div class="game-guide-item"><span>🌱</span><div><b>花园怎么经营</b><p>直播会奖励种子。点空土地播种，点花苗浇水，成熟后点一下收获；也能用上方的一键按钮批量操作。</p></div></div>
+      <div class="game-guide-item"><span>🌷</span><div><b>鲜花有什么用</b><p>收获的花会存进花篮。累计收获 10 株后，每逢第 3 天疗愈直播结束，会自动开启鲜花专场并带来额外收益。</p></div></div>
+      <button class="main-btn primary" id="btnGuideStart" style="width:100%">知道啦，开始直播</button>
     </div>
   </div>
   <div id="gardenNotice" class="garden-notice" aria-live="polite">
