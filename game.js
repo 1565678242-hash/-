@@ -686,7 +686,7 @@ function makeBubble(type,word,r){
   /* 负面情绪：红/紫系；好情绪：金/绿系 */
   const coolPalette=[188,202,216,230,244,258,272,286,300,174],warmPalette=[8,18,28,38,48,340,352,24,44,330];
   if(type==='negative'){ hue=coolPalette[h%coolPalette.length]; sat=48+(h%13); light=77+(h%8); }
-  else { hue=warmPalette[h%warmPalette.length]; sat=58+(h%15); light=75+(h%9); }
+  else { hue=warmPalette[randInt(0,warmPalette.length-1)]; sat=58+randInt(0,14); light=75+randInt(0,8); }
   return { type,word,r,x:0,y:0,vx:(Math.random()-0.5)*CONFIG.gameplay.floatSpeed*2,vy:(Math.random()-0.5)*CONFIG.gameplay.floatSpeed*2,hue,sat,light,fontSize:0,wobble:Math.random()*Math.PI*2,popping:false,popT:0,scale:1,alpha:1,dead:false,collected:false,flash:0,entering:false,enterT:0,enterDelay:0,targetY:0 };
 }
 function makeFruit(r){
@@ -1237,7 +1237,7 @@ function popPair(a,b){
   if(state.heat>state.dayStats.heatPeak) state.dayStats.heatPeak=state.heat;
   persist();
   addFloat(mx,my-10,'+'+heatGain,'#d990a8');
-  if(state.combo>=3) addFloat(mx,my-30,'连击 ×'+state.combo,'#c08a6a');
+  if(state.combo>=3){AudioSys.combo();playComboPraise(state.combo);addFloat(mx,my-30,'连击 ×'+state.combo,'#c08a6a');addFloat(mx,my-52,state.combo>=10?'AMAZING!':'GREAT!','#d69a68');}
   setTimeout(checkDayEnd,280);
 }
 
