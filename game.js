@@ -1845,7 +1845,7 @@ function closeGarden(){
 }
 document.getElementById('btnGardenHome').addEventListener('click',function(){AudioSys.click();openGarden();});
 btnGardenQuickEl.addEventListener('click',function(){AudioSys.click();openGarden();});
-document.getElementById('btnGardenBack').addEventListener('click',function(){AudioSys.click();closeGarden();});
+document.getElementById('btnGardenBack').addEventListener('click',function(e){e.preventDefault();e.stopPropagation();closeGarden();try{AudioSys.click();}catch(err){}});
 document.getElementById('gardenPrev').addEventListener('click',function(){const g=ensureGarden();g.gardenPage=Math.max(0,g.gardenPage-1);persist();renderGarden();});
 document.getElementById('gardenNext').addEventListener('click',function(){const g=ensureGarden();g.gardenPage=Math.min(3,g.gardenPage+1);persist();renderGarden();});
 document.getElementById('basketPrev').addEventListener('click',function(){const g=ensureGarden();g.basketPage=Math.max(0,(Number(g.basketPage)||0)-1);persist();renderGarden();});
