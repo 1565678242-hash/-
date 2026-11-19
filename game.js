@@ -1399,6 +1399,7 @@ function hideGameplayLayers(){
 function showScreen(el){
   const ss=document.querySelectorAll('.screen');
   for(let i=0;i<ss.length;i++) ss[i].classList.remove('active');
+  document.body.classList.toggle('screen-overlay-open',!!el);
   if(el){
     hideGameplayLayers();
     el.classList.add('active');
