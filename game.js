@@ -1011,7 +1011,7 @@ function startDay(day){
     state.blendCount=snap.blend||0;
     state.dayStats=snap.dayStats&&typeof snap.dayStats==='object'?snap.dayStats:{popped:0,fansGained:0,heatPeak:0,answered:0}; state.fruitCollected=!!snap.fruitCollected;
     state.specials=Array.isArray(snap.specials)?snap.specials.map(function(s){return Object.assign({},s);}):[];
-    if(Number.isFinite(Number(snap.specialTimer)))state.specialTimer=Math.max(0,Number(snap.specialTimer));
+
     state.activeBuffs=Object.assign({comboShield:false,doubleHeat:false,extraFans:false},snap.buffs);
     bubbleList=snap.bubbles.map(function(s){
       const b=s.type==='fruit'?makeFruit(s.r):makeBubble(s.type,s.word,s.r);
@@ -1060,6 +1060,7 @@ function startDay(day){
   state.eventTimer=CONFIG.eventIntervalMin+Math.random()*(CONFIG.eventIntervalMax-CONFIG.eventIntervalMin);
   state.questionTimer=CONFIG.gameplay.questionIntervalMin+Math.random()*(CONFIG.gameplay.questionIntervalMax-CONFIG.gameplay.questionIntervalMin);
   state.specialTimer=randInt(10,18);
+  if(snap&&Number.isFinite(Number(snap.specialTimer)))state.specialTimer=Math.max(0,Number(snap.specialTimer));
 
   if(state.perfumeMode){ setTimeout(function(){ showEventBanner('调香直播开始！拖动原料融合，完成香氛拍卖','#e8a860'); },900); }
   if(snap){
