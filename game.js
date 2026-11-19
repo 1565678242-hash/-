@@ -1994,7 +1994,7 @@ function backFromOverlay(){
     showHud(true);
     startViewers();
     startDanmu();
-  }else if(state.phase==='result){
+  }else if(state.phase==='result'){
     showScreen(resultScreen);
   }else{
     showScreen(homeScreen);
