@@ -94,7 +94,7 @@ const CONFIG = {
     positiveCooldown: 2.0,
     fanLossOnHit: [5, 12],
     heatLossOnHit: [8, 15],
-    bubbleTopLimit: 136,
+    bubbleTopLimit: 198,
     bubbleBottomMargin: 28,
     questionChance: 0.55,
     questionIntervalMin: 18,
