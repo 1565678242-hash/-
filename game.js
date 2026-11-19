@@ -1402,7 +1402,7 @@ function showResult(){
   resultBtnEl.onclick=function(){ AudioSys.click(); if(ensureGarden().flowerLiveDue&&ensureGarden().flowers>0){startFlowerLive(true);}else{beginDayTransition(day+1);} };
   document.getElementById('resultGardenBtn').onclick=function(){AudioSys.click();openGarden();};
   showScreen(resultScreen);
-    const flowerGarden=ensureGarden();if(flowerGarden.flowerLiveDue&&flowerGarden.flowers>0){resultBtnEl.textContent='🌷 进入花卉直播';setTimeout(function(){if(state.phase==='result'&&flowerGarden.flowerLiveDue)startFlowerLive(true);},1100);}
+    const flowerGarden=ensureGarden();if(flowerGarden.flowerLiveDue&&flowerGarden.flowers>0){resultBtnEl.textContent='🌷 进入花卉直播';setTimeout(function(){if(state.phase==='result'&&flowerGarden.flowerLiveDue&&!document.getElementById('flowerLiveScreen').classList.contains('active'))startFlowerLive(true);},1100);}
     const pendingMatured=ensureGarden().pendingMaturedFlowers; if(pendingMatured.length)showGardenNotice('🌸','花儿成熟啦！','花园里的 '+pendingMatured.join('、')+' 已经成熟，记得去收获。');
 }
 
@@ -1909,6 +1909,7 @@ function startFlowerLive(automatic){
   }),earned:0,sold:0,finished:false,startedAt:Date.now()};
   persist();
  }
+ if(g.flowerAuction&&Array.isArray(g.flowerAuction.lots)&&g.flowerAuction.lots.length>5){g.flowerAuction.lots=g.flowerAuction.lots.slice(0,5);persist();}
  flowerLiveState=g.flowerAuction;renderFlowerLiveAuction();showScreen(document.getElementById('flowerLiveScreen'));
 }
 function renderFlowerLiveAuction(){
