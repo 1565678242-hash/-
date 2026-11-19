@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>滚蛋吧坏情绪：疗愈直播间</title>
-<link rel="stylesheet" href="styles.css?v=20261119-livehud-1">
+<link rel="stylesheet" href="styles.css?v=20261119-live-layout-1">
 </head>
 <body>
 <div id="app">
@@ -12,11 +12,10 @@
   <canvas id="gameCanvas" aria-label="游戏区域：拖动相同的情绪气泡进行消除，点击好运果收集"></canvas>
   <div id="hud">
     <div id="hostAvatar">🌞</div>
-    <div class="hud-chip" id="hudDayChip" hidden><span>天数</span><b id="hudDay">1</b></div>
-    <div class="hud-chip" id="hudHeatChip"><span>热度</span><b id="hudHeat">0</b></div>
-    <div class="hud-chip" id="hudFansChip"><span>粉丝</span><b id="hudFans">0</b></div>
     <div class="hud-chip lucky" id="hudLuckyChip"><span>好运果</span><b id="hudLucky">0</b></div>
     <div class="hud-chip" id="hudMoneyChip"><span>收益</span><b id="hudMoney">0</b></div>
+    <div class="hud-chip" id="hudHeatChip"><span>热度</span><b id="hudHeat">0</b></div>
+    <div class="hud-chip" id="hudFansChip"><span>粉丝</span><b id="hudFans">0</b></div>
   </div>
   <div id="liveBar"><span class="live-dot"></span>直播中 · <b id="liveViewers">--</b> 人在看</div>
   <div id="topRight">
@@ -206,6 +205,6 @@
   </div>
   <input type="file" id="saveFileInput" accept="application/json,.json" hidden>
 </div>
-<script src="game.js?v=20261119-audit-3" defer></script>
+<script src="game.js?v=20261119-live-layout-1" defer></script>
 </body>
 </html>
