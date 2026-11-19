@@ -1910,7 +1910,11 @@ function renderFlowerLiveAuction(){
   const bidHtml=(lot.bids||[]).map(function(b,i){return '<span>'+(i+1)+'号牌 '+b.buyer+' · ¥'+formatMoney(b.price)+'</span>';}).join('');
   return '<article class="flower-auction-lot '+(lot.sold?'is-sold':'')+'"><div class="flower-lot-emoji">'+lot.emoji+'</div><div class="flower-lot-main"><b class="flower-lot-title">'+lot.name+'</b><span class="flower-lot-meta">本项拍品 · '+lot.qty+' 朵 · '+(lot.sold?'已成交':'竞价进行中')+'</span><span class="flower-lot-bid">'+(lot.sold?'成交价':'当前最高价')+'：<strong>¥'+formatMoney(lot.price)+'</strong> · '+lot.buyer+'</span></div><button class="flower-lot-action" type="button" data-flower-deal="'+lot.id+'" '+(lot.sold?'disabled':'')+'>'+(lot.sold?'已成交':'成交')+'</button><div class="flower-lot-bids">'+bidHtml+'</div></article>';
  }).join('');
+ const feed=document.getElementById('flowerLiveReceipts');
+ const soldLots=lots.filter(function(l){return l.sold;});
+ feed.innerHTML=soldLots.length?soldLots.map(function(l){return '<div class="sale-receipt"><span>'+l.emoji+'</span><div><b>'+l.buyer+' 以 '+formatMoney(l.income||l.price)+' 元拍下 '+l.qty+' 朵'+l.name+'</b><small>本项拍卖已成交</small></div><strong>+'+formatMoney(l.income||l.price)+' 元</strong></div>';}).join(''):'<div class="receipt-empty">成交记录会实时显示在这里</div>';
  if(!lots.length)list.innerHTML='<div class="receipt-empty">花篮里暂时没有可拍卖的鲜花</div>';
+ if(lots.length&&!pending.length)setTimeout(finishFlowerLive,700);
 }
 function dealFlowerLot(id){
  const g=ensureGarden(),lot=(flowerLiveState.lots||[]).find(function(x){return x.id===id;});
