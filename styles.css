@@ -342,3 +342,69 @@ canvas#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block
 .flower-order-btn{min-height:44px;border:1px solid #e4ecdf;border-radius:15px;background:linear-gradient(120deg,#fff,#f2f7ed);color:#748b76;font-size:12px;font-weight:800}.flower-order-btn:disabled{opacity:.4}
 .flower-live-tip{min-height:38px;margin-top:14px;font-size:11px;line-height:1.7;color:#9aa995}.flower-live-earned{font-size:13px;font-weight:800;color:#c79a70;margin-top:8px}#resultGardenBtn{margin-bottom:9px}
 @media(min-width:600px){.flower-live-options{grid-template-columns:repeat(3,1fr)}}
+
+
+/* 手机和平板优先：花园与图鉴尽量在单屏完成操作 */
+#gardenScreen{
+  overflow:hidden;
+  justify-content:flex-start;
+  gap:4px;
+  padding:calc(38px + env(safe-area-inset-top)) 9px 8px;
+}
+#gardenScreen .page-title{margin:0 0 3px;font-size:21px;line-height:1.2}
+#gardenScreen .garden-intro{max-width:100%;margin:0 0 4px;padding:5px 9px;font-size:10px;line-height:1.45}
+#gardenScreen .garden-balance{gap:5px;margin:0 0 3px;flex-wrap:nowrap}
+#gardenScreen .garden-balance span{flex:1;min-width:0;padding:5px 4px;font-size:10px;white-space:nowrap}
+#gardenScreen .garden-progress{margin:0 0 3px;padding:5px 8px;font-size:10px}
+.garden-toolbar{width:min(96vw,460px);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin:2px 0 4px}
+.garden-toolbar .garden-action{min-height:36px;padding:5px 2px;font-size:10px;border-radius:12px;white-space:nowrap}
+.garden-toolbar .garden-action.primary{grid-column:auto}
+#gardenScreen .garden-plots{width:min(96vw,460px);max-height:none;overflow:hidden;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:1px}
+#gardenScreen .garden-plot{min-height:clamp(88px,13vh,112px);padding:4px 3px;border-radius:15px;gap:2px}
+#gardenScreen .soil-bed{height:42px;margin:0}
+#gardenScreen .soil-bed:before{width:75px;height:25px}
+#gardenScreen .soil-bed:after{width:65px;bottom:14px}
+#gardenScreen .soil-sprout{font-size:25px}
+#gardenScreen .soil-sprout.stage-1{font-size:28px}
+#gardenScreen .soil-sprout.stage-2{font-size:31px}
+#gardenScreen .soil-sprout.stage-3{font-size:34px}
+#gardenScreen .garden-plant-name{font-size:10px;line-height:1.2}
+#gardenScreen .garden-stage,#gardenScreen .plot-status{font-size:9px;line-height:1.2}
+#gardenScreen .plot-actions{margin-top:2px;gap:3px}
+#gardenScreen .plot-actions button{min-height:23px;font-size:9px;padding:2px}
+#gardenScreen .garden-tip{max-width:100%;margin:2px 0 0;padding:4px 8px;font-size:9px;line-height:1.35}
+#gardenScreen .garden-plot{cursor:pointer}
+#gardenScreen button.garden-plot{font-family:inherit}
+#collectionScreen{justify-content:flex-start;overflow:hidden;padding:calc(42px + env(safe-area-inset-top)) 10px 10px;gap:7px}
+#collectionScreen .page-title{margin:0;font-size:21px}
+#collectionScreen .tabs{margin:0}
+#collectionScreen .pair-grid{width:100%;max-width:520px;max-height:none;overflow:hidden;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:1px}
+#collectionScreen .pair-card{min-height:100px;padding:8px 4px 6px;border-radius:13px}
+#collectionScreen .pair-icon{width:48px;height:48px;font-size:29px}
+#collectionScreen .pair-name{font-size:10px;line-height:1.25}
+#collectionScreen .pair-desc{font-size:8px;line-height:1.35;max-height:24px;overflow:hidden}
+.collection-pager{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:3px;color:#91a092;font-size:11px}
+.collection-pager .tab{padding:7px 12px;margin:0;font-size:10px}
+.collection-pager .tab:disabled{opacity:.35}
+@media(min-width:600px){
+ #gardenScreen .garden-plots{grid-template-columns:repeat(3,minmax(0,1fr));}
+ #gardenScreen .garden-plot{min-height:clamp(100px,14vh,130px)}
+ #collectionScreen .pair-grid{grid-template-columns:repeat(4,minmax(0,1fr));}
+}
+@media(max-width:380px){
+ #gardenScreen{padding-left:6px;padding-right:6px}
+ .garden-toolbar{gap:3px}
+ .garden-toolbar .garden-action{font-size:9px}
+ #gardenScreen .garden-plot{min-height:84px}
+ #collectionScreen .pair-grid{gap:5px}
+ #collectionScreen .pair-card{min-height:90px}
+}
+@media(max-height:680px){
+ #gardenScreen{padding-top:calc(34px + env(safe-area-inset-top))}
+ #gardenScreen .garden-intro{display:none}
+ #gardenScreen .garden-plot{min-height:78px}
+ #gardenScreen .soil-bed{height:34px}
+ #gardenScreen .soil-bed:before{height:21px}
+ #gardenScreen .soil-bed:after{bottom:12px}
+ #gardenScreen .garden-tip{display:none}
+}
