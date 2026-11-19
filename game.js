@@ -1967,6 +1967,9 @@ function updateViewerCount(){ const base=Math.max(600,Math.round((saveData.total
 /* ============================================================
    三十三、启动
    ============================================================ */
+function updatePhoneClock(){const el=document.getElementById('phoneClock');if(el){const d=new Date();el.textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}}
+updatePhoneClock();setInterval(updatePhoneClock,15000);
+if(navigator.getBattery){navigator.getBattery().then(function(b){const icon=document.querySelector('.phone-status-right span:last-child');function draw(){if(icon)icon.textContent='▰ '+Math.round(b.level*100)+'%';}draw();b.addEventListener('levelchange',draw);}).catch(function(){});}
 document.getElementById('btnGameGuide').addEventListener('click',function(){document.getElementById('gameGuide').classList.add('show');document.getElementById('gameGuide').setAttribute('aria-hidden','false');});
 function closeGameGuide(){document.getElementById('gameGuide').classList.remove('show');document.getElementById('gameGuide').setAttribute('aria-hidden','true');}
 document.getElementById('btnGuideClose').addEventListener('click',closeGameGuide);
