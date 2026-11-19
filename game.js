@@ -1048,7 +1048,7 @@ function startDay(day){
     updateComboBadge();
   } else {
     layoutBubbles(bubbleList);
-    bubbleList.forEach(function(b){ b.targetY=b.y; b.y=-b.r-40; b.entering=true; b.enterT=0; b.enterDelay=999; });
+    bubbleList.forEach(function(b){ b.targetY=b.y; b.y=b.targetY+40; b.entering=true; b.enterT=0; b.enterDelay=999; });
     state.bubbles=bubbleList;
   }
 
@@ -1212,7 +1212,7 @@ function spawnIngredient(){
   b.x=r+20+Math.random()*(CW-r*2-40);
   b.y=CONFIG.gameplay.bubbleTopLimit+r+Math.random()*(CH-CONFIG.gameplay.bubbleBottomMargin-CONFIG.gameplay.bubbleTopLimit-r*2);
   b.fontSize=fitFontSize(b.word,r);
-  b.targetY=b.y; b.y=-b.r-40; b.entering=true; b.enterT=0; b.enterDelay=0.4;
+  b.targetY=b.y; b.y=b.targetY+40; b.entering=true; b.enterT=0; b.enterDelay=0.4;
   state.bubbles.push(b);
 }
 function blendPair(a,b){
@@ -1627,7 +1627,7 @@ function update(dt){
   const top=CONFIG.gameplay.bubbleTopLimit,bot=CH-CONFIG.gameplay.bubbleBottomMargin;
   for(let i=0;i<state.bubbles.length;i++){
     const b=state.bubbles[i];
-    if(b.entering){ if(b.popping||b===state.dragging){ b.entering=false; continue; } b.enterT+=dt; if(b.enterT<b.enterDelay) continue; const t=Math.min(1,(b.enterT-b.enterDelay)/0.65); const ease=1-Math.pow(1-t,3); b.y=-b.r-40+(b.targetY+b.r+40)*ease; if(t>=1){ b.entering=false; b.y=b.targetY; } continue; }
+    if(b.entering){ if(b.popping||b===state.dragging){ b.entering=false; continue; } b.enterT+=dt; if(b.enterT<b.enterDelay) continue; const t=Math.min(1,(b.enterT-b.enterDelay)/0.65); const ease=1-Math.pow(1-t,3); b.y=b.targetY+40*(1-ease); if(t>=1){ b.entering=false; b.y=b.targetY; } continue; }
     if(b.popping||b===state.dragging) continue;
     b.wobble+=dt*1.3; b.x+=b.vx*dt; b.y+=b.vy*dt;
     if(b.x<b.r){ b.x=b.r; b.vx=Math.abs(b.vx); }
