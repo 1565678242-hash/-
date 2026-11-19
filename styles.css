@@ -1186,3 +1186,14 @@ body.screen-overlay-open #gardenScreen{
 .flower-live-launch{width:min(100%,620px);margin:4px auto 0;min-height:46px;border:1px solid #e6eee2;background:linear-gradient(110deg,#f8e9ed,#edf5e9);color:#718b73;font-weight:800}
 @media(min-width:600px){.flower-live-lots{grid-template-columns:repeat(2,minmax(0,1fr))}.flower-auction-lot{grid-template-columns:44px minmax(0,1fr) auto}.flower-lot-bids{grid-column:1/-1}}
 @media(max-width:380px){.flower-auction-lot{grid-template-columns:40px minmax(0,1fr) auto;gap:7px;padding:9px}.flower-lot-emoji{width:38px;height:38px;font-size:23px}.flower-lot-action{min-width:58px;padding:6px}}
+
+
+/* Garden growth feedback: make every fertilizer step visibly distinct. */
+.garden-plot.planted-plot .soil-sprout{display:inline-grid;place-items:center;min-width:42px;min-height:42px;font-size:clamp(27px,7vw,38px);line-height:1;transform-origin:center bottom;transition:transform .28s ease,filter .28s ease}
+.garden-plot.growth-stage-0 .soil-sprout{transform:scale(.82);filter:saturate(.72);opacity:.82}
+.garden-plot.growth-stage-1 .soil-sprout{transform:scale(.98);filter:saturate(1.05)}
+.garden-plot.growth-stage-2 .soil-sprout{transform:scale(1.14);filter:saturate(1.22) drop-shadow(0 3px 3px rgba(95,145,92,.18))}
+.garden-plot.growth-stage-3 .soil-sprout{transform:scale(1.28);filter:saturate(1.3) drop-shadow(0 4px 5px rgba(207,137,159,.22))}
+.plant-growth-meter{height:5px;width:min(76%,92px);margin:5px auto 2px;overflow:hidden;border-radius:99px;background:#e8eee4;box-shadow:inset 0 1px 2px rgba(74,102,76,.08)}
+.plant-growth-meter span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#a8cf9c,#dfb2a4);transition:width .35s ease}
+.garden-plot.growth-stage-3 .plant-growth-meter span{background:linear-gradient(90deg,#a5c99b,#e7a1b5)}
