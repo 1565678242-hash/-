@@ -683,10 +683,10 @@ function computeRadius(count){ const top=CONFIG.gameplay.bubbleTopLimit; const b
 function fitFontSize(word,r){ let fs=r*0.52; const maxW=r*1.55; ctx.font='500 '+fs+'px '+FONT_FAMILY; let g=0; while(ctx.measureText(word).width>maxW&&fs>8&&g++<40){ fs-=0.8; ctx.font='500 '+fs+'px '+FONT_FAMILY; } return fs; }
 function makeBubble(type,word,r){
   const h=hashStr(word); let hue,sat,light;
-  /* 负面情绪：红/紫系；好情绪：金/绿系 */
-  const coolPalette=[188,202,216,230,244,258,272,286,300,174],warmPalette=[8,18,28,38,48,340,352,24,44,330];
-  if(type==='negative'){ hue=coolPalette[h%coolPalette.length]; sat=48+(h%13); light=77+(h%8); }
-  else { hue=warmPalette[randInt(0,warmPalette.length-1)]; sat=58+randInt(0,14); light=75+randInt(0,8); }
+  /* 坏情绪：清透浅冷色；好情绪：更浓郁的暖色，触屏时一眼区分 */
+  const coolPalette=[188,198,208,218,228,238,248,258,168,178],warmPalette=[8,16,24,32,40,344,352,28,36,336];
+  if(type==='negative'){ hue=coolPalette[h%coolPalette.length]; sat=34+(h%9); light=82+(h%6); }
+  else { hue=warmPalette[randInt(0,warmPalette.length-1)]; sat=62+randInt(0,12); light=59+randInt(0,7); }
   return { type,word,r,x:0,y:0,vx:(Math.random()-0.5)*CONFIG.gameplay.floatSpeed*2,vy:(Math.random()-0.5)*CONFIG.gameplay.floatSpeed*2,hue,sat,light,fontSize:0,wobble:Math.random()*Math.PI*2,popping:false,popT:0,scale:1,alpha:1,dead:false,collected:false,flash:0,entering:false,enterT:0,enterDelay:0,targetY:0 };
 }
 function makeFruit(r){
@@ -1388,7 +1388,7 @@ function showResult(){
    二十五、页面 / 果篮商店
    ============================================================ */
 function showScreen(el){ const ss=document.querySelectorAll('.screen'); for(let i=0;i<ss.length;i++) ss[i].classList.remove('active'); if(el) el.classList.add('active'); }
-function showGardenNotice(emoji,title,message){if(state.phase==='playing')state.paused=true;const box=document.getElementById('gardenNotice'),go=document.getElementById('gardenNoticeGo');go.style.display=((title.indexOf('成熟')>=0||title.indexOf('收获')>=0||message.indexOf('已成熟')>=0)&&!gardenScreen.classList.contains('active'))?'block':'none';document.getElementById('gardenNoticeEmoji').textContent=emoji;document.getElementById('gardenNoticeTitle').textContent=title;document.getElementById('gardenNoticeText').textContent=message;box.classList.add('show');}
+function showGardenNotice(emoji,title,message){if(state.phase==='playing')state.paused=true;const box=document.getElementById('gardenNotice'),go=document.getElementById('gardenNoticeGo'),actions=box.querySelector('.notice-actions');const showGo=(title.indexOf('成熟')>=0||title.indexOf('收获')>=0||message.indexOf('已成熟')>=0)&&!gardenScreen.classList.contains('active');go.style.display=showGo?'block':'none';actions.classList.toggle('single-action',!showGo);document.getElementById('gardenNoticeEmoji').textContent=emoji;document.getElementById('gardenNoticeTitle').textContent=title;document.getElementById('gardenNoticeText').textContent=message;box.classList.add('show');}
 document.getElementById('gardenNoticeClose').addEventListener('click',function(){document.getElementById('gardenNotice').classList.remove('show');const pending=ensureGarden().pendingMaturedFlowers;if(pending.length){pending.length=0;persist();}if(state.phase==='playing'&&!gardenScreen.classList.contains('active'))state.paused=false;AudioSys.click();});
 document.getElementById('gardenNoticeGo').addEventListener('click',function(){document.getElementById('gardenNotice').classList.remove('show');const pending=ensureGarden().pendingMaturedFlowers;if(pending.length){pending.length=0;persist();}if(!gardenScreen.classList.contains('active')){if(state.phase==='playing')state.paused=false;openGarden();}});
 function beginDayTransition(day){const el=document.getElementById('dayTransition');document.getElementById('dayTransitionText').textContent='第 '+day+' 天';el.classList.add('show');setTimeout(function(){el.classList.remove('show');startDay(day);},1450);}
