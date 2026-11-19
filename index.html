@@ -8,6 +8,7 @@
 </head>
 <body>
 <div id="app">
+  <div id="phoneStatusBar"><span id="phoneClock">09:41</span><span class="phone-status-right"><span>◉ Wi-Fi</span><span>▮▮▮</span><span>▰</span></span></div>
   <canvas id="gameCanvas" aria-label="游戏区域：拖动相同的情绪气泡进行消除，点击好运果收集"></canvas>
   <div id="hud">
     <div class="hud-chip"><span>天数</span><b id="hudDay">1</b></div>
@@ -51,7 +52,6 @@
       <button class="main-btn" id="btnGardenHome">🌱 我 的 花 园</button>
       <button class="main-btn lucky-btn" id="btnShopHome">商 店</button>
       <button class="main-btn" id="btnCollectionHome">收 藏 图 鉴</button>
-      <button class="main-btn" id="btnData">直 播 数 据</button>
       <button class="main-btn" id="btnAchievements">成 就</button>
       <button class="main-btn" id="btnSaveHome">存 档 管 理</button>
     </div>
@@ -69,7 +69,9 @@
       <button class="garden-action" id="btnGardenHarvest">🌼 一键收获</button>
       <button class="garden-action" id="btnGardenFertilize">🧴 营养液（库存 0）</button>
     </div>
+    <div class="garden-pager"><button class="tab" id="gardenPrev">‹</button><span id="gardenPageLabel">1 / 4</span><button class="tab" id="gardenNext">›</button></div>
     <div class="garden-plots" id="gardenPlots"></div>
+    <div class="flower-basket"><div class="basket-heading">🧺 我的花篮 <span id="basketCount">0 种 · 0 朵</span></div><div id="flowerBasketItems" class="flower-basket-items"><span class="basket-empty">收获的鲜花会收纳在这里</span></div></div>
     <div class="garden-tip" id="gardenTip">点空土地就能播种；也可以使用上方的一键操作。</div>
   </div>
   <div id="dataScreen" class="screen">
@@ -98,8 +100,8 @@
     <button class="back-btn" id="btnShopBack">‹ 返回</button>
     <div class="page-title">商店</div>
     <div class="shop-balance">好运果 <b id="shopBalance">0</b> · 收益 <b id="shopMoney" style="color:#7a9a5a">0 元</b></div>
-    <div class="tabs"><button class="tab active" id="tabShopFruit">好运果兑换</button><button class="tab" id="tabShopGoods">花园商城</button></div>
-    <div class="shop-grid" id="shopGrid"></div>
+    <div class="tabs"><button class="tab active" id="tabShopFruit">直播道具</button><button class="tab" id="tabShopGoods">花园商城</button></div>
+    <div class="shop-grid" id="shopGrid"></div><div class="shop-pager"><button class="tab" id="shopPrev">‹ 上一页</button><span id="shopPageLabel">1 / 1</span><button class="tab" id="shopNext">下一页 ›</button></div>
   </div>
   <div id="achievementScreen" class="screen">
     <button class="back-btn" id="btnAchievementBack">‹ 返回</button>
@@ -122,7 +124,7 @@
     <div class="flower-live-card"><div class="flower-live-kicker">🌷 花园特别企划 · 鲜花专场</div><div class="page-title">今日卖花直播</div>
       <div class="flower-live-stage"><div class="flower-live-customer" id="flowerLiveCustomer">👩🏻‍🌾</div><div class="flower-live-order" id="flowerLiveOrder">有位客人正在等你准备花束……</div><div class="flower-live-progress" id="flowerLiveProgress">第 1 / 5 位顾客</div></div>
       <div class="flower-live-stock">花篮库存：<b id="flowerLiveStock">0</b> 朵</div><div class="flower-live-options"><button class="flower-order-btn" data-bouquet="1">小花束 · 1 朵</button><button class="flower-order-btn" data-bouquet="2">日常花束 · 2 朵</button><button class="flower-order-btn" data-bouquet="3">心意花束 · 3 朵</button></div>
-      <div class="flower-live-tip" id="flowerLiveTip">根据顾客的心意选择花束数量。数量刚好会获得额外打赏！</div><div class="flower-live-earned" id="flowerLiveEarned">本场收入：0 元</div></div>
+      <div class="flower-live-tip" id="flowerLiveTip">根据顾客的心意选择花束数量。数量刚好会获得额外打赏！</div><div class="flower-live-earned" id="flowerLiveEarned">本场收入：0 元</div><div class="flower-live-receipts" id="flowerLiveReceipts"><div class="receipt-empty">今日成交记录会显示在这里</div></div></div>
   </div>
   <div id="pkOverlay">
     <div class="question-card">
@@ -182,7 +184,7 @@
     </div>
   </div>
   <div id="gardenNotice" class="garden-notice" aria-live="polite">
-    <div class="garden-notice-card"><div class="notice-emoji" id="gardenNoticeEmoji">🌸</div><div class="notice-title" id="gardenNoticeTitle">花儿成熟啦</div><div class="notice-text" id="gardenNoticeText"></div><button class="main-btn primary" id="gardenNoticeClose">知道啦</button></div>
+    <div class="garden-notice-card"><div class="notice-emoji" id="gardenNoticeEmoji">🌸</div><div class="notice-title" id="gardenNoticeTitle">花儿成熟啦</div><div class="notice-text" id="gardenNoticeText"></div><div class="notice-actions"><button class="main-btn" id="gardenNoticeClose">知道啦</button><button class="main-btn primary" id="gardenNoticeGo">去花园收获</button></div></div>
   </div>
   <div id="dayTransition" class="day-transition"><div class="day-transition-flower">🌼</div><div id="dayTransitionText">第 2 天</div><small>新的一天，也要好好生活</small></div>
   <div id="gameMenu" class="menu-overlay">
