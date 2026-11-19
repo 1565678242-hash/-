@@ -662,3 +662,83 @@ canvas#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block
   #hud{top:calc(138px + env(safe-area-inset-top))!important}
   #hostAvatar{top:calc(142px + env(safe-area-inset-top))!important}
 }
+
+
+/* ============================================================
+   Live layout + screen isolation — 2026-11-19
+   ============================================================ */
+
+/* 游戏 HUD 完成后，弹幕与事件统一落在其下方的独立半透明信息带。 */
+#hud{
+  top:calc(138px + env(safe-area-inset-top))!important;
+  z-index:28!important;
+}
+#danmuLayer{
+  position:absolute!important;
+  top:calc(220px + env(safe-area-inset-top))!important;
+  bottom:auto!important;
+  left:0!important;
+  right:0!important;
+  height:30px!important;
+  padding:3px 0!important;
+  overflow:hidden!important;
+  background:rgba(255,255,255,.58)!important;
+  border-top:1px solid rgba(255,255,255,.68)!important;
+  border-bottom:1px solid rgba(255,255,255,.68)!important;
+  backdrop-filter:blur(8px)!important;
+  -webkit-backdrop-filter:blur(8px)!important;
+  z-index:27!important;
+  pointer-events:none!important;
+}
+#eventBanner{
+  position:absolute!important;
+  top:calc(252px + env(safe-area-inset-top))!important;
+  bottom:auto!important;
+  left:0!important;
+  right:0!important;
+  width:100%!important;
+  max-width:none!important;
+  min-height:30px!important;
+  margin:0!important;
+  padding:3px 10px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+  background:rgba(255,255,255,.58)!important;
+  border-bottom:1px solid rgba(255,255,255,.68)!important;
+  backdrop-filter:blur(8px)!important;
+  -webkit-backdrop-filter:blur(8px)!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  z-index:26!important;
+  pointer-events:none!important;
+}
+#eventBanner .eb-inner{
+  max-width:100%!important;
+  margin:0 auto!important;
+  font-size:clamp(10px,2.7vw,12px)!important;
+  line-height:1.35!important;
+  text-align:center!important;
+}
+
+/* 进入花园、商店、图鉴等独立页面时，彻底隐藏直播画布及悬浮 HUD，
+   防止透明页面上仍能看到直播气泡和弹幕。 */
+body.screen-overlay-open #gameCanvas,
+body.screen-overlay-open #hud,
+body.screen-overlay-open #liveBar,
+body.screen-overlay-open #hostAvatar,
+body.screen-overlay-open #topRight,
+body.screen-overlay-open #danmuLayer,
+body.screen-overlay-open #btnLike,
+body.screen-overlay-open #introHint,
+body.screen-overlay-open #comboBadge,
+body.screen-overlay-open #eventBanner,
+body.screen-overlay-open #pkBar{
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+body.screen-overlay-open #gardenScreen{
+  background:linear-gradient(165deg,rgba(250,247,252,.99),rgba(244,248,250,.99))!important;
+}
