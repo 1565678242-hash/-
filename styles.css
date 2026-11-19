@@ -855,7 +855,7 @@ body.screen-overlay-open #gardenScreen{
     align-items:stretch!important;
     z-index:28!important;
   }
-  #hudDayChip{display:none!important}
+  #hud #hudDayChip{display:none!important}
   #hostAvatar{
     position:relative!important;top:auto!important;left:auto!important;
     width:36px!important;height:36px!important;
@@ -869,10 +869,10 @@ body.screen-overlay-open #gardenScreen{
     justify-content:center!important;align-items:center!important;
     border-radius:10px!important;
   }
-  #hud .hud-chip.lucky{grid-column:2!important;grid-row:1!important}
-  #hud #hudMoney{grid-column:3!important;grid-row:1!important}
-  #hud #hudHeat{grid-column:1!important;grid-row:2!important}
-  #hud #hudFans{grid-column:2!important;grid-row:2!important}
+  #hud #hudLuckyChip{grid-column:2!important;grid-row:1!important}
+  #hud #hudMoneyChip{grid-column:3!important;grid-row:1!important}
+  #hud #hudHeatChip{grid-column:1!important;grid-row:2!important}
+  #hud #hudFansChip{grid-column:2!important;grid-row:2!important}
   #danmuLayer{
     position:absolute!important;top:calc(126px + env(safe-area-inset-top))!important;
     bottom:auto!important;left:0!important;right:0!important;
