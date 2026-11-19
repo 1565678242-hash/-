@@ -1017,3 +1017,126 @@ body.screen-overlay-open #gardenScreen{
   z-index:50!important;
 }
 #introHint.show{transform:translate(-50%,-50%) scale(1)!important}
+
+
+/* === 2026-11-19：直播顶部按钮、气泡活动区与花园排版统一微调 === */
+
+/* 直播顶部操作按钮：利用整行宽度均匀铺开，避免右侧拥挤、左侧留白。 */
+#topRight{
+  left:8px!important;
+  right:8px!important;
+  width:auto!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:5px!important;
+}
+#topRight .icon-btn{
+  flex:0 0 36px!important;
+  width:36px!important;
+  min-width:36px!important;
+}
+#topRight .text-btn{
+  flex:1 1 0!important;
+  min-width:0!important;
+  padding-left:4px!important;
+  padding-right:4px!important;
+  text-align:center!important;
+  letter-spacing:0!important;
+}
+@media(max-width:420px){
+  #topRight{left:6px!important;right:6px!important;gap:4px!important}
+  #topRight .icon-btn{flex-basis:34px!important;width:34px!important;min-width:34px!important}
+  #topRight .text-btn{font-size:10px!important;padding-left:2px!important;padding-right:2px!important}
+}
+
+/* 花园内容统一字号、居中和留白；花篮条目分格展示，不再挤成一团。 */
+#gardenScreen{
+  align-items:center!important;
+  text-align:center!important;
+  gap:8px!important;
+}
+#gardenScreen .page-title{
+  width:100%!important;
+  margin:0 auto 2px!important;
+  text-align:center!important;
+  font-size:20px!important;
+  line-height:1.35!important;
+}
+#gardenScreen .garden-intro,
+#gardenScreen .garden-balance,
+#gardenScreen .garden-progress,
+#gardenScreen .garden-tip{
+  box-sizing:border-box!important;
+  width:min(100%,620px)!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-align:center!important;
+  font-size:12px!important;
+  line-height:1.55!important;
+}
+#gardenScreen .garden-intro{padding:8px 12px!important}
+#gardenScreen .garden-balance{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:8px 16px!important;
+}
+#gardenScreen .garden-progress{padding:3px 8px!important}
+#gardenScreen .garden-toolbar{margin:0 auto!important}
+#gardenScreen .garden-action{
+  font-size:12px!important;
+  line-height:1.35!important;
+}
+#gardenScreen .garden-plots{margin:0 auto!important}
+#gardenScreen .garden-plot{
+  text-align:center!important;
+}
+#gardenScreen .garden-plot .garden-plant-name,
+#gardenScreen .garden-plot .garden-stage,
+#gardenScreen .garden-plot .plot-title,
+#gardenScreen .garden-plot .plot-cost,
+#gardenScreen .garden-plot .plot-tap-hint{
+  font-size:11px!important;
+  line-height:1.35!important;
+  text-align:center!important;
+}
+#gardenScreen .garden-plot .plot-actions button{font-size:11px!important}
+#gardenScreen .garden-pager,
+#gardenScreen .basket-pager{justify-content:center!important}
+#gardenScreen .flower-basket{
+  box-sizing:border-box!important;
+  width:min(100%,620px)!important;
+  margin:0 auto!important;
+  padding:12px!important;
+  gap:8px!important;
+}
+#gardenScreen .basket-heading{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px 10px!important;
+  width:100%!important;
+  text-align:center!important;
+  font-size:13px!important;
+  line-height:1.4!important;
+}
+#gardenScreen .basket-heading span{font-size:11px!important}
+#gardenScreen .flower-basket-items{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;
+  width:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+  overflow:visible!important;
+}
+#gardenScreen .flower-basket-items>*{
+  min-width:0!important;
+  box-sizing:border-box!important;
+  text-align:center!important;
+  font-size:11px!important;
+  line-height:1.4!important;
+}
+#gardenScreen .basket-empty{grid-column:1/-1!important;font-size:11px!important}
