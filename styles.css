@@ -525,24 +525,24 @@ canvas#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block
 
 /* 花园：手机端六块土地一屏展示，花篮利用剩余空间 */
 #gardenScreen{align-items:center;justify-content:flex-start;overflow:hidden;gap:4px;padding-top:calc(48px + env(safe-area-inset-top));padding-bottom:calc(6px + env(safe-area-inset-bottom))}
-#gardenScreen .garden-toolbar{width:min(96vw,520px);grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin:2px 0}
-#gardenScreen .garden-toolbar .garden-action{min-height:38px;padding:5px 2px;font-size:clamp(9px,2.6vw,12px);white-space:nowrap}
-#gardenScreen .garden-toolbar #btnGardenFertilize{grid-column:auto;min-height:38px;width:100%;font-size:clamp(9px,2.5vw,12px)}
+#gardenScreen .garden-toolbar{width:min(96vw,520px);grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:3px 0}
+#gardenScreen .garden-toolbar .garden-action{grid-column:auto;min-height:40px;padding:6px 5px;font-size:clamp(10px,2.8vw,12px);white-space:nowrap}
+#gardenScreen .garden-toolbar #btnGardenFertilize{grid-column:auto;min-height:40px;width:100%;font-size:clamp(10px,2.8vw,12px)}
 #gardenScreen .garden-plots{width:min(96vw,520px);flex:0 0 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(68px,1fr));gap:5px}
 #gardenScreen .garden-plot{min-height:clamp(68px,10.5vh,96px);padding:3px 2px;border-radius:13px}
 #gardenScreen .soil-bed{height:clamp(27px,4.5vh,40px)}
 #gardenScreen .garden-plant-name{font-size:clamp(9px,2.5vw,12px)}
 #gardenScreen .garden-stage,#gardenScreen .plot-tap-hint{font-size:clamp(7px,2vw,9px)}
 #gardenScreen .garden-pager{height:27px;flex:0 0 27px;margin:0}
-#gardenScreen .flower-basket{width:min(96vw,520px);flex:1 1 78px;min-height:74px;max-height:none;overflow:hidden;display:flex;flex-direction:column}
-#gardenScreen .flower-basket-items{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;white-space:normal;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-content:start;gap:5px}
+#gardenScreen .flower-basket{width:min(96vw,520px);flex:0 0 auto;min-height:74px;max-height:150px;overflow:hidden;display:flex;flex-direction:column}
+#gardenScreen .flower-basket-items{flex:0 1 auto;min-height:0;max-height:104px;overflow-y:auto;overflow-x:hidden;white-space:normal;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;gap:5px}
 #gardenScreen .basket-flower{min-width:0;white-space:nowrap;justify-content:flex-start;padding:4px 5px;font-size:clamp(8px,2vw,10px)}
 #gardenScreen .basket-flower b{overflow:hidden;text-overflow:ellipsis}
 #gardenScreen .garden-tip{width:min(96vw,520px);flex:0 0 auto;margin:0;max-height:24px}
-#eventBanner{top:42%;z-index:18}
+#eventBanner{top:39%;z-index:18}
 @media(max-width:420px){
  #gardenScreen .garden-intro{font-size:9px;line-height:1.35;margin:0 4px}
- #gardenScreen .garden-toolbar .garden-action{font-size:8px;letter-spacing:-.3px}
+ #gardenScreen .garden-toolbar .garden-action{font-size:10px;letter-spacing:0}
  #gardenScreen .garden-plot{min-height:66px}
  #gardenScreen .soil-bed{height:26px}
  #gardenScreen .garden-pager .tab{padding:3px 9px}
@@ -561,8 +561,8 @@ canvas#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block
  #gardenScreen .flower-basket{min-height:54px}
 }
 
-/* 直播滚动弹幕下移至屏幕中上部，避开顶部菜单并增强对比 */
-#danmuLayer{top:38%;height:42px;z-index:19}
+/* 直播弹幕与事件横幅轻微上移，给中下部游戏区域留出空间 */
+#danmuLayer{top:35%;height:42px;z-index:19}
 .danmu-float{font-size:clamp(11px,3vw,13px);font-weight:700;line-height:1.45;padding:6px 13px;background:rgba(255,255,255,.94);color:#718574;border:1px solid rgba(255,255,255,.95);box-shadow:0 4px 14px rgba(100,120,100,.16)}
 .danmu-float.gift{background:linear-gradient(135deg,rgba(255,247,222,.97),rgba(255,232,239,.97));color:#a77b45}
 .danmu-float.bad{background:linear-gradient(135deg,rgba(239,234,246,.97),rgba(229,239,241,.97));color:#766c8c}
