@@ -811,3 +811,14 @@ body.screen-overlay-open #gardenScreen{
   pointer-events:auto!important;
   background:linear-gradient(165deg,#faf7fc,#f4f8fa)!important;
 }
+
+
+/* 花园返回按钮始终可点击，避免被花园内容层遮挡。 */
+#gardenScreen>#btnGardenBack{
+  position:absolute!important;
+  top:calc(29px + env(safe-area-inset-top))!important;
+  left:15px!important;
+  z-index:1000!important;
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+}
