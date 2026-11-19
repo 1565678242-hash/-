@@ -1,3 +1,4 @@
+/* Release: 20261119-save-nav-fix-1 — HTML/CSS/JS synchronized */
 (function(){
 'use strict';
 
@@ -572,7 +573,20 @@ function loadSave(){
         saveData.currentDay = d.currentDay||1;
         saveData.hintedFruit = !!d.hintedFruit;
         saveData.hintedPositive = !!d.hintedPositive;
-        saveData.daySnapshot = d.daySnapshot||null;
+        const rawSnapshot=d.daySnapshot;
+        if(rawSnapshot&&typeof rawSnapshot==='object'&&Number(rawSnapshot.day)>0&&Array.isArray(rawSnapshot.bubbles)){
+          const safeBubbles=rawSnapshot.bubbles.filter(function(b){
+            return b&&typeof b==='object'&&typeof b.type==='string'&&typeof b.word==='string'&&
+              Number.isFinite(Number(b.x))&&Number.isFinite(Number(b.y))&&Number.isFinite(Number(b.r))&&Number(b.r)>0;
+          }).map(function(b){return Object.assign({},b,{r:clamp(Number(b.r),8,80),x:Number(b.x),y:Number(b.y)});});
+          const safeSpecials=Array.isArray(rawSnapshot.specials)?rawSnapshot.specials.filter(function(s){
+            return s&&typeof s==='object'&&(s.kind==='red'||s.kind==='hater')&&Number.isFinite(Number(s.x))&&
+              Number.isFinite(Number(s.y))&&Number.isFinite(Number(s.r))&&Number(s.r)>0;
+          }).map(function(s){return Object.assign({},s,{x:Number(s.x),y:Number(s.y),r:clamp(Number(s.r),8,80)});}):[];
+          saveData.daySnapshot=safeBubbles.length?Object.assign({},rawSnapshot,{bubbles:safeBubbles,specials:safeSpecials,
+            dayStats:rawSnapshot.dayStats&&typeof rawSnapshot.dayStats==='object'?rawSnapshot.dayStats:{popped:0,fansGained:0,heatPeak:0,answered:0},
+            buffs:rawSnapshot.buffs&&typeof rawSnapshot.buffs==='object'?rawSnapshot.buffs:{}}):null;
+        }else{saveData.daySnapshot=null;}
         saveData.money = d.money||0;
         saveData.totalEarned = d.totalEarned||0;
         saveData.garden = d.garden && typeof d.garden==='object' ? Object.assign({seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0,unlockedPlots:1,flowers:0,harvestCount:0,totalFlowers:0,totalPlanted:0},d.garden) : {seeds:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0,unlockedPlots:1,flowers:0,harvestCount:0,totalFlowers:0,totalPlanted:0};
@@ -995,11 +1009,16 @@ function startDay(day){
     state.fans=snap.fans; state.fansDisplay=snap.fans; saveData.totalFans=snap.fans;
     state.combo=snap.combo; state.comboTimer=snap.comboTimer||0;
     state.blendCount=snap.blend||0;
-    state.dayStats=snap.dayStats; state.fruitCollected=snap.fruitCollected;
+    state.dayStats=snap.dayStats&&typeof snap.dayStats==='object'?snap.dayStats:{popped:0,fansGained:0,heatPeak:0,answered:0}; state.fruitCollected=!!snap.fruitCollected;
+    state.specials=Array.isArray(snap.specials)?snap.specials.map(function(s){return Object.assign({},s);}):[];
+    if(Number.isFinite(Number(snap.specialTimer)))state.specialTimer=Math.max(0,Number(snap.specialTimer));
     state.activeBuffs=Object.assign({comboShield:false,doubleHeat:false,extraFans:false},snap.buffs);
     bubbleList=snap.bubbles.map(function(s){
       const b=s.type==='fruit'?makeFruit(s.r):makeBubble(s.type,s.word,s.r);
-      b.x=s.x; b.y=s.y; b.fontSize=fitFontSize(s.word,s.r);
+      b.x=Number(s.x); b.y=Number(s.y); b.fontSize=fitFontSize(b.word,b.r);
+      if(Number.isFinite(Number(s.vx)))b.vx=Number(s.vx); if(Number.isFinite(Number(s.vy)))b.vy=Number(s.vy);
+      b.entering=!!s.entering; b.enterT=Number(s.enterT)||0; b.enterDelay=Number(s.enterDelay)||0;
+      b.targetY=Number.isFinite(Number(s.targetY))?Number(s.targetY):b.y;
       return b;
     });
   } else {
@@ -1133,13 +1152,15 @@ function collectSpecial(s){
 function saveDaySnapshot(){
   if(state.phase!=='playing') return;
   const bubbles=state.bubbles.filter(function(b){ return !b.dead&&!b.popping; }).map(function(b){
-    return { type:b.type, word:b.word, r:b.r, x:Math.round(b.x), y:Math.round(b.entering&&b.targetY?b.targetY:b.y) };
+    return { type:b.type, word:b.word, r:b.r, x:Math.round(b.x), y:Math.round(b.y), vx:b.vx, vy:b.vy,
+      entering:!!b.entering, enterT:b.enterT||0, enterDelay:b.enterDelay||0, targetY:b.targetY||b.y };
   });
   saveData.daySnapshot={ day:state.currentDay, heat:state.heat, fans:state.fans,
     dayStats:state.dayStats, combo:state.combo, comboTimer:state.comboTimer,
     pairKey:state.todayPair?state.todayPair.key:null,
     hasFruit:state.hasFruit, fruitCollected:state.fruitCollected,
-    buffs:state.activeBuffs, bubbles:bubbles, blend:state.blendCount||0 };
+    buffs:state.activeBuffs, bubbles:bubbles, specials:state.specials.filter(function(s){return s&&s.life>0;}).map(function(s){return {kind:s.kind,word:s.word,r:s.r,x:s.x,y:s.y,vx:s.vx,vy:s.vy,t:s.t||0,life:s.life};}),
+    specialTimer:state.specialTimer, blend:state.blendCount||0 };
 }
 function drawSpecial(s){
   ctx.save();
@@ -1856,26 +1877,28 @@ function openGarden(){
     gardenReturnPhase=state.phase;
     gardenReturnPaused=state.paused;
   }
-  if(state.phase==='playing'||state.phase==='tree')state.paused=true;
+  if(state.phase==='playing'){
+    saveDaySnapshot();persist();state.paused=true;state.dragging=null;state.pointerId=null;
+  }else if(state.phase==='tree'){state.paused=true;}
+  gameMenuEl.classList.remove('show');
   renderGarden();
   showScreen(gardenScreen);
 }
 function closeGarden(){
   let target=gardenReturnScreen;
+  gameMenuEl.classList.remove('show');
+  document.getElementById('saveManageMenu').classList.remove('show');
+  document.getElementById('gardenNotice').classList.remove('show');
   if(gardenReturnPhase==='playing'||gardenReturnPhase==='tree'){
     showScreen(null);
-    state.paused=gardenReturnPaused;
+    state.paused=!!gardenReturnPaused;
     showHud(true);
-    startViewers();
-    startDanmu();
+    if(!state.paused){startViewers();startDanmu();}else{stopViewers();stopDanmu();}
   }else{
-    if(!target||!document.body.contains(target)){
-      target=gardenReturnPhase==='result'?resultScreen:homeScreen;
-    }
+    if(!target||!document.body.contains(target))target=gardenReturnPhase==='result'?resultScreen:homeScreen;
     showScreen(target);
   }
-  gardenReturnScreen=null;
-  gardenReturnPhase=null;
+  gardenReturnScreen=null;gardenReturnPhase=null;gardenReturnPaused=false;
 }
 document.getElementById('btnGardenHome').addEventListener('click',function(){AudioSys.click();openGarden();});
 btnGardenQuickEl.addEventListener('click',function(){AudioSys.click();openGarden();});
@@ -1978,10 +2001,12 @@ document.getElementById('btnOpenBasket').addEventListener('click',function(){Aud
 document.getElementById('btnBasketBack').addEventListener('click',function(){AudioSys.click();showScreen(gardenScreen);renderGarden();});
 document.getElementById('btnGardenMenu').addEventListener('click',function(){AudioSys.click();document.getElementById('btnMenu').click();});
 function exportSave(){
-  persist();const blob=new Blob([JSON.stringify(saveData,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  saveDaySnapshot();persist();const blob=new Blob([JSON.stringify(saveData,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
   a.href=url;a.download='滚蛋吧坏情绪-存档.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);showToast('💾','存档已导出');
 }
 document.getElementById('btnSaveExport').addEventListener('click',exportSave);
+window.addEventListener('pagehide',function(){saveDaySnapshot();persist();});
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden'){saveDaySnapshot();persist();}});
 
 const saveManageMenuEl=document.getElementById('saveManageMenu');
 document.getElementById('btnSaveHome').addEventListener('click',function(){AudioSys.click();saveManageMenuEl.classList.add('show');});
@@ -2002,11 +2027,18 @@ saveFileInput.addEventListener('change',function(){
  reader.onload=function(){try{const data=JSON.parse(reader.result);if(!data||typeof data!=='object'||!('totalDays'in data)||!('currentDay'in data))throw new Error('invalid');if(!confirm('导入存档会覆盖当前进度，确定继续吗？'))return;localStorage.setItem(CONFIG.saveKey,JSON.stringify(data));location.reload();}catch(e){alert('存档文件无法识别，请选择本游戏导出的 JSON 文件。');}finally{saveFileInput.value='';}};
  reader.readAsText(file);
 });
-function closeGameMenu(){gameMenuEl.classList.remove('show');if(state.phase==='playing'||state.phase==='tree')state.paused=false;}
+function closeGameMenu(){
+  gameMenuEl.classList.remove('show');
+  const anotherScreenOpen=!!document.querySelector('.screen.active');
+  if(state.phase==='playing'||state.phase==='tree'){
+    state.paused=anotherScreenOpen;
+    if(!state.paused){showHud(true);startViewers();startDanmu();}
+  }
+}
 document.getElementById('btnMenu').addEventListener('click',function(e){e.stopPropagation();AudioSys.click();if(state.phase==='playing'||state.phase==='tree'){state.paused=true;state.dragging=null;state.pointerId=null;saveDaySnapshot();persist();}gameMenuEl.classList.add('show');});
 document.getElementById('btnResume').addEventListener('click',function(){AudioSys.click();closeGameMenu();});
 document.getElementById('btnMenuClose').addEventListener('click',function(){AudioSys.click();closeGameMenu();});
-document.getElementById('btnMenuHome').addEventListener('click',function(){AudioSys.click();saveDaySnapshot();persist();closeGameMenu();state.phase='idle';state.paused=false;stopDanmu();stopViewers();AudioSys.stopBgm();if(giftTimer){clearInterval(giftTimer);giftTimer=null;}showHud(false);updateHome();showScreen(homeScreen);});
+document.getElementById('btnMenuHome').addEventListener('click',function(){AudioSys.click();saveDaySnapshot();persist();closeGameMenu();gardenReturnScreen=null;gardenReturnPhase=null;gardenReturnPaused=false;state.phase='idle';state.paused=false;stopDanmu();stopViewers();AudioSys.stopBgm();if(giftTimer){clearInterval(giftTimer);giftTimer=null;}showHud(false);updateHome();showScreen(homeScreen);});
 /* ============================================================
    三十一、UI 事件
    ============================================================ */
