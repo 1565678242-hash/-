@@ -791,7 +791,28 @@ function showHud(show){ hudEl.classList.toggle('show',show); topRightEl.classLis
    十五、弹幕
    ============================================================ */
 let danmuTimer=null,danmuTrackIdx=0,danmuActive=0; const DANMU_TRACKS=[0,14], MAX_DANMU=5;
-function addDanmu(text,kind){ if(danmuActive>=MAX_DANMU) return; const el=document.createElement('div'); el.className='danmu-float'+(kind?' '+kind:''); if(!text){ if(Math.random()<0.22){ text=CONFIG.viewerNames[randInt(0,CONFIG.viewerNames.length-1)]+' 进入了直播间'; } else { text=CONFIG.danmuTexts[randInt(0,CONFIG.danmuTexts.length-1)]; } } el.textContent=text; el.style.top=DANMU_TRACKS[danmuTrackIdx%DANMU_TRACKS.length]+'px'; danmuTrackIdx++; const dur=17+Math.random()*5; el.style.animationDuration=dur+'s'; danmuLayer.appendChild(el); danmuActive++; setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); danmuActive--; },dur*1000+300); }
+function addDanmu(text,kind){
+  if(!text&&Math.random()<0.22){
+    const notice=document.createElement('div');
+    notice.className='entry-toast';
+    notice.textContent='👋 '+CONFIG.viewerNames[randInt(0,CONFIG.viewerNames.length-1)]+' 进入了直播间';
+    document.getElementById('app').appendChild(notice);
+    setTimeout(function(){if(notice.parentNode)notice.parentNode.removeChild(notice);},3600);
+    return;
+  }
+  if(danmuActive>=MAX_DANMU)return;
+  const el=document.createElement('div');
+  el.className='danmu-float'+(kind?' '+kind:'');
+  if(!text)text=CONFIG.danmuTexts[randInt(0,CONFIG.danmuTexts.length-1)];
+  el.textContent=text;
+  el.style.top=DANMU_TRACKS[danmuTrackIdx%DANMU_TRACKS.length]+'px';
+  danmuTrackIdx++;
+  const dur=17+Math.random()*5;
+  el.style.animationDuration=dur+'s';
+  danmuLayer.appendChild(el);
+  danmuActive++;
+  setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);danmuActive--;},dur*1000+300);
+}
 function startDanmu(){ stopDanmu(); addDanmu(); danmuTimer=setInterval(function(){ if(state.phase!=='playing'||state.paused||state.questionOpen) return; addDanmu(); },2600+Math.random()*2400); }
 function stopDanmu(){ if(danmuTimer){ clearInterval(danmuTimer); danmuTimer=null; } danmuLayer.innerHTML=''; danmuActive=0; danmuTrackIdx=0; }
 
