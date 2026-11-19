@@ -59,18 +59,17 @@
   <div id="gardenScreen" class="screen">
     <button class="back-btn" id="btnGardenBack">‹ 返回</button>
     <div class="page-title">我的小花园</div>
-    <div class="garden-intro">把种子种进土地，浇水让花苗长大。普通种子会长出指定花朵；随机种子和神奇种子要等收获时才揭晓。每株成熟花只能收获一次，可获得 2–4 朵鲜花。累计收获 10 株花，就能解锁独立的卖花直播！</div>
+    <div class="garden-intro">点空土地直接播种；每天一键浇水，成熟后点土地收获。直播结束也会让花苗成长。</div>
     <div class="garden-balance"><span>🌱 种子 <b id="gardenSeeds">0</b></span><span>🌷 鲜花 <b id="gardenFlowerStock">0</b></span><span>♡ 收益 <b id="gardenMoney">0</b></span></div>
     <div class="garden-progress" id="gardenProgress">已收获 0 次 · 再收获 10 次解锁卖花直播</div>
-    <div class="garden-plots" id="gardenPlots"></div>
-    <div class="garden-actions">
-      <button class="garden-action primary" id="btnGardenPlant">🌱 种下一颗种子</button>
-      <button class="garden-action" id="btnGardenWater">💧 给植物浇水</button>
-      <button class="garden-action" id="btnGardenFertilize">🧴 使用营养液</button>
-      <button class="garden-action" id="btnGardenHarvest">🌼 收获成熟花朵</button>
-      <button class="garden-action flower-live" id="btnFlowerLive" disabled>🎥 卖花直播（收获 10 次解锁）</button>
+    <div class="garden-toolbar">
+      <button class="garden-action primary" id="btnGardenPlant">🌱 一键播种</button>
+      <button class="garden-action" id="btnGardenWater">💧 一键浇水</button>
+      <button class="garden-action" id="btnGardenHarvest">🌼 一键收获</button>
+      <button class="garden-action" id="btnGardenFertilize">🧴 营养液（库存 0）</button>
     </div>
-    <div class="garden-tip" id="gardenTip">第一步：点击「种下一颗种子」。植物成熟后点击收获，就能积累鲜花库存。</div>
+    <div class="garden-plots" id="gardenPlots"></div>
+    <div class="garden-tip" id="gardenTip">点空土地就能播种；也可以使用上方的一键操作。</div>
   </div>
   <div id="dataScreen" class="screen">
     <button class="back-btn" id="btnDataBack">‹ 返回</button>
@@ -90,8 +89,9 @@
   <div id="collectionScreen" class="screen">
     <button class="back-btn" id="btnCollectionBack">‹ 返回</button>
     <div class="page-title" id="colTitle">鲜花图鉴</div>
-    <div class="tabs"><button class="tab active" id="tabUnlocked">已收集</button><button class="tab" id="tabAll">全部鲜花</button></div>
+    <div class="tabs collection-tabs"><button class="tab active" id="tabUnlocked">普通花卉</button><button class="tab" id="tabAll">神奇花卉</button></div>
     <div class="pair-grid" id="collectionGrid"></div>
+    <div class="collection-pager"><button class="tab" id="collectionPrev">‹ 上一页</button><span id="collectionPageLabel">1 / 1</span><button class="tab" id="collectionNext">下一页 ›</button></div>
   </div>
   <div id="shopScreen" class="screen">
     <button class="back-btn" id="btnShopBack">‹ 返回</button>
