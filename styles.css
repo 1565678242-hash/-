@@ -804,7 +804,7 @@ body.screen-overlay-open #gardenScreen{
 #app.screen-overlay-open #pkBar{
   display:none!important;
 }
-#app.screen-overlay-open #gardenScreen{
+#app.screen-overlay-open #gardenScreen.active{
   z-index:200!important;
   opacity:1!important;
   visibility:visible!important;
