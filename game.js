@@ -1043,7 +1043,7 @@ function startDay(day){
     if(state.perfumeMode){
       if(!saveData.hintedBlend){ hints.push('拖动原料互相融合调香'); saveData.hintedBlend=true; }
     } else {
-      if(day===1) hints.push('拖动相同坏情绪相撞');
+      if(day===1) hints.push('拖动两个写着相同坏情绪的泡泡，让它们碰在一起就能消除');
       if(state.hasFruit&&!saveData.hintedFruit){ hints.push('好运果 点击收集'); saveData.hintedFruit=true; }
       if(cfg.posTypes>0&&!saveData.hintedPositive){ hints.push('暖色好情绪 别去碰'); saveData.hintedPositive=true; }
     }
@@ -1843,7 +1843,7 @@ function renderGarden(){
  gardenSeedsEl.textContent=g.seeds||0;
  gardenMoneyEl.textContent=formatMoney(saveData.money||0);
  document.getElementById('gardenFlowerStock').textContent=g.flowers||0;
- document.getElementById('gardenProgress').textContent='已收获 '+g.harvestCount+' 株 · '+(g.harvestCount>=10?'每 3 天疗愈直播结束后自动开启鲜花专场':'再收获 '+(10-g.harvestCount)+' 株，解锁每 3 天自动开启的鲜花专场');
+ document.getElementById('gardenProgress').textContent='已收获 '+g.harvestCount+' 株 · '+(g.harvestCount>=10?'鲜花专场每 3 天自动开启（下次：第 '+(g.nextFlowerSaleDay||((Number(saveData.currentDay)||1)+3))+' 天）':'再收获 '+(10-g.harvestCount)+' 株，解锁每 3 天自动开启的鲜花专场');
  const icons=['🌰','🌱','🌿','🌸'],labels=['刚种下','正在发芽','枝叶舒展','鲜花成熟'];
  let cards='';
  for(let i=0;i<6;i++){
@@ -1887,7 +1887,7 @@ function openGarden(){gardenReturnToResult=state.phase==='result';renderGarden()
 document.getElementById('btnGardenHome').addEventListener('click',function(){AudioSys.click();openGarden();});
 btnGardenQuickEl.addEventListener('click',function(){AudioSys.click();openGarden();});
 document.getElementById('btnGardenBack').addEventListener('click',function(){AudioSys.click();if(gardenReturnToResult){gardenReturnToResult=false;showScreen(resultScreen);}else showScreen(homeScreen);});
-function plantGardenSeed(i){const g=ensureGarden();if(g.seeds<1||i!==g.plots.length||i>=g.unlockedPlots)return false;const seed=g.seedInventory.shift()||rollGardenSeed();g.seeds=g.seedInventory.length;const plant=seed.kind==='normal'?(GARDEN_SEED_LIBRARY.find(function(f){return f.id===seed.flowerId;})||GARDEN_SEED_LIBRARY[0]):null;const name=seed.kind==='random'?'随机花苗':(seed.kind==='magic'?'神奇花苗':plant.name);g.plots.push({seedKind:seed.kind,flowerId:seed.flowerId||null,name:name,emoji:plant?plant.emoji:'❔',effect:plant&&plant.effect||'',stage:0,revealed:seed.kind==='normal'});g.totalPlanted++;gardenTipEl.textContent=seed.kind==='random'?'随机种子已种下，收获时揭晓花种。':(seed.kind==='magic'?'神奇种子已种下，收获时揭晓花朵和功效。':'已种下 '+plant.name+'。');persist();renderGarden();checkAchievements();return true;}
+function plantGardenSeed(i){const g=ensureGarden();if(g.seeds<1){gardenTipEl.textContent='种子库存为 0，完成疗愈直播就能获得新种子。';showToast('🌱','还没有种子哦');return false;}if(i!==g.plots.length||i>=g.unlockedPlots)return false;const seed=g.seedInventory.shift()||rollGardenSeed();g.seeds=g.seedInventory.length;const plant=seed.kind==='normal'?(GARDEN_SEED_LIBRARY.find(function(f){return f.id===seed.flowerId;})||GARDEN_SEED_LIBRARY[0]):null;const name=seed.kind==='random'?'随机花苗':(seed.kind==='magic'?'神奇花苗':plant.name);g.plots.push({seedKind:seed.kind,flowerId:seed.flowerId||null,name:name,emoji:plant?plant.emoji:'❔',effect:plant&&plant.effect||'',stage:0,revealed:seed.kind==='normal'});g.totalPlanted++;gardenTipEl.textContent=seed.kind==='random'?'随机种子已种下，收获时揭晓花种。':(seed.kind==='magic'?'神奇种子已种下，收获时揭晓花朵和功效。':'已种下 '+plant.name+'。');persist();renderGarden();checkAchievements();return true;}
 document.getElementById('btnGardenPlant').addEventListener('click',function(){const g=ensureGarden();let n=0;while(g.seeds>0&&g.plots.length<g.unlockedPlots){if(plantGardenSeed(g.plots.length))n++;else break;}gardenTipEl.textContent=n?'一口气种下 '+n+' 颗种子！':'没有空土地或种子啦。';renderGarden();});
 function waterGardenPlot(i){const g=ensureGarden(),p=g.plots[i];if(!p||(p.stage||0)>=3||g.lastWaterDay===(saveData.currentDay||1))return;const before=p.stage||0;p.stage=Math.min(3,before+1);g.lastWaterDay=saveData.currentDay||1;gardenTipEl.textContent='今天的浇水完成啦！'+p.name+' 长高了一步，明天再来浇水吧。';persist();renderGarden();if(before<3&&p.stage>=3)showGardenNotice('🌸','花儿成熟啦！','你种下的 '+p.name+' 已经成熟，快去收获它吧！');}
 document.getElementById('btnGardenWater').addEventListener('click',function(){const g=ensureGarden();if(g.lastWaterDay===(saveData.currentDay||1))return;let n=0,ready=[];g.plots.forEach(function(p){if((p.stage||0)<3){p.stage=Math.min(3,(p.stage||0)+1);n++;if(p.stage>=3)ready.push(p.name);}});if(!n)return;g.lastWaterDay=saveData.currentDay||1;persist();renderGarden();gardenTipEl.textContent='今天给 '+n+' 株花苗都浇过水啦。';if(ready.length)showGardenNotice('🌸','有花儿成熟啦！',ready.join('、')+' 已经盛开，点土地就能收获。');});
