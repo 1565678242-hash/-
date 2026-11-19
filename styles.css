@@ -566,3 +566,69 @@ canvas#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block
 .danmu-float{font-size:clamp(11px,3vw,13px);font-weight:700;line-height:1.45;padding:6px 13px;background:rgba(255,255,255,.94);color:#718574;border:1px solid rgba(255,255,255,.95);box-shadow:0 4px 14px rgba(100,120,100,.16)}
 .danmu-float.gift{background:linear-gradient(135deg,rgba(255,247,222,.97),rgba(255,232,239,.97));color:#a77b45}
 .danmu-float.bad{background:linear-gradient(135deg,rgba(239,234,246,.97),rgba(229,239,241,.97));color:#766c8c}
+
+
+/* 2026-11-19 final mobile layout overrides: keep garden balanced and clear the bubbles */
+#eventBanner{top:22%!important}
+#danmuLayer{top:24%!important}
+@media(max-width:600px){
+  #gardenScreen{
+    gap:6px!important;
+    padding-top:calc(46px + env(safe-area-inset-top))!important;
+    padding-bottom:calc(8px + env(safe-area-inset-bottom))!important;
+  }
+  #gardenScreen .garden-toolbar{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:7px!important;
+    width:min(94vw,520px)!important;
+    margin:5px 0!important;
+  }
+  #gardenScreen .garden-toolbar .garden-action,
+  #gardenScreen .garden-toolbar #btnGardenFertilize{
+    grid-column:auto!important;
+    width:100%!important;
+    min-height:42px!important;
+    padding:7px 5px!important;
+    font-size:clamp(10px,2.9vw,12px)!important;
+    white-space:nowrap!important;
+  }
+  #gardenScreen .garden-plots{
+    width:min(96vw,540px)!important;
+    flex:0 0 auto!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    grid-template-rows:repeat(2,minmax(clamp(96px,13vh,124px),auto))!important;
+    gap:7px!important;
+    padding:2px!important;
+  }
+  #gardenScreen .garden-plot{
+    min-height:clamp(96px,13vh,124px)!important;
+    padding:5px 3px!important;
+    border-radius:16px!important;
+    gap:3px!important;
+  }
+  #gardenScreen .soil-bed{height:clamp(34px,5vh,44px)!important}
+  #gardenScreen .garden-pager{height:29px!important;flex:0 0 29px!important}
+  #gardenScreen .flower-basket{
+    width:min(96vw,540px)!important;
+    flex:0 0 auto!important;
+    height:auto!important;
+    min-height:72px!important;
+    max-height:112px!important;
+    padding:8px 10px!important;
+  }
+  #gardenScreen .flower-basket-items{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    max-height:72px!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    white-space:normal!important;
+    gap:5px!important;
+  }
+  #gardenScreen .garden-tip{flex:0 0 auto!important;margin-top:2px!important}
+}
+@media(max-width:420px){
+  #gardenScreen .garden-plot{min-height:clamp(94px,12.5vh,116px)!important}
+  #gardenScreen .soil-bed{height:34px!important}
+}
