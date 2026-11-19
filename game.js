@@ -1339,7 +1339,7 @@ function finishSuccess(){
   garden.seeds=garden.seedInventory.length;
   const maturedNames=[];
   garden.plots.forEach(function(p){const before=p.stage||0;p.stage=Math.min(3,before+1);if(before<3&&p.stage>=3)maturedNames.push(p.name);});
-  garden.pendingMaturedFlowers=(garden.pendingMaturedFlowers||[]).concat(maturedNames);state.maturedFlowers=maturedNames;state.seedRewards=seedRewards;state.liveIncome=liveIncome;state.flowerSale=null;state.flowerSales=[];if(garden.harvestCount>=10&&garden.nextFlowerSaleDay==null)garden.nextFlowerSaleDay=state.currentDay+3;state.auctionPerfume=null;
+  garden.pendingMaturedFlowers=(garden.pendingMaturedFlowers||[]).concat(maturedNames);state.maturedFlowers=maturedNames;state.seedRewards=seedRewards;state.liveIncome=liveIncome;state.flowerSale=null;state.flowerSales=[];state.auctionPerfume=null;
   saveData.totalHeat+=state.heat; saveData.totalFans=state.fans;
   saveData.totalPopped+=state.dayStats.popped; saveData.totalDays+=1;
   if(state.currentDay>saveData.bestDay) saveData.bestDay=state.currentDay;
