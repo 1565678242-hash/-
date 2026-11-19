@@ -742,3 +742,72 @@ body.screen-overlay-open #pkBar{
 body.screen-overlay-open #gardenScreen{
   background:linear-gradient(165deg,rgba(250,247,252,.99),rgba(244,248,250,.99))!important;
 }
+
+
+/* === 仅修正直播信息文字位置与花园页面隔离（2026-11-19） === */
+/* HUD/头像信息区之后，弹幕和事件使用连续的两条信息带。 */
+#danmuLayer{
+  top:calc(198px + env(safe-area-inset-top))!important;
+  bottom:auto!important;
+  left:0!important;
+  right:0!important;
+  height:30px!important;
+  padding:3px 0!important;
+  background:rgba(255,255,255,.72)!important;
+  border-top:1px solid rgba(255,255,255,.82)!important;
+  border-bottom:1px solid rgba(255,255,255,.82)!important;
+  backdrop-filter:blur(8px)!important;
+  -webkit-backdrop-filter:blur(8px)!important;
+  z-index:27!important;
+  pointer-events:none!important;
+}
+#eventBanner{
+  top:calc(228px + env(safe-area-inset-top))!important;
+  bottom:auto!important;
+  left:0!important;
+  right:0!important;
+  width:100%!important;
+  min-height:30px!important;
+  height:30px!important;
+  margin:0!important;
+  padding:3px 8px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:rgba(255,255,255,.72)!important;
+  border-bottom:1px solid rgba(255,255,255,.82)!important;
+  backdrop-filter:blur(8px)!important;
+  -webkit-backdrop-filter:blur(8px)!important;
+  z-index:26!important;
+  pointer-events:none!important;
+}
+#eventBanner .eb-inner{
+  max-width:100%!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  font-size:clamp(10px,2.7vw,12px)!important;
+  line-height:1.35!important;
+  text-align:center!important;
+}
+/* 花园打开时从布局树中移除直播画布及所有直播悬浮层，避免透明叠层。 */
+#app.screen-overlay-open #gameCanvas,
+#app.screen-overlay-open #hud,
+#app.screen-overlay-open #liveBar,
+#app.screen-overlay-open #hostAvatar,
+#app.screen-overlay-open #topRight,
+#app.screen-overlay-open #danmuLayer,
+#app.screen-overlay-open #btnLike,
+#app.screen-overlay-open #introHint,
+#app.screen-overlay-open #comboBadge,
+#app.screen-overlay-open #eventBanner,
+#app.screen-overlay-open #pkBar{
+  display:none!important;
+}
+#app.screen-overlay-open #gardenScreen{
+  z-index:200!important;
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+  background:linear-gradient(165deg,#faf7fc,#f4f8fa)!important;
+}
