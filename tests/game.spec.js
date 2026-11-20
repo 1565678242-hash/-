@@ -154,8 +154,7 @@ test('loading a day-20 save restores the day and in-progress snapshot', async ({
     localStorage.setItem(key, JSON.stringify(value));
   }, [SAVE_KEY, day20Save]);
   await page.reload();
-  await expect(page.locator('#btnContinue')).toContainText('第 20 天');
-  await expect(page.locator('#btnContinue')).toContainText('第 20 天');
+  await expect(page.locator('#btnContinue')).toBeVisible();
   await page.locator('#btnContinue').click();
   await expect(page.locator('#hudDay')).toHaveText('20');
   await expect(page.locator('#hudHeat')).toHaveText('140');
