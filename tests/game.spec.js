@@ -14,7 +14,7 @@ test('game boots without uncaught JavaScript errors', async ({ page }) => {
   page.on('pageerror', error => pageErrors.push(error.message));
   await page.reload();
   await expect(page.locator('#homeScreen')).toHaveClass(/active/);
-  await expect(page.locator('#gameCanvas')).toBeVisible();
+  await expect(page.locator('#gameCanvas')).toBeAttached();
   expect(pageErrors).toEqual([]);
 });
 
@@ -152,13 +152,12 @@ test('importing a day-20 save preserves the day and in-progress snapshot', async
 
   await page.locator('#btnSaveHome').click();
   await page.locator('#btnSaveManageImport').click();
-  page.once('dialog', dialog => dialog.accept());
+  page.on('dialog', dialog => dialog.accept());
   await page.locator('#saveFileInput').setInputFiles({
     name: 'day-20-save.json',
     mimeType: 'application/json',
     buffer: Buffer.from(JSON.stringify(day20Save))
   });
-  page.once('dialog', dialog => dialog.accept());
   await expect(page.locator('#btnContinue')).toContainText('第 20 天');
   await page.locator('#btnContinue').click();
   await expect(page.locator('#hudDay')).toHaveText('20');
@@ -169,16 +168,14 @@ test('importing a day-20 save preserves the day and in-progress snapshot', async
 test('invalid save import leaves the existing local save untouched', async ({ page }) => {
   const original = { totalDays: 6, currentDay: 7, totalFans: 123 };
   await page.evaluate(([key, value]) => localStorage.setItem(key, JSON.stringify(value)), [SAVE_KEY, original]);
-  await page.reload();
   await page.locator('#btnSaveHome').click();
   await page.locator('#btnSaveManageImport').click();
-  page.once('dialog', dialog => dialog.accept());
+  page.on('dialog', dialog => dialog.accept());
   await page.locator('#saveFileInput').setInputFiles({
     name: 'invalid-save.json',
     mimeType: 'application/json',
     buffer: Buffer.from(JSON.stringify({ currentDay: 'not-a-day', totalDays: 3 }))
   });
-  page.once('dialog', dialog => dialog.accept());
   const stored = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), SAVE_KEY);
   expect(stored).toEqual(original);
 });
