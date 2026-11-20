@@ -2021,7 +2021,7 @@ function finishFlowerLive(){
  if(flowerLiveState.sold>0){
   saveData.money=(saveData.money||0)+flowerLiveState.earned;saveData.totalEarned=(saveData.totalEarned||0)+flowerLiveState.earned;
   g.flowerLives=(g.flowerLives||0)+1;g.healingLivesSinceFlowerLive=0;g.flowerLiveDue=false;g.flowerAuction=null;persist();checkAchievements();
-  gardenTipEl.textContent='花卉直播圆满结束！成交 '+lots.length+' 项、'+flowerLiveState.sold+' 朵鲜花，收入 '+formatMoney(flowerLiveState.earned)+' 🪙。';
+  gardenTipEl.textContent='花卉直播圆满结束！成交 '+lots.length+' 项、'+flowerLiveState.sold+' 朵鲜花，金币奖励 '+formatMoney(flowerLiveState.earned)+' 🪙。';
   document.getElementById('flowerSettlementSub').textContent='成交 '+lots.length+' 条竞价条目 · '+flowerLiveState.sold+' 朵鲜花';
   document.getElementById('flowerSettlementIncome').textContent='+🪙'+formatMoney(flowerLiveState.earned);
   document.getElementById('flowerSettlementTotal').textContent='已计入总金币 · 当前总金币 🪙'+formatMoney(saveData.totalEarned||0);
