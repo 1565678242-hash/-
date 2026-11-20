@@ -117,6 +117,8 @@ test('loading a day-20 save restores the day and in-progress snapshot', async ({
     unlocked: ['xi', 'li', 'sang'],
     luckyCount: 11,
     currentDay: 20,
+    seenIntro: true,
+    seenStoryIntro: true,
     money: 3897,
     totalEarned: 6677,
     garden: {
