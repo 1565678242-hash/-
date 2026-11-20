@@ -1528,3 +1528,27 @@ body{color:#5f5866}
 
 /* 恢复第六个 HUD 数据格：天数。 */
 #hud #hudDayChip{grid-column:3!important;grid-row:2!important}
+
+
+/* Emergency mobile recovery: keep the home menu reachable on short screens. */
+#homeScreen{
+  justify-content:flex-start!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  -webkit-overflow-scrolling:touch;
+  padding-top:calc(44px + env(safe-area-inset-top))!important;
+  padding-bottom:calc(28px + env(safe-area-inset-bottom))!important;
+  gap:14px!important;
+}
+#homeScreen .home-title{
+  flex:0 0 auto!important;
+  margin-bottom:12px!important;
+}
+#homeScreen .home-buttons{
+  flex:0 0 auto!important;
+  width:min(80vw,218px)!important;
+  padding-bottom:8px!important;
+}
+#app.screen-overlay-open .entry-toast{
+  display:none!important;
+}
