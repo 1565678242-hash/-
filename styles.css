@@ -1,4 +1,4 @@
-/* Release: 20261119-soft-praise-voice-1 — synchronized with index.html and game.js */
+/* Release: 20261120-readable-mobile-1 — synchronized with index.html and game.js */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;min-height:100%;overflow:hidden;overscroll-behavior:none}
 body{font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#fdf7f2;color:#6d6272}
@@ -1217,3 +1217,84 @@ body.screen-overlay-open #gardenScreen{
 .flower-live-settlement-card{width:min(100%,360px);padding:27px 22px 22px;border:1px solid rgba(255,255,255,.95);border-radius:26px;background:linear-gradient(150deg,#fff,#f2f8ef);box-shadow:0 20px 60px rgba(61,91,67,.22);text-align:center;}
 .flower-live-settlement-card .settlement-emoji{font-size:42px;margin-bottom:8px;}.flower-live-settlement-card .settlement-title{font-size:20px;font-weight:900;color:#637e67;}.flower-live-settlement-card .settlement-sub{margin-top:9px;font-size:12px;line-height:1.6;color:#91a08e;}.flower-live-settlement-card .settlement-income{margin:17px 0 8px;font-size:32px;font-weight:900;color:#c18e63;}.flower-live-settlement-card .settlement-total{margin-bottom:18px;font-size:11px;color:#8e9b8b;}.flower-live-settlement-card .main-btn{width:100%;}
 @media(max-width:420px){#gardenScreen .garden-top-nav{top:calc(25px + env(safe-area-inset-top));right:9px;gap:5px}#gardenScreen .garden-nav-btn{padding:6px 9px;font-size:10px}#basketScreen .basket-screen-items{grid-template-columns:1fr}}
+
+
+/* ============================================================
+   Readability pass · 20261120
+   Darker text, comfortable minimum sizes, and mobile-safe controls.
+   ============================================================ */
+body{color:#5f5866}
+.hud-chip span,#hud .hud-chip span{font-size:10px!important;color:#58675d!important;letter-spacing:.02em!important}
+#liveBar{font-size:12px;color:#655b6b}
+.text-btn,#topRight .text-btn{font-size:12px!important;color:#5d6c61!important;letter-spacing:.02em!important}
+.q-tag{font-size:11px;color:#786b80}
+.shop-desc{font-size:12px;color:#6f6875}
+.shop-buy{font-size:12px}
+.home-sub{font-size:12px;color:#776e7c;line-height:1.65;letter-spacing:.06em}
+.data-card span{font-size:12px;color:#6d6573}
+.pair-rarity{font-size:10px}
+.pair-name{font-size:12px;color:#62596b}
+.pair-desc{font-size:10px;color:#756b7b;line-height:1.5}
+.ach-desc{font-size:12px;color:#6e6874}
+.ach-status{font-size:11px;color:#806b91}
+.rs-item span{font-size:11px;color:#756b7b}
+.reward-name{font-size:12px}
+.pk-side span{font-size:11px;color:#756b7b}
+.shop-section{font-size:12px;color:#756779}
+.au-note{font-size:11px;color:#786a5c}
+.garden-plant-name{font-size:13px;color:#596f5d}
+.garden-stage{font-size:12px;color:#687968}
+.garden-action{font-size:12px;color:#5c715f}
+.menu-sub{font-size:12px;color:#687968}
+.plot-actions button{font-size:11px;color:#5e715f}
+.plot-cost{font-size:11px;color:#786b5d}
+.plot-tap-hint{font-size:11px;color:#687968}
+.story-system{font-size:11px;color:#71866b}
+.flower-live-kicker{font-size:11px;color:#71866b}
+.flower-live-progress{font-size:11px;color:#687968}
+.flower-live-tip{font-size:12px!important;color:#667662!important}
+.flower-live-banner small{font-size:11px;color:#687968}
+.live-pill{font-size:10px}
+.flower-live-summary>span{font-size:11px;color:#687968}
+.flower-lot-meta,.flower-lot-bid{font-size:11px;color:#687968}
+.flower-lot-action{font-size:12px}
+.flower-lot-bids span{font-size:10px;color:#74645f}
+.receipt-empty{font-size:12px;color:#687968}
+.sale-receipt b{font-size:12px;color:#596f5d}
+.sale-receipt small{font-size:11px;color:#687968}
+.collection-pager{font-size:12px;color:#687968}
+.collection-pager .tab{font-size:11px}
+#collectionScreen .pair-name{font-size:11px;line-height:1.35}
+#collectionScreen .pair-desc{font-size:10px;line-height:1.4;color:#756b7b;max-height:30px}
+.game-guide-kicker{font-size:11px;color:#71866b}
+.game-guide-item p{font-size:12px;color:#625f68;line-height:1.7}
+#gardenScreen .garden-tip{font-size:12px!important;color:#5f715f!important}
+#gardenScreen .garden-plot .plot-actions button{font-size:11px!important}
+.basket-empty{font-size:11px;color:#756f68}
+.flower-live-settlement-card .settlement-total{font-size:12px;color:#687968}
+
+@media(max-width:520px){
+  #topRight{
+    right:8px!important;
+    left:auto!important;
+    max-width:calc(100vw - 16px);
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    align-content:flex-start;
+    gap:4px!important;
+  }
+  #topRight .text-btn{
+    min-height:34px!important;
+    height:auto!important;
+    padding:5px 8px!important;
+    font-size:11px!important;
+    line-height:1.25;
+    white-space:nowrap;
+  }
+  #topRight .icon-btn{width:34px;height:34px}
+  .hud-chip span,#hud .hud-chip span{font-size:9px!important}
+}
+@media(max-width:360px){
+  #topRight .text-btn{font-size:10px!important;padding:5px 7px!important}
+  .home-sub{font-size:11px}
+}
