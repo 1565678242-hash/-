@@ -2255,6 +2255,7 @@ function backFromOverlay(){
     showScreen(homeScreen);
   }
 }
+document.getElementById('btnDataBack').addEventListener('click',backFromOverlay);
 document.getElementById('btnShopBack').addEventListener('click',backFromOverlay);
 btnShop.addEventListener('click',function(e){ e.stopPropagation(); AudioSys.click(); if(state.phase==='playing'||state.phase==='tree'){ state.paused=true; state.dragging=null; state.pointerId=null; if(state.phase==='playing'){ saveDaySnapshot(); persist(); } } renderShop(); showScreen(shopScreen); });
 
