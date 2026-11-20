@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>滚蛋吧坏情绪：疗愈直播间</title>
-<link rel="stylesheet" href="styles.css?v=20261120-readable-mobile-1">
+<link rel="stylesheet" href="styles.css?v=20261120-stability-fix-2">
 </head>
 <body>
 <div id="app">
@@ -210,6 +210,17 @@
       <button class="menu-cancel" id="btnSaveManageClose">返回</button>
     </div>
   </div>
+  <div id="resetConfirmOverlay" class="reset-confirm-overlay" aria-hidden="true">
+    <div class="reset-confirm-card" role="alertdialog" aria-modal="true" aria-labelledby="resetConfirmTitle" aria-describedby="resetConfirmText">
+      <div class="reset-confirm-icon">🧹</div>
+      <div class="reset-confirm-title" id="resetConfirmTitle">确认清空游戏数据？</div>
+      <p class="reset-confirm-text" id="resetConfirmText">这会清除本游戏的直播进度、收益、花园、图鉴和成就，且无法撤销。</p>
+      <div class="reset-confirm-actions">
+        <button type="button" class="reset-confirm-cancel" id="btnResetCancel">再想想</button>
+        <button type="button" class="reset-confirm-submit" id="btnResetConfirm">确认清空</button>
+      </div>
+    </div>
+  </div>
   <div id="gameMenu" class="menu-overlay">
     <div class="menu-card"><div class="menu-title">暂停一下</div><div class="menu-sub">你的进度会自动保存</div>
       <button class="menu-action primary" id="btnResume">继续直播</button><button class="menu-action" id="btnSaveExport">导出存档</button>
@@ -219,6 +230,6 @@
   </div>
   <input type="file" id="saveFileInput" accept="application/json,.json" hidden>
 </div>
-<script src="game.js?v=20261120-readable-mobile-1" defer></script>
+<script src="game.js?v=20261120-stability-fix-2" defer></script>
 </body>
 </html>
