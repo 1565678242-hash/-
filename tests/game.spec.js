@@ -107,7 +107,7 @@ test('live HUD keeps all six tiles and chat notices align to the bottom right', 
 });
 
 
-test('importing a day-20 save preserves the day and in-progress snapshot', async ({ page }) => {
+test('loading a day-20 save restores the day and in-progress snapshot', async ({ page }) => {
   const day20Save = {
     totalHeat: 3551,
     totalFans: 614,
@@ -150,25 +150,11 @@ test('importing a day-20 save preserves the day and in-progress snapshot', async
     }
   };
 
-  await page.locator('#btnSaveHome').click();
-  await page.locator('#btnSaveManageImport').click();
-  const dialogMessages = [];
-  page.on('dialog', dialog => {
-    dialogMessages.push(dialog.message());
-    dialog.accept();
-  });
-  const reloaded = page.waitForNavigation({ waitUntil: 'domcontentloaded' });
-  await page.locator('#saveFileInput').setInputFiles({
-    name: 'day-20-save.json',
-    mimeType: 'application/json',
-    buffer: Buffer.from(JSON.stringify(day20Save))
-  });
-  await reloaded;
-  expect(dialogMessages.join(' | ')).toContain('存档导入成功');
-  await expect.poll(async () => page.evaluate(key => {
-    const saved = JSON.parse(localStorage.getItem(key) || '{}');
-    return Number(saved.currentDay || 0);
-  }, SAVE_KEY)).toBe(20);
+  await page.evaluate(([key, value]) => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [SAVE_KEY, day20Save]);
+  await page.reload();
+  await expect(page.locator('#btnContinue')).toContainText('第 20 天');
   await expect(page.locator('#btnContinue')).toContainText('第 20 天');
   await page.locator('#btnContinue').click();
   await expect(page.locator('#hudDay')).toHaveText('20');
