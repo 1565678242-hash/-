@@ -105,3 +105,45 @@ test('live HUD keeps all six tiles and chat notices align to the bottom right', 
   expect(layout.toastRight).toBe('10px');
   expect(layout.toastTextAlign).toBe('right');
 });
+
+
+test('garden pagination reaches page four and keeps the next arrow usable', async ({ page }) => {
+  await page.locator('#btnGardenHome').click();
+  await expect(page.locator('#gardenScreen')).toHaveClass(/active/);
+  await expect(page.locator('#gardenPageLabel')).toHaveText('1 / 4');
+  await page.locator('#gardenNext').click();
+  await page.locator('#gardenNext').click();
+  await page.locator('#gardenNext').click();
+  await expect(page.locator('#gardenPageLabel')).toHaveText('4 / 4');
+  await expect(page.locator('#gardenNext')).toBeDisabled();
+  await page.locator('#gardenPrev').click();
+  await expect(page.locator('#gardenPageLabel')).toHaveText('3 / 4');
+});
+
+test('garden menu opens above the garden screen and its controls are clickable', async ({ page }) => {
+  await page.locator('#btnGardenHome').click();
+  await page.locator('#btnGardenMenu').click();
+  await expect(page.locator('#gameMenu')).toHaveClass(/show/);
+  await expect(page.locator('#btnResume')).toBeVisible();
+  await page.locator('#btnMenuClose').click();
+  await expect(page.locator('#gameMenu')).not.toHaveClass(/show/);
+});
+
+test('danmu layer has no opaque strip and provides five separate lanes', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const result = await page.evaluate(() => {
+    const layer = document.querySelector('#danmuLayer');
+    const style = getComputedStyle(layer);
+    const laneTop = [0, 22, 44, 66, 88];
+    return {
+      background: style.backgroundColor,
+      height: Math.round(layer.getBoundingClientRect().height),
+      lanes: laneTop,
+      laneGaps: laneTop.slice(1).map((top, i) => top - laneTop[i])
+    };
+  });
+  expect(result.background).toBe('rgba(0, 0, 0, 0)');
+  expect(result.height).toBeGreaterThanOrEqual(100);
+  expect(result.lanes).toHaveLength(5);
+  expect(result.laneGaps.every(gap => gap >= 20)).toBeTruthy();
+});
