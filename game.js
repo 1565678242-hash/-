@@ -1,4 +1,4 @@
-/* Release: 20261119-soft-praise-voice-1 — HTML/CSS/JS synchronized */
+/* Release: 20261120-readable-mobile-1 — HTML/CSS/JS synchronized */
 (function(){
 'use strict';
 
