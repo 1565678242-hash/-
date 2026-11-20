@@ -1,4 +1,4 @@
-/* Release: 20261120-stability-fix-2 — HTML/CSS/JS synchronized */
+/* Release: 20261120-coin-interaction-fix-1 — HTML/CSS/JS synchronized */
 (function(){
 'use strict';
 
