@@ -58,3 +58,12 @@ test('confirming reset clears saved progress and returns to home', async ({ page
   expect(saved.totalPopped).toBe(0);
   expect(saved.money).toBe(0);
 });
+
+test('live-room props are ordered from lowest lucky-fruit cost to highest', async ({ page }) => {
+  await page.locator('#btnShopHome').click();
+  const prices = await page.locator('#shopGrid .shop-buy').allTextContents();
+  const costs = prices.map(text => Number.parseInt(text, 10));
+  expect(costs.length).toBeGreaterThan(0);
+  expect(costs[0]).toBe(7);
+  expect(costs).toEqual([...costs].sort((a, b) => a - b));
+});
