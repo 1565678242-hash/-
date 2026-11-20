@@ -1,4 +1,4 @@
-/* Release: 20261120-coin-interaction-fix-1 — HTML/CSS/JS synchronized */
+/* Release: 20261120-haptics-entry-toast-1 — HTML/CSS/JS synchronized */
 (function(){
 'use strict';
 
@@ -650,6 +650,11 @@ const AudioSys = (function(){
   return { init,startBgm,stopBgm,pop,combo,wrong,collect,complete,click,deal,toggleMute,get muted(){return muted;} };
 })();
 
+/* 手机触感反馈：仅在浏览器支持时启用，不影响不支持震动的设备。 */
+function vibrateDevice(pattern){
+  try{ if(typeof navigator!=='undefined' && typeof navigator.vibrate==='function') navigator.vibrate(pattern); }catch(e){}
+}
+
 /* ============================================================
    七、Canvas
    ============================================================ */
@@ -1263,6 +1268,7 @@ function blendPair(a,b){
   spawnParticles(mx,my,'#f0c060',16);
   spawnParticles(mx,my,'rgba(255,255,255,.88)',8);
   AudioSys.pop();
+  vibrateDevice([22,18,22]);
   addCombo();
   if(state.combo>=3){AudioSys.combo();playComboPraise(state.combo);}
   const h=Math.round(randInt(10,16)*getHeatMult());
@@ -1386,7 +1392,9 @@ function checkDayEnd(){
 function finishSuccess(){
   if(state.phase!=='playing') return;
   state.phase='tree'; state.dragging=null; state.pointerId=null; resetCombo();
-  AudioSys.complete(); stopDanmu();
+  AudioSys.complete();
+  vibrateDevice([70,35,90,35,150]);
+  stopDanmu();
   const pair=state.todayPair;
   if(saveData.unlocked.indexOf(pair.key)<0) saveData.unlocked.push(pair.key);
   if(state.fruitCollected) saveData.luckyCount+=1;
