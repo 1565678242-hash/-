@@ -1,4 +1,4 @@
-/* Release: 20261120-readable-mobile-1 — HTML/CSS/JS synchronized */
+/* Release: 20261120-stability-fix-2 — HTML/CSS/JS synchronized */
 (function(){
 'use strict';
 
@@ -461,6 +461,25 @@ let saveData = {
   money: 0, totalEarned: 0, garden: { seeds: 0, seedInventory: [], lastWaterDay: 0, plots: [], fertilizer: 0, doubleCards: 0, tripleCards: 0, unlockedPlots:1, flowers:0, harvestCount:0, totalFlowers:0, totalPlanted:0 }, theme: "warm", avatar: "sun",
   ownedThemes: [], ownedAvatars: [], perfumes: [], pkWins: 0, seenIntro: false, seenStoryIntro: false
 };
+
+function createFreshSaveData(){
+  return {
+    totalHeat:0,totalFans:0,totalPopped:0,totalDays:0,bestDay:0,
+    unlocked:[],luckyCount:0,daysSinceLucky:0,unlockedAchievements:[],
+    maxComboEver:0,answeredCount:0,ownedItems:[],
+    currentDay:1,hintedFruit:false,hintedPositive:false,hintedBlend:false,daySnapshot:null,
+    money:0,totalEarned:0,
+    garden:{
+      seeds:0,seedInventory:[],lastWaterDay:0,plots:[],fertilizer:0,
+      doubleCards:0,tripleCards:0,unlockedPlots:1,flowers:0,harvestCount:0,
+      totalFlowers:0,totalPlanted:0,maxHarvestBatch:0,flowerLives:0,
+      healingLivesSinceFlowerLive:0,flowerLiveDue:false,pendingMaturedFlowers:[],
+      flowerCollection:[],magicCollection:[],flowerStockById:{},gardenPage:0,basketPage:0
+    },
+    theme:"warm",avatar:"sun",ownedThemes:[],ownedAvatars:[],
+    perfumes:[],pkWins:0,seenIntro:false,seenStoryIntro:false
+  };
+}
 
 /* ============================================================
    三、DOM
@@ -2030,18 +2049,85 @@ window.addEventListener('pagehide',function(){saveDaySnapshot();persist();});
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden'){saveDaySnapshot();persist();}});
 
 const saveManageMenuEl=document.getElementById('saveManageMenu');
+const resetConfirmOverlayEl=document.getElementById('resetConfirmOverlay');
+const resetConfirmTextEl=document.getElementById('resetConfirmText');
+let resetConfirmMode='clear';
+function openResetConfirm(mode){
+  resetConfirmMode=mode;
+  resetConfirmTextEl.textContent=mode==='newGame'
+    ?'重新开始会清除当前游戏进度，并从第 1 天重新开始。此操作无法撤销。'
+    :'这会清除本游戏的直播进度、收益、花园、图鉴和成就，并回到初始主页。此操作无法撤销。';
+  document.getElementById('resetConfirmTitle').textContent=mode==='newGame'?'重新开始游戏？':'确认清空游戏数据？';
+  document.getElementById('btnResetConfirm').textContent=mode==='newGame'?'重新开始':'确认清空';
+  resetConfirmOverlayEl.classList.add('show');
+  resetConfirmOverlayEl.setAttribute('aria-hidden','false');
+}
+function closeResetConfirm(){
+  resetConfirmOverlayEl.classList.remove('show');
+  resetConfirmOverlayEl.setAttribute('aria-hidden','true');
+}
+function resetRuntimeForHome(){
+  if(giftTimer){clearInterval(giftTimer);giftTimer=null;}
+  stopDanmu();stopViewers();AudioSys.stopBgm();
+  if(introHintTimer){clearTimeout(introHintTimer);introHintTimer=null;}
+  Object.assign(state,{
+    currentDay:1,phase:'idle',paused:false,questionOpen:false,
+    bubbles:[],particles:[],floats:[],gifts:[],
+    dragging:null,dragOffX:0,dragOffY:0,pointerId:null,
+    heat:0,fans:0,heatDisplay:0,fansDisplay:0,
+    combo:0,comboTimer:0,positiveCooldown:0,
+    dayStats:{popped:0,fansGained:0,heatPeak:0,answered:0},
+    fruitCollected:false,hasFruit:false,
+    todayPair:null,todayFlower:'桃花',todayFlowerType:'peach',todayFruit:'桃子',todayFruitType:'peach',
+    tree:{active:false,visible:false,t:0,duration:2.6,branches:[],tips:[],onDone:null},
+    eventTimer:0,questionTimer:0,time:0,lastTime:state.lastTime,
+    pk:null,moneyDisplay:0,perfumeMode:false,blendCount:0,
+    specials:[],specialTimer:16,snapTick:0,
+    activeBuffs:{comboShield:false,doubleHeat:false,extraFans:false,doubleHeatFans:false,doubleIncome:false,milkTea:false,snacks:false,coffee:false,cake:false}
+  });
+  lastHeat=null;lastFans=null;lastLucky=null;lastMoney=null;
+  pkBarEl.classList.remove('show');pkOverlay.classList.remove('show');
+  questionOverlay.classList.remove('show');auctionOverlay.classList.remove('show');
+  eventBannerEl.classList.remove('show');eventBannerEl.innerHTML='';
+  introTutorialEl.classList.remove('show');
+  document.getElementById('gardenNotice').classList.remove('show');
+  document.getElementById('flowerLiveSettlement').classList.remove('show');
+  gameMenuEl.classList.remove('show');
+  saveManageMenuEl.classList.remove('show');
+  showHud(false);
+}
+function clearAllProgress(){
+  try{localStorage.removeItem(CONFIG.saveKey);}
+  catch(e){resetConfirmTextEl.textContent='无法清除本地存档。请检查微信/浏览器的存储权限后重试。';return;}
+  saveData=createFreshSaveData();
+  resetRuntimeForHome();
+  shopTab='fruit';shopPage=0;collectionCategory='normal';collectionPage=0;
+  applyTheme(saveData.theme);updateAvatar();
+  renderGarden();renderCollection();renderAchievements();renderShop();
+  updateDataScreen();updateHome();
+  showScreen(homeScreen);
+  persist();
+  closeResetConfirm();
+  showToast('🧹','游戏数据已清空，已回到初始主页');
+}
+function startNewGame(){
+  const hasSeenStory=!!saveData.seenStoryIntro;
+  saveData=createFreshSaveData();
+  saveData.seenIntro=hasSeenStory;saveData.seenStoryIntro=hasSeenStory;
+  resetRuntimeForHome();
+  gardenTipEl.textContent='花圃已经整理好啦。先领取直播种子，再选择空土地种下；浇水三次或完成直播，让花苗慢慢长大。';
+  renderGarden();updateHome();persist();
+  closeResetConfirm();
+  showTutorial();applyBuffsForNewDay();startGiftTimer();startDay(1);
+}
 document.getElementById('btnSaveHome').addEventListener('click',function(){AudioSys.click();saveManageMenuEl.classList.add('show');});
 document.getElementById('btnSaveManageClose').addEventListener('click',function(){AudioSys.click();saveManageMenuEl.classList.remove('show');});
 document.getElementById('btnSaveManageExport').addEventListener('click',function(){AudioSys.click();exportSave();});
 document.getElementById('btnSaveManageImport').addEventListener('click',function(){AudioSys.click();saveFileInput.click();});
-document.getElementById('btnSaveManageReset').addEventListener('click',function(){
-  AudioSys.click();
-  const ok=confirm('确定重开游戏吗？\n\n这会清除当前浏览器保存的本游戏全部进度，包括直播数据、金币、花园、图鉴和成就，并从初始状态重新开始。\n\n此操作无法撤销，建议先导出存档备份。');
-  if(!ok)return;
-  try{localStorage.removeItem(CONFIG.saveKey);}
-  catch(e){alert('清除本地存档失败，请检查浏览器的存储权限。');return;}
-  location.reload();
-});
+document.getElementById('btnSaveManageReset').addEventListener('click',function(){AudioSys.click();openResetConfirm('clear');});
+document.getElementById('btnResetCancel').addEventListener('click',function(){AudioSys.click();closeResetConfirm();});
+document.getElementById('btnResetConfirm').addEventListener('click',function(){AudioSys.click();if(resetConfirmMode==='newGame')startNewGame();else clearAllProgress();});
+resetConfirmOverlayEl.addEventListener('click',function(e){if(e.target===resetConfirmOverlayEl)closeResetConfirm();});
 document.getElementById('btnSaveImport').addEventListener('click',function(){saveFileInput.click();});
 saveFileInput.addEventListener('change',function(){
  const file=saveFileInput.files&&saveFileInput.files[0];if(!file)return;const reader=new FileReader();
@@ -2080,24 +2166,13 @@ document.getElementById('btnContinue').addEventListener('click',function(){
 });
 
 document.getElementById('btnNewGame').addEventListener('click',function(){
-  AudioSys.init(); AudioSys.click();
-  if(saveData.totalDays>0||saveData.luckyCount>0||saveData.unlocked.length>0){
-    if(!window.confirm('重新开始会清空所有进度，确定吗？')) return;
-  }
-  const hasSeenStory=!!saveData.seenStoryIntro;
-  saveData={ totalHeat:0, totalFans:0, totalPopped:0, totalDays:0, bestDay:0,
-    unlocked:[], luckyCount:0, daysSinceLucky:0, unlockedAchievements:[],
-    maxComboEver:0, answeredCount:0, ownedItems:[],
-    currentDay:1, hintedFruit:false, hintedPositive:false, hintedBlend:false, daySnapshot:null,
-    money:0, totalEarned:0, garden:{seeds:0,seedInventory:[],lastWaterDay:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0,unlockedPlots:1,flowers:0,harvestCount:0,totalFlowers:0,totalPlanted:0,maxHarvestBatch:0,flowerLives:0,healingLivesSinceFlowerLive:0,flowerLiveDue:false,pendingMaturedFlowers:[]}, theme:"warm", avatar:"sun",
-    ownedThemes:[], ownedAvatars:[], perfumes:[], pkWins:0, seenIntro:hasSeenStory, seenStoryIntro:hasSeenStory };
-  gardenTipEl.textContent='花圃已经整理好啦。先领取直播种子，再选择空土地种下；浇水三次或完成直播，让花苗慢慢长大。'; renderGarden();
-  showTutorial();
-  updateHome();
-  persist();
-  applyBuffsForNewDay();
-  startGiftTimer();
-  startDay(1);
+  AudioSys.init();AudioSys.click();
+  const g=saveData.garden||{};
+  const hasProgress=saveData.totalDays>0||saveData.totalPopped>0||saveData.luckyCount>0||
+    saveData.unlocked.length>0||saveData.money>0||saveData.totalEarned>0||
+    (Array.isArray(g.plots)&&g.plots.length>0)||(Number(g.harvestCount)||0)>0;
+  if(hasProgress){openResetConfirm('newGame');return;}
+  startNewGame();
 });
 
 btnExit.addEventListener('click',function(e){
