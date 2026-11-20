@@ -105,3 +105,80 @@ test('live HUD keeps all six tiles and chat notices align to the bottom right', 
   expect(layout.toastRight).toBe('10px');
   expect(layout.toastTextAlign).toBe('right');
 });
+
+
+test('importing a day-20 save preserves the day and in-progress snapshot', async ({ page }) => {
+  const day20Save = {
+    totalHeat: 3551,
+    totalFans: 614,
+    totalPopped: 112,
+    totalDays: 19,
+    bestDay: 19,
+    unlocked: ['xi', 'li', 'sang'],
+    luckyCount: 11,
+    currentDay: 20,
+    money: 3897,
+    totalEarned: 6677,
+    garden: {
+      seeds: 4,
+      plots: [{ seedKind: 'normal', flowerId: 'echinacea', stage: 2, revealed: true }],
+      unlockedPlots: 8,
+      flowers: 56,
+      harvestCount: 30,
+      totalFlowers: 88,
+      totalPlanted: 31,
+      flowerCollection: ['echinacea']
+    },
+    daySnapshot: {
+      day: 20,
+      heat: 140,
+      fans: 614,
+      dayStats: { popped: 1, fansGained: 39, heatPeak: 140, answered: 0 },
+      combo: 0,
+      comboTimer: 0,
+      pairKey: 'cao',
+      hasFruit: true,
+      fruitCollected: true,
+      buffs: {},
+      bubbles: [{
+        type: 'negative', word: '委屈', r: 33, x: 120, y: 240,
+        vx: 1, vy: 1, entering: false, enterT: 0, enterDelay: 0, targetY: 240
+      }],
+      specials: [],
+      specialTimer: 1.5,
+      blend: 0
+    }
+  };
+
+  await page.locator('#btnSaveHome').click();
+  await page.locator('#btnSaveManageImport').click();
+  page.once('dialog', dialog => dialog.accept());
+  await page.locator('#saveFileInput').setInputFiles({
+    name: 'day-20-save.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(day20Save))
+  });
+  page.once('dialog', dialog => dialog.accept());
+  await expect(page.locator('#btnContinue')).toContainText('第 20 天');
+  await page.locator('#btnContinue').click();
+  await expect(page.locator('#hudDay')).toHaveText('20');
+  await expect(page.locator('#hudHeat')).toHaveText('140');
+  await expect(page.locator('#hudFans')).toHaveText('614');
+});
+
+test('invalid save import leaves the existing local save untouched', async ({ page }) => {
+  const original = { totalDays: 6, currentDay: 7, totalFans: 123 };
+  await page.evaluate(([key, value]) => localStorage.setItem(key, JSON.stringify(value)), [SAVE_KEY, original]);
+  await page.reload();
+  await page.locator('#btnSaveHome').click();
+  await page.locator('#btnSaveManageImport').click();
+  page.once('dialog', dialog => dialog.accept());
+  await page.locator('#saveFileInput').setInputFiles({
+    name: 'invalid-save.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify({ currentDay: 'not-a-day', totalDays: 3 }))
+  });
+  page.once('dialog', dialog => dialog.accept());
+  const stored = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), SAVE_KEY);
+  expect(stored).toEqual(original);
+});
