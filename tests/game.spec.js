@@ -67,3 +67,41 @@ test('live-room props are ordered from lowest lucky-fruit cost to highest', asyn
   expect(costs[0]).toBe(7);
   expect(costs).toEqual([...costs].sort((a, b) => a - b));
 });
+
+
+test('live HUD keeps all six tiles and chat notices align to the bottom right', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator('#hud > *')).toHaveCount(6);
+  await expect(page.locator('#hudDayChip')).toBeAttached();
+
+  const layout = await page.evaluate(() => {
+    const layer = document.querySelector('#danmuLayer');
+    const bubble = document.createElement('div');
+    bubble.className = 'danmu-float';
+    layer.appendChild(bubble);
+    const toast = document.createElement('div');
+    toast.className = 'entry-toast';
+    document.body.appendChild(toast);
+    const layerStyle = getComputedStyle(layer);
+    const bubbleStyle = getComputedStyle(bubble);
+    const toastStyle = getComputedStyle(toast);
+    const result = {
+      dayChipDisplay: getComputedStyle(document.querySelector('#hudDayChip')).display,
+      layerRight: layerStyle.right,
+      bubbleRight: bubbleStyle.right,
+      bubbleTextAlign: bubbleStyle.textAlign,
+      toastRight: toastStyle.right,
+      toastTextAlign: toastStyle.textAlign
+    };
+    bubble.remove();
+    toast.remove();
+    return result;
+  });
+
+  expect(layout.dayChipDisplay).not.toBe('none');
+  expect(layout.layerRight).toBe('10px');
+  expect(layout.bubbleRight).toBe('0px');
+  expect(layout.bubbleTextAlign).toBe('right');
+  expect(layout.toastRight).toBe('10px');
+  expect(layout.toastTextAlign).toBe('right');
+});
