@@ -164,11 +164,11 @@ test('importing a day-20 save preserves the day and in-progress snapshot', async
     buffer: Buffer.from(JSON.stringify(day20Save))
   });
   await reloaded;
+  expect(dialogMessages.join(' | ')).toContain('存档导入成功');
   await expect.poll(async () => page.evaluate(key => {
     const saved = JSON.parse(localStorage.getItem(key) || '{}');
     return Number(saved.currentDay || 0);
   }, SAVE_KEY)).toBe(20);
-  expect(dialogMessages.some(message => message.includes('存档导入成功'))).toBeTruthy();
   await expect(page.locator('#btnContinue')).toContainText('第 20 天');
   await page.locator('#btnContinue').click();
   await expect(page.locator('#hudDay')).toHaveText('20');
