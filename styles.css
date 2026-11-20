@@ -1,4 +1,4 @@
-/* Release: 20261120-coin-interaction-fix-1 — synchronized with index.html and game.js */
+/* Release: 20261120-haptics-entry-toast-1 — synchronized with index.html and game.js */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;min-height:100%;overflow:hidden;overscroll-behavior:none}
 body{font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#fdf7f2;color:#6d6272}
@@ -982,26 +982,32 @@ body.screen-overlay-open #gardenScreen{
   z-index:35!important;
 }
 .entry-toast{
-  position:absolute;
-  right:12px;
-  bottom:calc(18px + env(safe-area-inset-bottom));
-  max-width:min(72vw,320px);
-  padding:8px 12px;
-  border:1px solid rgba(255,255,255,.9);
+  position:fixed;
+  left:50%;
+  right:auto;
+  bottom:calc(22px + env(safe-area-inset-bottom));
+  width:min(84vw,360px);
+  max-width:calc(100vw - 28px);
+  box-sizing:border-box;
+  padding:10px 14px;
+  border:1px solid rgba(255,255,255,.96);
   border-radius:16px;
-  background:rgba(255,255,255,.9);
-  color:#8c7890;
-  font-size:11px;
-  line-height:1.35;
-  box-shadow:0 4px 14px rgba(150,130,160,.16);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  z-index:34;
+  background:rgba(255,255,255,.96);
+  color:#75667b;
+  font-size:12px;
+  line-height:1.5;
+  text-align:center;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  box-shadow:0 6px 20px rgba(105,90,120,.2);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  z-index:1200;
   pointer-events:none;
   animation:entryToastIn .22s ease-out,entryToastOut .35s ease-in 3.1s forwards;
 }
-@keyframes entryToastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes entryToastOut{to{opacity:0;transform:translateY(5px)}}
+@keyframes entryToastIn{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes entryToastOut{to{opacity:0;transform:translate(-50%,5px)}}
 /* 每日玩法提示恢复画面正中央，保持原来的居中提示样式。 */
 #introHint{
   top:46%!important;
@@ -1301,7 +1307,7 @@ body{color:#5f5866}
 
 
 /* ============================================================
-   Launch stability pass · 20261120-coin-interaction-fix-1
+   Launch stability pass · 20261120-haptics-entry-toast-1
    1) Let all live HUD text breathe instead of clipping it.
    2) Keep all six controls reachable on narrow mobile screens.
    3) Use an in-app reset dialog compatible with embedded webviews.
