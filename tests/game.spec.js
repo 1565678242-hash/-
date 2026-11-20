@@ -152,9 +152,9 @@ test('loading a day-20 save restores the day and in-progress snapshot', async ({
     }
   };
 
-  await page.evaluate(([key, value]) => {
+  await page.addInitScript(({ key, value }) => {
     localStorage.setItem(key, JSON.stringify(value));
-  }, [SAVE_KEY, day20Save]);
+  }, { key: SAVE_KEY, value: day20Save });
   await page.reload();
   await expect(page.locator('#btnContinue')).toBeVisible();
   await page.locator('#btnContinue').click();
