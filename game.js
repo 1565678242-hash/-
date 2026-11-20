@@ -828,7 +828,7 @@ function showHud(show){ hudEl.classList.toggle('show',show); topRightEl.classLis
 /* ============================================================
    十五、弹幕
    ============================================================ */
-let danmuTimer=null,danmuActive=0; const DANMU_TRACKS=[0,22,44,66,88], MAX_DANMU=5; let danmuLaneBusy=DANMU_TRACKS.map(function(){return false;});
+let danmuTimer=null,danmuTrackIdx=0,danmuActive=0; const DANMU_TRACKS=[0,14], MAX_DANMU=5;
 function addDanmu(text,kind){
   if(!text&&Math.random()<0.22){
     const notice=document.createElement('div');
@@ -839,19 +839,17 @@ function addDanmu(text,kind){
     return;
   }
   if(danmuActive>=MAX_DANMU)return;
-  const laneIndex=danmuLaneBusy.findIndex(function(busy){return !busy;});
-  if(laneIndex<0)return;
-  danmuLaneBusy[laneIndex]=true;
   const el=document.createElement('div');
   el.className='danmu-float'+(kind?' '+kind:'');
   if(!text)text=CONFIG.danmuTexts[randInt(0,CONFIG.danmuTexts.length-1)];
   el.textContent=text;
-  el.style.top=DANMU_TRACKS[laneIndex]+'px';
-  const dur=5.5+Math.random()*1.5;
+  el.style.top=DANMU_TRACKS[danmuTrackIdx%DANMU_TRACKS.length]+'px';
+  danmuTrackIdx++;
+  const dur=17+Math.random()*5;
   el.style.animationDuration=dur+'s';
   danmuLayer.appendChild(el);
   danmuActive++;
-  setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);danmuActive=Math.max(0,danmuActive-1);danmuLaneBusy[laneIndex]=false;},dur*1000+300);
+  setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);danmuActive--;},dur*1000+300);
 }
 function startDanmu(){ stopDanmu(); addDanmu(); danmuTimer=setInterval(function(){ if(state.phase!=='playing'||state.paused||state.questionOpen) return; addDanmu(); },2600+Math.random()*2400); }
 function stopDanmu(){ if(danmuTimer){ clearInterval(danmuTimer); danmuTimer=null; } danmuLayer.innerHTML=''; danmuActive=0; danmuTrackIdx=0; }
@@ -1886,7 +1884,7 @@ const THERAPY_FLOWERS=[
  {id:'resilience',name:'韧性花',emoji:'🌺',effect:'愿你柔软又有力量，经历风雨仍能慢慢盛开。'}
 ];
 function rollGardenSeed(){const n=Math.random();if(n<0.06)return {kind:'random',label:'随机种子'};if(n<0.11)return {kind:'magic',label:'神奇种子'};const f=GARDEN_SEED_LIBRARY[randInt(0,GARDEN_SEED_LIBRARY.length-1)];return {kind:'normal',flowerId:f.id,label:f.label};}
-function ensureGarden(){if(!saveData.garden)saveData.garden={seeds:0,seedInventory:[],lastWaterDay:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};const g=saveData.garden;if(!Array.isArray(g.plots))g.plots=[];if(!Array.isArray(g.seedInventory))g.seedInventory=[];g.seedInventory=g.seedInventory.map(function(seed){if(seed.kind==='mystery')return Object.assign({},seed,{kind:'random',label:'随机种子'});if(seed.kind==='therapy')return Object.assign({},seed,{kind:'magic',label:'神奇种子'});return seed;});g.plots.forEach(function(p){if(p.seedKind==='mystery')p.seedKind='random';if(p.seedKind==='therapy')p.seedKind='magic';});while(g.seedInventory.length<(Number(g.seeds)||0))g.seedInventory.push(rollGardenSeed());g.seeds=g.seedInventory.length;if(g.lastWaterDay==null)g.lastWaterDay=0;if(g.unlockedPlots==null)g.unlockedPlots=1;if(g.flowers==null)g.flowers=0;if(!Array.isArray(g.flowerCollection))g.flowerCollection=[];if(!Array.isArray(g.magicCollection))g.magicCollection=[];g.magicCollection=g.magicCollection.filter(function(f,i,a){return f&&f.id&&a.findIndex(function(x){return x&&x.id===f.id;})===i;});g.flowerCollection=g.flowerCollection.filter(function(id){const magic=THERAPY_FLOWERS.find(function(f){return f.id===id;});if(magic){if(!g.magicCollection.some(function(x){return x.id===id;}))g.magicCollection.push({id:magic.id,name:magic.name,emoji:magic.emoji,effect:magic.effect});return false;}return true;});if(!g.flowerStockById||typeof g.flowerStockById!=='object')g.flowerStockById={};if(g.harvestCount==null)g.harvestCount=0;if(g.totalFlowers==null)g.totalFlowers=0;if(!Array.isArray(g.pendingMaturedFlowers))g.pendingMaturedFlowers=[];if(g.totalPlanted==null)g.totalPlanted=g.plots.length;if(g.maxHarvestBatch==null)g.maxHarvestBatch=0;if(g.flowerLives==null)g.flowerLives=0;if(g.healingLivesSinceFlowerLive==null)g.healingLivesSinceFlowerLive=0;if(g.flowerLiveDue==null)g.flowerLiveDue=false;g.unlockedPlots=clamp(Math.max(Number(g.unlockedPlots)||1,Math.min(24,g.plots.length)),1,24);g.gardenPage=clamp(Number(g.gardenPage)||0,0,3);g.basketPage=clamp(Number(g.basketPage)||0,0,999);return g;}
+function ensureGarden(){if(!saveData.garden)saveData.garden={seeds:0,seedInventory:[],lastWaterDay:0,plots:[],fertilizer:0,doubleCards:0,tripleCards:0};const g=saveData.garden;if(!Array.isArray(g.plots))g.plots=[];if(!Array.isArray(g.seedInventory))g.seedInventory=[];g.seedInventory=g.seedInventory.map(function(seed){if(seed.kind==='mystery')return Object.assign({},seed,{kind:'random',label:'随机种子'});if(seed.kind==='therapy')return Object.assign({},seed,{kind:'magic',label:'神奇种子'});return seed;});g.plots.forEach(function(p){if(p.seedKind==='mystery')p.seedKind='random';if(p.seedKind==='therapy')p.seedKind='magic';});while(g.seedInventory.length<(Number(g.seeds)||0))g.seedInventory.push(rollGardenSeed());g.seeds=g.seedInventory.length;if(g.lastWaterDay==null)g.lastWaterDay=0;if(g.unlockedPlots==null)g.unlockedPlots=1;if(g.flowers==null)g.flowers=0;if(!Array.isArray(g.flowerCollection))g.flowerCollection=[];if(!Array.isArray(g.magicCollection))g.magicCollection=[];g.magicCollection=g.magicCollection.filter(function(f,i,a){return f&&f.id&&a.findIndex(function(x){return x&&x.id===f.id;})===i;});g.flowerCollection=g.flowerCollection.filter(function(id){const magic=THERAPY_FLOWERS.find(function(f){return f.id===id;});if(magic){if(!g.magicCollection.some(function(x){return x.id===id;}))g.magicCollection.push({id:magic.id,name:magic.name,emoji:magic.emoji,effect:magic.effect});return false;}return true;});if(!g.flowerStockById||typeof g.flowerStockById!=='object')g.flowerStockById={};if(g.harvestCount==null)g.harvestCount=0;if(g.totalFlowers==null)g.totalFlowers=0;if(!Array.isArray(g.pendingMaturedFlowers))g.pendingMaturedFlowers=[];if(g.totalPlanted==null)g.totalPlanted=g.plots.length;if(g.maxHarvestBatch==null)g.maxHarvestBatch=0;if(g.flowerLives==null)g.flowerLives=0;if(g.healingLivesSinceFlowerLive==null)g.healingLivesSinceFlowerLive=0;if(g.flowerLiveDue==null)g.flowerLiveDue=false;g.unlockedPlots=clamp(Math.max(Number(g.unlockedPlots)||1,Math.min(24,g.plots.length)),1,24);g.gardenPage=clamp(Number(g.gardenPage)||0,0,2);g.basketPage=clamp(Number(g.basketPage)||0,0,999);return g;}
 
 function renderBasket(){
  const g=ensureGarden(),basket=[];let total=0;
