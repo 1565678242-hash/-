@@ -13,7 +13,7 @@
   <div id="hud">
     <div id="hostAvatar">🌞</div>
     <div class="hud-chip lucky" id="hudLuckyChip"><span>好运果</span><b id="hudLucky">0</b></div>
-    <div class="hud-chip" id="hudMoneyChip"><span>收益</span><b id="hudMoney">0</b></div>
+    <div class="hud-chip" id="hudMoneyChip"><span>金币</span><b id="hudMoney">0</b></div>
     <div class="hud-chip" id="hudHeatChip"><span>热度</span><b id="hudHeat">0</b></div>
     <div class="hud-chip" id="hudFansChip"><span>粉丝</span><b id="hudFans">0</b></div>
   </div>
@@ -61,7 +61,7 @@
     <div class="garden-top-nav"><button class="garden-nav-btn" id="btnOpenBasket">🧺 我的花篮</button><button class="garden-nav-btn" id="btnGardenMenu">☰ 菜单</button></div>
     <div class="page-title">我的小花园</div>
     <div class="garden-intro">点空土地播种，点花苗浇水，成熟后点花朵收获。也可以使用上方的一键操作。每场疗愈直播结束，花苗都会成长一步。</div>
-    <div class="garden-balance"><span>🌱 种子 <b id="gardenSeeds">0</b></span><span>🌷 鲜花 <b id="gardenFlowerStock">0</b></span><span>♡ 收益 <b id="gardenMoney">0</b></span></div>
+    <div class="garden-balance"><span>🌱 种子 <b id="gardenSeeds">0</b></span><span>🌷 鲜花 <b id="gardenFlowerStock">0</b></span><span>♡ 金币 <b id="gardenMoney">0</b></span></div>
     <div class="garden-progress" id="gardenProgress">已收获 0 次 · 再收获 10 次解锁卖花直播</div>
     <div class="garden-toolbar">
       <button class="garden-action primary" id="btnGardenPlant">🌱 一键播种</button>
@@ -92,7 +92,7 @@
       <div class="data-card"><span>最高天数</span><b id="statBest">0</b></div>
       <div class="data-card"><span>累计好运果</span><b id="statLucky">0</b></div>
       <div class="data-card"><span>已兑换道具</span><b id="statItems">0</b></div>
-      <div class="data-card"><span>累计收益</span><b id="statEarn">0</b></div>
+      <div class="data-card"><span>累计金币</span><b id="statEarn">0</b></div>
     </div>
   </div>
   <div id="collectionScreen" class="screen">
@@ -105,7 +105,7 @@
   <div id="shopScreen" class="screen">
     <button class="back-btn" id="btnShopBack">‹ 返回</button>
     <div class="page-title">商店</div>
-    <div class="shop-balance">好运果 <b id="shopBalance">0</b> · 收益 <b id="shopMoney" style="color:#7a9a5a">0 元</b></div>
+    <div class="shop-balance">好运果 <b id="shopBalance">0</b> · 金币 <b id="shopMoney" style="color:#7a9a5a">0 🪙</b></div>
     <div class="tabs"><button class="tab active" id="tabShopFruit">直播道具</button><button class="tab" id="tabShopGoods">花园商城</button></div>
     <div class="shop-grid" id="shopGrid"></div><div class="shop-pager"><button class="tab" id="shopPrev">‹ 上一页</button><span id="shopPageLabel">1 / 1</span><button class="tab" id="shopNext">下一页 ›</button></div>
   </div>
@@ -132,20 +132,20 @@
       <div class="page-title">花卉直播间</div>
       <p class="flower-live-intro">每一种鲜花都是独立拍品。观众轮番出价，你可以逐条确认成交。</p>
       <div class="flower-live-banner"><span class="flower-live-customer" id="flowerLiveCustomer">🌼</span><div><b>花园主播 · 正在直播</b><small id="flowerLiveOrder">欢迎来到今日鲜花拍卖专场</small></div><span class="live-pill">LIVE</span></div>
-      <div class="flower-live-summary"><span>待拍花卉 <b id="flowerLiveProgress">0 项</b></span><span>花篮余量 <b id="flowerLiveStock">0 朵</b></span><span>本场成交 <b id="flowerLiveEarned">¥0</b></span></div>
+      <div class="flower-live-summary"><span>待拍花卉 <b id="flowerLiveProgress">0 项</b></span><span>花篮余量 <b id="flowerLiveStock">0 朵</b></span><span>本场成交 <b id="flowerLiveEarned">🪙0</b></span></div>
       <div class="flower-live-lots" id="flowerLiveLots"><div class="receipt-empty">正在整理今日拍品……</div></div>
       <div class="flower-live-tip" id="flowerLiveTip">每一项拍品后都有独立的「成交」按钮；全部花卉成交后，本场直播才会结束。</div>
       <div class="flower-live-receipts" id="flowerLiveReceipts"><div class="receipt-empty">成交记录会实时显示在这里</div></div>
     </div>
   </div>
-  <div id="flowerLiveSettlement" class="flower-live-settlement" aria-hidden="true"><div class="flower-live-settlement-card"><div class="settlement-emoji">🌷</div><div class="settlement-title">花卉直播结算</div><div class="settlement-sub" id="flowerSettlementSub">本场拍卖圆满结束</div><div class="settlement-income" id="flowerSettlementIncome">+¥0</div><div class="settlement-total" id="flowerSettlementTotal">收益已计入总收益</div><button class="main-btn primary" id="btnFlowerSettlementDone" type="button">完成结算</button></div></div>
+  <div id="flowerLiveSettlement" class="flower-live-settlement" aria-hidden="true"><div class="flower-live-settlement-card"><div class="settlement-emoji">🌷</div><div class="settlement-title">花卉直播结算</div><div class="settlement-sub" id="flowerSettlementSub">本场拍卖圆满结束</div><div class="settlement-income" id="flowerSettlementIncome">+🪙0</div><div class="settlement-total" id="flowerSettlementTotal">金币已计入总金币</div><button class="main-btn primary" id="btnFlowerSettlementDone" type="button">进入下一天</button></div></div>
   <div id="pkOverlay">
     <div class="question-card">
       <div class="q-header">
         <div class="q-avatar">🎤</div>
         <div class="q-meta"><div class="q-name" id="pkName">???</div><div class="q-tag">向你发起热度 PK</div></div>
       </div>
-      <div class="q-text">接受挑战：限时内疯狂消除坏情绪涨热度，超过对方就赢了！获胜有大额收益和涨粉，输了会掉一点粉丝哦。</div>
+      <div class="q-text">接受挑战：限时内疯狂消除坏情绪涨热度，超过对方就赢了！获胜有大额金币和涨粉，输了会掉一点粉丝哦。</div>
       <div class="q-options">
         <button class="q-option" id="pkAccept">⚡ 接受 PK！</button>
         <button class="q-option" id="pkDecline">这次先不比了</button>
@@ -161,7 +161,7 @@
       <div class="au-name" id="auName">《好运香水》</div>
       <div class="au-note" id="auNote"></div>
       <div class="au-bidder" id="auBidder">观众举牌竞价中……</div>
-      <div class="au-price" id="auPrice">0 元</div>
+      <div class="au-price" id="auPrice">0 🪙</div>
       <div class="q-options">
         <button class="q-option" id="auDeal">🔨 成交！</button>
       </div>
@@ -173,8 +173,8 @@
       <div class="tut-step on"><div class="tut-emoji">🔔</div><div class="tut-title">叮！欢迎绑定</div><div class="tut-text">欢迎来到「滚蛋吧坏情绪：疗愈直播系统」！<br>一段新的生活，正等待你开启。</div></div>
       <div class="tut-step"><div class="tut-emoji">🌧️</div><div class="tut-title">失业之后</div><div class="tut-text">失业后，你决定开始疗愈直播。<br>没有想到，这会成为人生新的起点。</div></div>
       <div class="tut-step"><div class="tut-emoji">🫧</div><div class="tut-title">疗愈别人，也疗愈自己</div><div class="tut-text">你在直播里消除了很多观众的负面情绪，<br>也慢慢帮助大家解开了心里的结。</div></div>
-      <div class="tut-step"><div class="tut-emoji">💗</div><div class="tut-title">一点点变好的生活</div><div class="tut-text">收到的鼓励越来越多，<br>你也慢慢获得了第一笔属于自己的收益。</div></div>
-      <div class="tut-step"><div class="tut-emoji">🌱</div><div class="tut-title">把收益种进花园</div><div class="tut-text">你把这些收益投入自己的小花园，<br>买下土地，播种、浇水，照料每一株花苗。</div></div>
+      <div class="tut-step"><div class="tut-emoji">💗</div><div class="tut-title">一点点变好的生活</div><div class="tut-text">收到的鼓励越来越多，<br>你也慢慢获得了第一笔属于自己的金币。</div></div>
+      <div class="tut-step"><div class="tut-emoji">🌱</div><div class="tut-title">把金币种进花园</div><div class="tut-text">你把这些金币投入自己的小花园，<br>买下土地，播种、浇水，照料每一株花苗。</div></div>
       <div class="tut-step"><div class="tut-emoji">🌷</div><div class="tut-title">鲜花也有了新去处</div><div class="tut-text">花儿终于盛开。<br>你把亲手收获的鲜花摆进直播间，开始售卖花束。</div></div>
       <div class="tut-step"><div class="tut-emoji">🏡</div><div class="tut-title">从小花园到大花园</div><div class="tut-text">你决定继续扩张自己的花园，<br>让更多种子在这里生根、开花。</div></div>
       <div class="tut-step"><div class="tut-emoji">🍎</div><div class="tut-title">还有更远的计划</div><div class="tut-text">等花园越来越热闹，<br>你还打算买地经营一座果园……</div></div>
@@ -192,7 +192,7 @@
       <div class="game-guide-item"><span>🫧</span><div><b>疗愈直播怎么玩</b><p>用手指拖动写着相同坏情绪的泡泡，让它们碰在一起就能消除。粉色/明亮的好情绪不要碰；出现好运果时，轻点它收集。</p></div></div>
       <div class="game-guide-item"><span>💬</span><div><b>直播里还有什么</b><p>回答观众提问、参加随机互动，会带来热度和粉丝。清除当天所有坏情绪，就能完成今天的直播。</p></div></div>
       <div class="game-guide-item"><span>🌱</span><div><b>花园怎么经营</b><p>直播会奖励种子。点空土地播种，点花苗浇水，成熟后点一下收获；也能用上方的一键按钮批量操作。</p></div></div>
-      <div class="game-guide-item"><span>🌷</span><div><b>鲜花有什么用</b><p>收获的花会存进花篮。累计收获 10 株后，每完成 5 场疗愈直播，就会自动开启一场花卉直播；每场最多 5 条竞价条目，成交收益会计入总收益。</p></div></div>
+      <div class="game-guide-item"><span>🌷</span><div><b>鲜花有什么用</b><p>收获的花会存进花篮。累计收获 10 株后，每完成 5 场疗愈直播，就会自动开启一场花卉直播；每场最多 5 条竞价条目，成交金币会计入总金币。</p></div></div>
       <button class="main-btn primary" id="btnGuideStart" style="width:100%">知道啦，开始直播</button>
     </div>
   </div>
@@ -214,7 +214,7 @@
     <div class="reset-confirm-card" role="alertdialog" aria-modal="true" aria-labelledby="resetConfirmTitle" aria-describedby="resetConfirmText">
       <div class="reset-confirm-icon">🧹</div>
       <div class="reset-confirm-title" id="resetConfirmTitle">确认清空游戏数据？</div>
-      <p class="reset-confirm-text" id="resetConfirmText">这会清除本游戏的直播进度、收益、花园、图鉴和成就，且无法撤销。</p>
+      <p class="reset-confirm-text" id="resetConfirmText">这会清除本游戏的直播进度、金币、花园、图鉴和成就，且无法撤销。</p>
       <div class="reset-confirm-actions">
         <button type="button" class="reset-confirm-cancel" id="btnResetCancel">再想想</button>
         <button type="button" class="reset-confirm-submit" id="btnResetConfirm">确认清空</button>
