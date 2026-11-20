@@ -1,4 +1,4 @@
-/* Release: 20261120-gold-coin-label-fix-1 — synchronized with index.html and game.js */
+/* Release: 20261120-danmu-right-hud-six-1 — synchronized with index.html and game.js */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;min-height:100%;overflow:hidden;overscroll-behavior:none}
 body{font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#fdf7f2;color:#6d6272}
@@ -856,7 +856,6 @@ body.screen-overlay-open #gardenScreen{
     align-items:stretch!important;
     z-index:28!important;
   }
-  #hud #hudDayChip{display:none!important}
   #hostAvatar{
     position:relative!important;top:auto!important;left:auto!important;
     width:36px!important;height:36px!important;
@@ -1307,7 +1306,7 @@ body{color:#5f5866}
 
 
 /* ============================================================
-   Launch stability pass · 20261120-gold-coin-label-fix-1
+   Launch stability pass · 20261120-danmu-right-hud-six-1
    1) Let all live HUD text breathe instead of clipping it.
    2) Keep all six controls reachable on narrow mobile screens.
    3) Use an in-app reset dialog compatible with embedded webviews.
@@ -1470,3 +1469,62 @@ body{color:#5f5866}
 }
 
 .shop-currency-note{width:100%;text-align:center;margin:-14px 0 2px;font-size:10px;line-height:1.5;color:#9a91a0;}
+
+
+/* 2026-11-20：弹幕与进入直播间提示统一靠屏幕右下角，不改动其他区域布局。 */
+#danmuLayer{
+  position:absolute!important;
+  top:auto!important;
+  bottom:calc(58px + env(safe-area-inset-bottom))!important;
+  left:auto!important;
+  right:10px!important;
+  width:min(82vw,360px)!important;
+  height:52px!important;
+  padding:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+  z-index:27!important;
+  pointer-events:none!important;
+}
+#danmuLayer .danmu-float{
+  position:absolute!important;
+  left:auto!important;
+  right:0!important;
+  width:max-content!important;
+  max-width:100%!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  text-align:right!important;
+  line-height:1.4!important;
+  transform:none!important;
+  animation-name:danmuRightFade!important;
+  animation-timing-function:linear!important;
+  animation-fill-mode:forwards!important;
+}
+@keyframes danmuRightFade{
+  0%{opacity:0;transform:translateX(8px)}
+  6%{opacity:1;transform:translateX(0)}
+  90%{opacity:1;transform:translateX(0)}
+  100%{opacity:0;transform:translateX(0)}
+}
+.entry-toast{
+  left:auto!important;
+  right:10px!important;
+  bottom:calc(116px + env(safe-area-inset-bottom))!important;
+  width:min(82vw,360px)!important;
+  max-width:calc(100vw - 20px)!important;
+  text-align:right!important;
+  overflow-wrap:anywhere!important;
+  transform:none!important;
+  animation:entryToastRightIn .22s ease-out,entryToastRightOut .35s ease-in 3.1s forwards!important;
+}
+@keyframes entryToastRightIn{
+  from{opacity:0;transform:translateX(8px)}
+  to{opacity:1;transform:translateX(0)}
+}
+@keyframes entryToastRightOut{
+  to{opacity:0;transform:translateX(0)}
+}
+
+/* 恢复第六个 HUD 数据格：天数。 */
+#hud #hudDayChip{grid-column:3!important;grid-row:2!important}
