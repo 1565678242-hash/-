@@ -828,7 +828,7 @@ function showHud(show){ hudEl.classList.toggle('show',show); topRightEl.classLis
 /* ============================================================
    十五、弹幕
    ============================================================ */
-let danmuTimer=null,danmuTrackIdx=0,danmuActive=0; const DANMU_TRACKS=[0,22,44,66,88], MAX_DANMU=5;
+let danmuTimer=null,danmuActive=0; const DANMU_TRACKS=[0,22,44,66,88], MAX_DANMU=5; let danmuLaneBusy=DANMU_TRACKS.map(function(){return false;});
 function addDanmu(text,kind){
   if(!text&&Math.random()<0.22){
     const notice=document.createElement('div');
@@ -839,17 +839,19 @@ function addDanmu(text,kind){
     return;
   }
   if(danmuActive>=MAX_DANMU)return;
+  const laneIndex=danmuLaneBusy.findIndex(function(busy){return !busy;});
+  if(laneIndex<0)return;
+  danmuLaneBusy[laneIndex]=true;
   const el=document.createElement('div');
   el.className='danmu-float'+(kind?' '+kind:'');
   if(!text)text=CONFIG.danmuTexts[randInt(0,CONFIG.danmuTexts.length-1)];
   el.textContent=text;
-  el.style.top=DANMU_TRACKS[danmuTrackIdx%DANMU_TRACKS.length]+'px';
-  danmuTrackIdx++;
+  el.style.top=DANMU_TRACKS[laneIndex]+'px';
   const dur=5.5+Math.random()*1.5;
   el.style.animationDuration=dur+'s';
   danmuLayer.appendChild(el);
   danmuActive++;
-  setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);danmuActive--;},dur*1000+300);
+  setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);danmuActive=Math.max(0,danmuActive-1);danmuLaneBusy[laneIndex]=false;},dur*1000+300);
 }
 function startDanmu(){ stopDanmu(); addDanmu(); danmuTimer=setInterval(function(){ if(state.phase!=='playing'||state.paused||state.questionOpen) return; addDanmu(); },2600+Math.random()*2400); }
 function stopDanmu(){ if(danmuTimer){ clearInterval(danmuTimer); danmuTimer=null; } danmuLayer.innerHTML=''; danmuActive=0; danmuTrackIdx=0; }
