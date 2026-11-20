@@ -1462,3 +1462,5 @@ body{color:#5f5866}
   #danmuLayer{top:calc(150px + env(safe-area-inset-top))!important}
   #eventBanner{top:calc(188px + env(safe-area-inset-top))!important}
 }
+
+.shop-currency-note{width:100%;text-align:center;margin:-14px 0 2px;font-size:10px;line-height:1.5;color:#9a91a0;}
