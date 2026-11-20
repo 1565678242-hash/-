@@ -1459,6 +1459,6 @@ body{color:#5f5866}
   #topRight .icon-btn,#topRight .text-btn{min-height:34px!important}
   #hud{top:calc(68px + env(safe-area-inset-top))!important}
   #hud .hud-chip{min-height:32px!important}
-  #danmuLayer{top:calc(140px + env(safe-area-inset-top))!important}
-  #eventBanner{top:calc(178px + env(safe-area-inset-top))!important}
+  #danmuLayer{top:calc(150px + env(safe-area-inset-top))!important}
+  #eventBanner{top:calc(188px + env(safe-area-inset-top))!important}
 }
