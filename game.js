@@ -2142,8 +2142,50 @@ document.getElementById('btnResetConfirm').addEventListener('click',function(){A
 resetConfirmOverlayEl.addEventListener('click',function(e){if(e.target===resetConfirmOverlayEl)closeResetConfirm();});
 document.getElementById('btnSaveImport').addEventListener('click',function(){saveFileInput.click();});
 saveFileInput.addEventListener('change',function(){
- const file=saveFileInput.files&&saveFileInput.files[0];if(!file)return;const reader=new FileReader();
- reader.onload=function(){try{const data=JSON.parse(reader.result);if(!data||typeof data!=='object'||!('totalDays'in data)||!('currentDay'in data))throw new Error('invalid');if(!confirm('导入存档会覆盖当前进度，确定继续吗？'))return;localStorage.setItem(CONFIG.saveKey,JSON.stringify(data));location.reload();}catch(e){alert('存档文件无法识别，请选择本游戏导出的 JSON 文件。');}finally{saveFileInput.value='';}};
+ const file=saveFileInput.files&&saveFileInput.files[0];if(!file)return;
+ const reader=new FileReader();
+ reader.onload=function(){
+  let data;
+  try{
+   data=JSON.parse(reader.result);
+   if(!data||typeof data!=='object'||Array.isArray(data)||
+      !Number.isInteger(Number(data.currentDay))||Number(data.currentDay)<1||
+      !Number.isFinite(Number(data.totalDays))||Number(data.totalDays)<0){
+     throw new Error('invalid-save-format');
+   }
+  }catch(e){
+   alert('存档文件无法识别或进度字段损坏。本次没有修改现有存档。');
+   saveFileInput.value='';return;
+  }
+  if(!confirm('即将导入第 '+Number(data.currentDay)+' 天的存档，并覆盖当前进度。导入前会自动备份当前存档。确定继续吗？')){
+   saveFileInput.value='';return;
+  }
+  const backupKey=CONFIG.saveKey+'_before_import_backup';
+  let previous=null;
+  try{
+   previous=localStorage.getItem(CONFIG.saveKey);
+   if(previous!==null)localStorage.setItem(backupKey,previous);
+   const serialized=JSON.stringify(data);
+   localStorage.setItem(CONFIG.saveKey,serialized);
+   const written=localStorage.getItem(CONFIG.saveKey);
+   const verified=written?JSON.parse(written):null;
+   if(!verified||Number(verified.currentDay)!==Number(data.currentDay)||
+      Number(verified.totalDays)!==Number(data.totalDays)){
+    throw new Error('save-write-verification-failed');
+   }
+   alert('存档导入成功！已恢复到第 '+Number(verified.currentDay)+' 天。点击确定后进入游戏。');
+   location.reload();
+  }catch(e){
+   try{
+    if(previous===null)localStorage.removeItem(CONFIG.saveKey);
+    else localStorage.setItem(CONFIG.saveKey,previous);
+   }catch(restoreError){}
+   alert('导入失败：浏览器没有成功保存这份存档，原有进度已尽力恢复。请勿清除浏览器数据后重试。');
+  }finally{
+   saveFileInput.value='';
+  }
+ };
+ reader.onerror=function(){alert('读取存档文件失败，请重新选择 JSON 文件。');saveFileInput.value='';};
  reader.readAsText(file);
 });
 function closeGameMenu(){
