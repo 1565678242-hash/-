@@ -1,4 +1,4 @@
-/* Release: 20261120-readable-mobile-1 — synchronized with index.html and game.js */
+/* Release: 20261120-stability-fix-2 — synchronized with index.html and game.js */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;min-height:100%;overflow:hidden;overscroll-behavior:none}
 body{font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#fdf7f2;color:#6d6272}
@@ -1297,4 +1297,168 @@ body{color:#5f5866}
 @media(max-width:360px){
   #topRight .text-btn{font-size:10px!important;padding:5px 7px!important}
   .home-sub{font-size:11px}
+}
+
+
+/* ============================================================
+   Launch stability pass · 20261120-stability-fix-2
+   1) Let all live HUD text breathe instead of clipping it.
+   2) Keep all six controls reachable on narrow mobile screens.
+   3) Use an in-app reset dialog compatible with embedded webviews.
+   ============================================================ */
+#topRight{
+  top:calc(28px + env(safe-area-inset-top))!important;
+  left:8px!important;right:8px!important;
+  width:auto!important;max-width:680px!important;
+  margin:0 auto!important;
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:5px!important;
+  align-items:stretch!important;
+  transform:none!important;
+}
+#topRight .icon-btn,#topRight .text-btn{
+  width:100%!important;min-width:0!important;max-width:none!important;
+  height:auto!important;min-height:38px!important;
+  padding:5px 2px!important;margin:0!important;
+  border-radius:12px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  font-size:clamp(9px,2.8vw,13px)!important;
+  line-height:1.25!important;letter-spacing:0!important;
+  white-space:normal!important;overflow:visible!important;
+  overflow-wrap:anywhere!important;text-overflow:clip!important;
+}
+#hud{
+  top:calc(74px + env(safe-area-inset-top))!important;
+  left:10px!important;right:10px!important;
+  width:auto!important;max-width:600px!important;
+  margin:0 auto!important;padding:0!important;
+  height:auto!important;min-height:0!important;max-height:none!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  grid-template-rows:repeat(2,minmax(36px,auto))!important;
+  gap:5px!important;align-items:stretch!important;
+  overflow:visible!important;
+}
+#hud .hud-chip{
+  width:100%!important;min-width:0!important;
+  height:auto!important;min-height:36px!important;max-height:none!important;
+  margin:0!important;padding:4px 6px!important;
+  display:flex!important;flex-direction:column!important;
+  align-items:center!important;justify-content:center!important;
+  gap:2px!important;overflow:visible!important;
+  white-space:normal!important;
+}
+#hud .hud-chip span{
+  display:block!important;max-width:100%!important;
+  font-size:11px!important;line-height:1.25!important;
+  color:#58675d!important;white-space:normal!important;
+  overflow:visible!important;text-overflow:clip!important;
+}
+#hud .hud-chip b{
+  display:block!important;max-width:100%!important;
+  font-size:14px!important;line-height:1.2!important;
+  color:#554f5c!important;white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+#hud #hostAvatar{
+  grid-column:1!important;grid-row:1!important;
+  position:relative!important;top:auto!important;left:auto!important;
+  width:100%!important;height:auto!important;min-height:36px!important;
+  margin:0!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  font-size:20px!important;overflow:visible!important;
+}
+#hud #hudLuckyChip{grid-column:2!important;grid-row:1!important}
+#hud #hudMoneyChip{grid-column:3!important;grid-row:1!important}
+#hud #hudHeatChip{grid-column:1!important;grid-row:2!important}
+#hud #hudFansChip{grid-column:2!important;grid-row:2!important}
+#danmuLayer{
+  top:calc(154px + env(safe-area-inset-top))!important;
+  bottom:auto!important;left:0!important;right:0!important;
+  height:36px!important;min-height:36px!important;max-height:none!important;
+  padding:5px 0!important;margin:0!important;
+  overflow:hidden!important;line-height:1.5!important;
+}
+#danmuLayer .danmu-float{font-size:12px!important;line-height:1.5!important}
+#eventBanner{
+  top:calc(192px + env(safe-area-inset-top))!important;
+  bottom:auto!important;left:0!important;right:0!important;
+  width:100%!important;height:auto!important;
+  min-height:36px!important;max-height:none!important;
+  padding:4px 10px!important;margin:0!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  overflow:visible!important;
+}
+#eventBanner .eb-inner{
+  display:block!important;width:100%!important;max-width:100%!important;
+  height:auto!important;max-height:none!important;
+  padding:5px 10px!important;
+  font-size:clamp(11px,2.8vw,13px)!important;
+  line-height:1.4!important;text-align:center!important;
+  white-space:normal!important;overflow:visible!important;
+  overflow-wrap:anywhere!important;text-overflow:clip!important;
+  animation:none!important;
+}
+#pkBar{top:calc(238px + env(safe-area-inset-top))!important}
+#liveBar{white-space:normal!important;line-height:1.25!important}
+.flower-live-screen{
+  align-items:stretch!important;justify-content:flex-start!important;
+  overflow-x:hidden!important;overflow-y:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+  padding:calc(54px + env(safe-area-inset-top)) 12px calc(22px + env(safe-area-inset-bottom))!important;
+}
+.flower-live-card{min-width:0!important;min-height:0!important;height:auto!important}
+.flower-live-intro,.flower-live-banner b,.flower-live-banner small,
+.flower-live-summary>span,.flower-live-tip,.flower-lot-name,
+.flower-lot-meta,.flower-lot-bid,.sale-receipt b,.sale-receipt small{
+  white-space:normal!important;overflow:visible!important;
+  overflow-wrap:anywhere!important;text-overflow:clip!important;
+  line-height:1.45!important;
+}
+.flower-live-summary>span{min-width:0!important}
+.flower-auction-lot{min-width:0!important;align-items:center!important}
+.flower-auction-lot>*{min-width:0!important}
+.flower-lot-action{white-space:normal!important;min-width:58px!important;max-width:82px!important;line-height:1.25!important}
+.reset-confirm-overlay{
+  position:fixed;inset:0;z-index:3000;
+  display:none;align-items:center;justify-content:center;
+  padding:22px calc(18px + env(safe-area-inset-right)) calc(22px + env(safe-area-inset-bottom)) calc(18px + env(safe-area-inset-left));
+  background:rgba(47,57,49,.48);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+}
+.reset-confirm-overlay.show{display:flex}
+.reset-confirm-card{
+  width:min(100%,360px);padding:24px 20px 18px;
+  border:1px solid rgba(255,255,255,.96);border-radius:24px;
+  background:linear-gradient(155deg,#fffefa,#f2f7ef);
+  box-shadow:0 20px 60px rgba(40,55,43,.24);text-align:center;
+}
+.reset-confirm-icon{font-size:34px;line-height:1.3;margin-bottom:8px}
+.reset-confirm-title{font-size:18px;font-weight:900;line-height:1.4;color:#536b58}
+.reset-confirm-text{margin:10px 0 18px;font-size:13px;line-height:1.75;color:#62666a;overflow-wrap:anywhere}
+.reset-confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.reset-confirm-actions button{
+  min-width:0;min-height:44px;padding:9px 8px;border:0;border-radius:14px;
+  font-size:14px;font-weight:800;line-height:1.3;white-space:normal;
+}
+.reset-confirm-cancel{background:#edf0e9;color:#5e6c5f}
+.reset-confirm-submit{background:linear-gradient(135deg,#d98b9b,#c87588);color:#fff}
+@media(max-width:360px){
+  #topRight{left:5px!important;right:5px!important;gap:3px!important}
+  #topRight .icon-btn,#topRight .text-btn{min-height:36px!important;font-size:9px!important;padding:4px 1px!important}
+  #hud .hud-chip span{font-size:10px!important}
+  #hud .hud-chip b{font-size:13px!important}
+}
+@media(min-width:700px){
+  #topRight{top:calc(32px + env(safe-area-inset-top))!important}
+  #hud{top:calc(80px + env(safe-area-inset-top))!important}
+  #danmuLayer{top:calc(160px + env(safe-area-inset-top))!important}
+  #eventBanner{top:calc(200px + env(safe-area-inset-top))!important}
+}
+@media(max-height:620px){
+  #topRight .icon-btn,#topRight .text-btn{min-height:34px!important}
+  #hud{top:calc(68px + env(safe-area-inset-top))!important}
+  #hud .hud-chip{min-height:32px!important}
+  #danmuLayer{top:calc(140px + env(safe-area-inset-top))!important}
+  #eventBanner{top:calc(178px + env(safe-area-inset-top))!important}
 }
