@@ -538,7 +538,6 @@ const gardenSeedsEl = document.getElementById('gardenSeeds');
 const gardenMoneyEl = document.getElementById('gardenMoney');
 const gardenTipEl = document.getElementById('gardenTip');
 const gameMenuEl = document.getElementById('gameMenu');
-const saveFileInput = document.getElementById('saveFileInput');
 
 const collectionScreen = document.getElementById('collectionScreen');
 const shopScreen = document.getElementById('shopScreen');
@@ -2052,11 +2051,6 @@ document.getElementById('flowerLiveLots').addEventListener('click',function(e){
 document.getElementById('btnOpenBasket').addEventListener('click',function(){AudioSys.click();renderBasket();showScreen(document.getElementById('basketScreen'));});
 document.getElementById('btnBasketBack').addEventListener('click',function(){AudioSys.click();showScreen(gardenScreen);renderGarden();});
 document.getElementById('btnGardenMenu').addEventListener('click',function(){AudioSys.click();document.getElementById('btnMenu').click();});
-function exportSave(){
-  saveDaySnapshot();persist();const blob=new Blob([JSON.stringify(saveData,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
-  a.href=url;a.download='滚蛋吧坏情绪-存档.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);showToast('💾','存档已导出');
-}
-document.getElementById('btnSaveExport').addEventListener('click',exportSave);
 window.addEventListener('pagehide',function(){saveDaySnapshot();persist();});
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden'){saveDaySnapshot();persist();}});
 
@@ -2134,60 +2128,10 @@ function startNewGame(){
 }
 document.getElementById('btnSaveHome').addEventListener('click',function(){AudioSys.click();saveManageMenuEl.classList.add('show');});
 document.getElementById('btnSaveManageClose').addEventListener('click',function(){AudioSys.click();saveManageMenuEl.classList.remove('show');});
-document.getElementById('btnSaveManageExport').addEventListener('click',function(){AudioSys.click();exportSave();});
-document.getElementById('btnSaveManageImport').addEventListener('click',function(){AudioSys.click();saveFileInput.click();});
 document.getElementById('btnSaveManageReset').addEventListener('click',function(){AudioSys.click();openResetConfirm('clear');});
 document.getElementById('btnResetCancel').addEventListener('click',function(){AudioSys.click();closeResetConfirm();});
 document.getElementById('btnResetConfirm').addEventListener('click',function(){AudioSys.click();if(resetConfirmMode==='newGame')startNewGame();else clearAllProgress();});
 resetConfirmOverlayEl.addEventListener('click',function(e){if(e.target===resetConfirmOverlayEl)closeResetConfirm();});
-document.getElementById('btnSaveImport').addEventListener('click',function(){saveFileInput.click();});
-saveFileInput.addEventListener('change',function(){
- const file=saveFileInput.files&&saveFileInput.files[0];if(!file)return;
- const reader=new FileReader();
- reader.onload=function(){
-  let data;
-  try{
-   data=JSON.parse(reader.result);
-   if(!data||typeof data!=='object'||Array.isArray(data)||
-      !Number.isInteger(Number(data.currentDay))||Number(data.currentDay)<1||
-      !Number.isFinite(Number(data.totalDays))||Number(data.totalDays)<0){
-     throw new Error('invalid-save-format');
-   }
-  }catch(e){
-   alert('存档文件无法识别或进度字段损坏。本次没有修改现有存档。');
-   saveFileInput.value='';return;
-  }
-  if(!confirm('即将导入第 '+Number(data.currentDay)+' 天的存档，并覆盖当前进度。导入前会自动备份当前存档。确定继续吗？')){
-   saveFileInput.value='';return;
-  }
-  const backupKey=CONFIG.saveKey+'_before_import_backup';
-  let previous=null;
-  try{
-   previous=localStorage.getItem(CONFIG.saveKey);
-   if(previous!==null)localStorage.setItem(backupKey,previous);
-   const serialized=JSON.stringify(data);
-   localStorage.setItem(CONFIG.saveKey,serialized);
-   const written=localStorage.getItem(CONFIG.saveKey);
-   const verified=written?JSON.parse(written):null;
-   if(!verified||Number(verified.currentDay)!==Number(data.currentDay)||
-      Number(verified.totalDays)!==Number(data.totalDays)){
-    throw new Error('save-write-verification-failed');
-   }
-   alert('存档导入成功！已恢复到第 '+Number(verified.currentDay)+' 天。点击确定后进入游戏。');
-   location.reload();
-  }catch(e){
-   try{
-    if(previous===null)localStorage.removeItem(CONFIG.saveKey);
-    else localStorage.setItem(CONFIG.saveKey,previous);
-   }catch(restoreError){}
-   alert('导入失败：浏览器没有成功保存这份存档，原有进度已尽力恢复。请勿清除浏览器数据后重试。');
-  }finally{
-   saveFileInput.value='';
-  }
- };
- reader.onerror=function(){alert('读取存档文件失败，请重新选择 JSON 文件。');saveFileInput.value='';};
- reader.readAsText(file);
-});
 function closeGameMenu(){
   gameMenuEl.classList.remove('show');
   const anotherScreenOpen=!!document.querySelector('.screen.active');
