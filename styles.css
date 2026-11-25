@@ -1582,3 +1582,7 @@ body{color:#5f5866}
 
 /* Remove the live-room danmu strip, including its translucent white panel. */
 #danmuLayer{display:none!important;background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+
+
+/* Hide live-room entry notifications as well as the danmu strip. */
+.entry-toast{display:none!important;visibility:hidden!important;}
