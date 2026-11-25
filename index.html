@@ -13,6 +13,7 @@
 <div id="app">
   <div id="phoneStatusBar"><span id="phoneClock">09:41</span><span class="phone-status-right"><span>◉ Wi-Fi</span><span>▮▮▮</span><span>▰</span></span></div>
   <canvas id="gameCanvas" aria-label="游戏区域：拖动相同的情绪气泡进行消除，点击好运果收集"></canvas>
+  <button id="btnEmergencyRestart" type="button" aria-label="清空游戏记录并重新开始">↻ 重开游戏</button>
   <div id="hud">
     <div id="hostAvatar">🌞</div>
     <div class="hud-chip lucky" id="hudLuckyChip"><span>好运果</span><b id="hudLucky">0</b></div>
@@ -51,12 +52,10 @@
     <div class="home-buttons">
       <button class="main-btn primary" id="btnContinue">继 续 游 戏</button>
       <button class="main-btn" id="btnGameGuide">📖 新手玩法说明</button>
-      <button class="main-btn" id="btnNewGame">新 游 戏</button>
       <button class="main-btn" id="btnGardenHome">🌱 我 的 花 园</button>
       <button class="main-btn lucky-btn" id="btnShopHome">商 店</button>
       <button class="main-btn" id="btnCollectionHome">收 藏 图 鉴</button>
       <button class="main-btn" id="btnAchievements">成 就</button>
-      <button class="main-btn" id="btnSaveHome">进 度 管 理</button>
     </div>
     <div id="perfumeCountdown"></div>
   </div>
@@ -205,19 +204,11 @@
     <div class="garden-notice-card"><div class="notice-emoji" id="gardenNoticeEmoji">🌸</div><div class="notice-title" id="gardenNoticeTitle">花儿成熟啦</div><div class="notice-text" id="gardenNoticeText"></div><div class="notice-actions"><button class="main-btn" id="gardenNoticeClose">知道啦</button><button class="main-btn primary" id="gardenNoticeGo">去花园收获</button></div></div>
   </div>
   <div id="dayTransition" class="day-transition"><div class="day-transition-flower">🌼</div><div id="dayTransitionText">第 2 天</div><small>新的一天，也要好好生活</small></div>
-  <div id="saveManageMenu" class="menu-overlay">
-    <div class="menu-card save-manage-card">
-      <div class="menu-title">进度管理</div>
-       <div class="menu-sub">游戏进度会自动保存在本设备</div>
-      <button class="menu-action danger" id="btnSaveManageReset">重开游戏（清除本地数据）</button>
-      <button class="menu-cancel" id="btnSaveManageClose">返回</button>
-    </div>
-  </div>
   <div id="resetConfirmOverlay" class="reset-confirm-overlay" aria-hidden="true">
     <div class="reset-confirm-card" role="alertdialog" aria-modal="true" aria-labelledby="resetConfirmTitle" aria-describedby="resetConfirmText">
       <div class="reset-confirm-icon">🧹</div>
       <div class="reset-confirm-title" id="resetConfirmTitle">确认清空游戏数据？</div>
-      <p class="reset-confirm-text" id="resetConfirmText">这会清除本游戏的直播进度、金币、花园、图鉴和成就，且无法撤销。</p>
+      <p class="reset-confirm-text" id="resetConfirmText">这会清除本设备上的全部游戏记录、金币、花园、图鉴和成就，并从头开始。此操作无法撤销。</p>
       <div class="reset-confirm-actions">
         <button type="button" class="reset-confirm-cancel" id="btnResetCancel">再想想</button>
         <button type="button" class="reset-confirm-submit" id="btnResetConfirm">确认清空</button>
