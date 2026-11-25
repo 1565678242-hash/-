@@ -1934,7 +1934,6 @@ function openGarden(){
 function closeGarden(){
   let target=gardenReturnScreen;
   gameMenuEl.classList.remove('show');
-  document.getElementById('saveManageMenu').classList.remove('show');
   document.getElementById('gardenNotice').classList.remove('show');
   if(gardenReturnPhase==='playing'||gardenReturnPhase==='tree'){
     showScreen(null);
