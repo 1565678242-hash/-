@@ -2055,10 +2055,12 @@ document.addEventListener('visibilitychange',function(){if(document.visibilitySt
 
 const resetConfirmOverlayEl=document.getElementById('resetConfirmOverlay');
 const resetConfirmTextEl=document.getElementById('resetConfirmText');
-function openResetConfirm(){
-  resetConfirmTextEl.textContent='这会清除本设备上的全部游戏记录、金币、花园、图鉴和成就，并从头开始。此操作无法撤销。';
-  document.getElementById('resetConfirmTitle').textContent='重新开始游戏？';
-  document.getElementById('btnResetConfirm').textContent='确认重开';
+let resetConfirmMode='clear';
+function openResetConfirm(mode){
+  resetConfirmMode=mode||'clear';
+  resetConfirmTextEl.textContent=resetConfirmMode==='newGame'?'开始新游戏会清除当前游戏进度，并从第 1 天重新开始。此操作无法撤销。':'这会清除本设备上的全部游戏记录、金币、花园、图鉴和成就，并从头开始。此操作无法撤销。';
+  document.getElementById('resetConfirmTitle').textContent=resetConfirmMode==='newGame'?'开始新游戏？':'重新开始游戏？';
+  document.getElementById('btnResetConfirm').textContent=resetConfirmMode==='newGame'?'开始新游戏':'确认重开';
   resetConfirmOverlayEl.classList.add('show');
   resetConfirmOverlayEl.setAttribute('aria-hidden','false');
 }
@@ -2105,7 +2107,17 @@ function clearAllProgress(){
   window.location.reload();
 }
 document.getElementById('btnResetCancel').addEventListener('click',function(){AudioSys.click();closeResetConfirm();});
-document.getElementById('btnResetConfirm').addEventListener('click',function(){AudioSys.click();clearAllProgress();});
+function startNewGame(){
+  const hasSeenStory=!!saveData.seenStoryIntro;
+  saveData=createFreshSaveData();
+  saveData.seenIntro=hasSeenStory;saveData.seenStoryIntro=hasSeenStory;
+  resetRuntimeForHome();
+  gardenTipEl.textContent='花圃已经整理好啦。先领取直播种子，再选择空土地种下；浇水三次或完成直播，让花苗慢慢长大。';
+  renderGarden();updateHome();persist();
+  closeResetConfirm();
+  showTutorial();applyBuffsForNewDay();startGiftTimer();startDay(1);
+}
+document.getElementById('btnResetConfirm').addEventListener('click',function(){AudioSys.click();if(resetConfirmMode==='newGame')startNewGame();else clearAllProgress();});
 document.getElementById('btnResetHome').addEventListener('click',function(e){e.preventDefault();e.stopPropagation();AudioSys.click();openResetConfirm();});
 resetConfirmOverlayEl.addEventListener('click',function(e){if(e.target===resetConfirmOverlayEl)closeResetConfirm();});
 function closeGameMenu(){
@@ -2131,6 +2143,16 @@ function updateHome(){
   const cd=document.getElementById('perfumeCountdown');
   cd.textContent='完成直播得种子 · 经营花园 · 收获鲜花 · 解锁卖花直播';
 }
+
+document.getElementById('btnNewGame').addEventListener('click',function(){
+  AudioSys.init();AudioSys.click();
+  const g=saveData.garden||{};
+  const hasProgress=saveData.totalDays>0||saveData.totalPopped>0||saveData.luckyCount>0||
+    saveData.unlocked.length>0||saveData.money>0||saveData.totalEarned>0||
+    (Array.isArray(g.plots)&&g.plots.length>0)||(Number(g.harvestCount)||0)>0;
+  if(hasProgress){openResetConfirm('newGame');return;}
+  startNewGame();
+});
 
 document.getElementById('btnContinue').addEventListener('click',function(){
   AudioSys.init(); AudioSys.click(); AudioSys.startBgm();
