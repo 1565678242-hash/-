@@ -25,9 +25,10 @@ test('new player guide opens and closes', async ({ page }) => {
   await expect(page.locator('#gameGuide')).not.toHaveClass(/show/);
 });
 
-test('save management opens and reset can be cancelled safely', async ({ page }) => {
+test('progress management removes manual import/export while reset can be cancelled safely', async ({ page }) => {
   await page.locator('#btnSaveHome').click();
   await expect(page.locator('#saveManageMenu')).toHaveClass(/show/);
+  await expect(page.locator('#btnSaveManageImport, #btnSaveManageExport, #btnSaveImport, #btnSaveExport, #saveFileInput')).toHaveCount(0);
   await page.locator('#btnSaveManageReset').click();
   await expect(page.locator('#resetConfirmOverlay')).toHaveClass(/show/);
   await page.locator('#btnResetCancel').click();
@@ -163,17 +164,3 @@ test('loading a day-20 save restores the day and in-progress snapshot', async ({
   await expect(page.locator('#hudFans')).toHaveText('614');
 });
 
-test('invalid save import leaves the existing local save untouched', async ({ page }) => {
-  const original = { totalDays: 6, currentDay: 7, totalFans: 123 };
-  await page.evaluate(([key, value]) => localStorage.setItem(key, JSON.stringify(value)), [SAVE_KEY, original]);
-  await page.locator('#btnSaveHome').click();
-  await page.locator('#btnSaveManageImport').click();
-  page.on('dialog', dialog => dialog.accept());
-  await page.locator('#saveFileInput').setInputFiles({
-    name: 'invalid-save.json',
-    mimeType: 'application/json',
-    buffer: Buffer.from(JSON.stringify({ currentDay: 'not-a-day', totalDays: 3 }))
-  });
-  const stored = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), SAVE_KEY);
-  expect(stored).toEqual(original);
-});
