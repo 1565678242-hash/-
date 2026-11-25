@@ -2054,17 +2054,12 @@ document.getElementById('btnGardenMenu').addEventListener('click',function(){Aud
 window.addEventListener('pagehide',function(){saveDaySnapshot();persist();});
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden'){saveDaySnapshot();persist();}});
 
-const saveManageMenuEl=document.getElementById('saveManageMenu');
 const resetConfirmOverlayEl=document.getElementById('resetConfirmOverlay');
 const resetConfirmTextEl=document.getElementById('resetConfirmText');
-let resetConfirmMode='clear';
-function openResetConfirm(mode){
-  resetConfirmMode=mode;
-  resetConfirmTextEl.textContent=mode==='newGame'
-    ?'重新开始会清除当前游戏进度，并从第 1 天重新开始。此操作无法撤销。'
-    :'这会清除本游戏的直播进度、金币、花园、图鉴和成就，并回到初始主页。此操作无法撤销。';
-  document.getElementById('resetConfirmTitle').textContent=mode==='newGame'?'重新开始游戏？':'确认清空游戏数据？';
-  document.getElementById('btnResetConfirm').textContent=mode==='newGame'?'重新开始':'确认清空';
+function openResetConfirm(){
+  resetConfirmTextEl.textContent='这会清除本设备上的全部游戏记录、金币、花园、图鉴和成就，并从头开始。此操作无法撤销。';
+  document.getElementById('resetConfirmTitle').textContent='重新开始游戏？';
+  document.getElementById('btnResetConfirm').textContent='确认重开';
   resetConfirmOverlayEl.classList.add('show');
   resetConfirmOverlayEl.setAttribute('aria-hidden','false');
 }
@@ -2099,38 +2094,18 @@ function resetRuntimeForHome(){
   document.getElementById('gardenNotice').classList.remove('show');
   document.getElementById('flowerLiveSettlement').classList.remove('show');
   gameMenuEl.classList.remove('show');
-  saveManageMenuEl.classList.remove('show');
   showHud(false);
 }
 function clearAllProgress(){
   try{localStorage.removeItem(CONFIG.saveKey);}
-  catch(e){resetConfirmTextEl.textContent='无法清除本地存档。请检查微信/浏览器的存储权限后重试。';return;}
-  saveData=createFreshSaveData();
-  resetRuntimeForHome();
-  shopTab='fruit';shopPage=0;collectionCategory='normal';collectionPage=0;
-  applyTheme(saveData.theme);updateAvatar();
-  renderGarden();renderCollection();renderAchievements();renderShop();
-  updateDataScreen();updateHome();
-  showScreen(homeScreen);
-  persist();
+  catch(e){resetConfirmTextEl.textContent='无法清除本地游戏记录，请检查浏览器的存储权限后重试。';return;}
   closeResetConfirm();
-  showToast('🧹','游戏数据已清空，已回到初始主页');
+  /* 完整重载会同时清理卡住的动画状态、弹窗与定时器。 */
+  window.location.reload();
 }
-function startNewGame(){
-  const hasSeenStory=!!saveData.seenStoryIntro;
-  saveData=createFreshSaveData();
-  saveData.seenIntro=hasSeenStory;saveData.seenStoryIntro=hasSeenStory;
-  resetRuntimeForHome();
-  gardenTipEl.textContent='花圃已经整理好啦。先领取直播种子，再选择空土地种下；浇水三次或完成直播，让花苗慢慢长大。';
-  renderGarden();updateHome();persist();
-  closeResetConfirm();
-  showTutorial();applyBuffsForNewDay();startGiftTimer();startDay(1);
-}
-document.getElementById('btnSaveHome').addEventListener('click',function(){AudioSys.click();saveManageMenuEl.classList.add('show');});
-document.getElementById('btnSaveManageClose').addEventListener('click',function(){AudioSys.click();saveManageMenuEl.classList.remove('show');});
-document.getElementById('btnSaveManageReset').addEventListener('click',function(){AudioSys.click();openResetConfirm('clear');});
 document.getElementById('btnResetCancel').addEventListener('click',function(){AudioSys.click();closeResetConfirm();});
-document.getElementById('btnResetConfirm').addEventListener('click',function(){AudioSys.click();if(resetConfirmMode==='newGame')startNewGame();else clearAllProgress();});
+document.getElementById('btnResetConfirm').addEventListener('click',function(){AudioSys.click();clearAllProgress();});
+document.getElementById('btnEmergencyRestart').addEventListener('click',function(e){e.preventDefault();e.stopPropagation();openResetConfirm();});
 resetConfirmOverlayEl.addEventListener('click',function(e){if(e.target===resetConfirmOverlayEl)closeResetConfirm();});
 function closeGameMenu(){
   gameMenuEl.classList.remove('show');
@@ -2163,15 +2138,6 @@ document.getElementById('btnContinue').addEventListener('click',function(){
   startDay(saveData.currentDay||1);
 });
 
-document.getElementById('btnNewGame').addEventListener('click',function(){
-  AudioSys.init();AudioSys.click();
-  const g=saveData.garden||{};
-  const hasProgress=saveData.totalDays>0||saveData.totalPopped>0||saveData.luckyCount>0||
-    saveData.unlocked.length>0||saveData.money>0||saveData.totalEarned>0||
-    (Array.isArray(g.plots)&&g.plots.length>0)||(Number(g.harvestCount)||0)>0;
-  if(hasProgress){openResetConfirm('newGame');return;}
-  startNewGame();
-});
 
 btnExit.addEventListener('click',function(e){
   e.stopPropagation(); AudioSys.click();
