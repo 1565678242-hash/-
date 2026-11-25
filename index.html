@@ -56,7 +56,7 @@
       <button class="main-btn lucky-btn" id="btnShopHome">商 店</button>
       <button class="main-btn" id="btnCollectionHome">收 藏 图 鉴</button>
       <button class="main-btn" id="btnAchievements">成 就</button>
-      <button class="main-btn" id="btnSaveHome">存 档 管 理</button>
+      <button class="main-btn" id="btnSaveHome">进 度 管 理</button>
     </div>
     <div id="perfumeCountdown"></div>
   </div>
@@ -207,10 +207,8 @@
   <div id="dayTransition" class="day-transition"><div class="day-transition-flower">🌼</div><div id="dayTransitionText">第 2 天</div><small>新的一天，也要好好生活</small></div>
   <div id="saveManageMenu" class="menu-overlay">
     <div class="menu-card save-manage-card">
-      <div class="menu-title">存档管理</div>
-      <div class="menu-sub">管理你的本地游戏进度</div>
-      <button class="menu-action" id="btnSaveManageExport">导出存档</button>
-      <button class="menu-action" id="btnSaveManageImport">导入存档</button>
+      <div class="menu-title">进度管理</div>
+       <div class="menu-sub">游戏进度会自动保存在本设备</div>
       <button class="menu-action danger" id="btnSaveManageReset">重开游戏（清除本地数据）</button>
       <button class="menu-cancel" id="btnSaveManageClose">返回</button>
     </div>
@@ -228,12 +226,10 @@
   </div>
   <div id="gameMenu" class="menu-overlay">
     <div class="menu-card"><div class="menu-title">暂停一下</div><div class="menu-sub">你的进度会自动保存</div>
-      <button class="menu-action primary" id="btnResume">继续直播</button><button class="menu-action" id="btnSaveExport">导出存档</button>
-      <button class="menu-action" id="btnSaveImport">导入存档</button><button class="menu-action" id="btnMenuHome">返回主页</button>
+      <button class="menu-action primary" id="btnResume">继续直播</button><button class="menu-action" id="btnMenuHome">返回主页</button>
       <button class="menu-cancel" id="btnMenuClose">关闭</button>
     </div>
   </div>
-  <input type="file" id="saveFileInput" accept="application/json,.json" hidden>
 </div>
 <script src="game.js?v=20261120-emergency-recovery-3" defer></script>
 </body>
