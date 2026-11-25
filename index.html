@@ -13,7 +13,6 @@
 <div id="app">
   <div id="phoneStatusBar"><span id="phoneClock">09:41</span><span class="phone-status-right"><span>◉ Wi-Fi</span><span>▮▮▮</span><span>▰</span></span></div>
   <canvas id="gameCanvas" aria-label="游戏区域：拖动相同的情绪气泡进行消除，点击好运果收集"></canvas>
-  <button id="btnEmergencyRestart" type="button" aria-label="清空游戏记录并重新开始">↻ 重开游戏</button>
   <div id="hud">
     <div id="hostAvatar">🌞</div>
     <div class="hud-chip lucky" id="hudLuckyChip"><span>好运果</span><b id="hudLucky">0</b></div>
@@ -51,6 +50,7 @@
     <div class="home-title"><h1>滚蛋吧坏情绪</h1><p>疗 愈 直 播 间</p><div class="home-sub">拖动相同的坏情绪泡泡消除它们，收集种子，把小花园慢慢种满。</div></div>
     <div class="home-buttons">
       <button class="main-btn primary" id="btnContinue">继 续 游 戏</button>
+      <button class="main-btn home-reset-btn" id="btnResetHome" type="button">↻ 重开游戏</button>
       <button class="main-btn" id="btnGameGuide">📖 新手玩法说明</button>
       <button class="main-btn" id="btnGardenHome">🌱 我 的 花 园</button>
       <button class="main-btn lucky-btn" id="btnShopHome">商 店</button>
