@@ -2096,15 +2096,17 @@ function resetRuntimeForHome(){
   showHud(false);
 }
 function clearAllProgress(){
-  try{localStorage.removeItem(CONFIG.saveKey);}
-  catch(e){resetConfirmTextEl.textContent='无法清除本地游戏记录，请检查浏览器的存储权限后重试。';return;}
+  try{
+    localStorage.removeItem(CONFIG.saveKey);
+    if(localStorage.getItem(CONFIG.saveKey)!==null) throw new Error('save key still exists');
+  }catch(e){resetConfirmTextEl.textContent='清空失败：浏览器没有允许删除游戏存档，请检查存储权限后重试。';return;}
   closeResetConfirm();
   /* 完整重载会同时清理卡住的动画状态、弹窗与定时器。 */
   window.location.reload();
 }
 document.getElementById('btnResetCancel').addEventListener('click',function(){AudioSys.click();closeResetConfirm();});
 document.getElementById('btnResetConfirm').addEventListener('click',function(){AudioSys.click();clearAllProgress();});
-document.getElementById('btnEmergencyRestart').addEventListener('click',function(e){e.preventDefault();e.stopPropagation();openResetConfirm();});
+document.getElementById('btnResetHome').addEventListener('click',function(e){e.preventDefault();e.stopPropagation();AudioSys.click();openResetConfirm();});
 resetConfirmOverlayEl.addEventListener('click',function(e){if(e.target===resetConfirmOverlayEl)closeResetConfirm();});
 function closeGameMenu(){
   gameMenuEl.classList.remove('show');
